@@ -389,6 +389,71 @@
   .t-dot{ width:8px; height:8px; border-radius:50%; border:none; background:rgba(255,255,255,0.2); cursor:pointer; padding:0; transition:background .25s, transform .25s; }
   .t-dot.active{ background:var(--red); transform:scale(1.3); }
 
+  /* ================= OUR TEAM ================= */
+  .team{ background:var(--bg); padding:96px 0; }
+  .team-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:24px;
+  }
+  @media (max-width:900px){ .team-grid{ grid-template-columns:1fr; gap:20px; } }
+  @media (max-width:640px){ .team-grid{ gap:16px; } }
+
+  .team-card{
+    background:var(--card); border:1px solid rgba(255,255,255,0.07); border-radius:10px;
+    overflow:hidden; display:flex; flex-direction:column;
+    transition:border-color .3s ease, transform .3s ease, box-shadow .3s ease;
+  }
+  .team-card:hover{
+    border-color:rgba(226,55,43,0.4);
+    transform:translateY(-4px);
+    box-shadow:0 20px 40px -12px rgba(0,0,0,0.5);
+  }
+
+  /* avatar block */
+  .team-avatar{
+    position:relative; background:var(--card-2);
+    height:200px; display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
+  }
+  @media (max-width:900px){ .team-avatar{ height:160px; } }
+  .team-avatar svg{
+    width:130px; height:130px; opacity:.9;
+    transition:opacity .3s, transform .4s ease;
+  }
+  .team-card:hover .team-avatar svg{ opacity:1; transform:scale(1.05); }
+  .team-initials{
+    position:absolute; bottom:14px; right:16px;
+    font-family:'Archivo',sans-serif; font-weight:900; font-size:13px; letter-spacing:.12em;
+    color:var(--red); opacity:.7;
+  }
+  /* subtle red glow behind avatar */
+  .team-avatar::before{
+    content:''; position:absolute; inset:0;
+    background:radial-gradient(50% 50% at 50% 50%, rgba(226,55,43,0.1), transparent 70%);
+    pointer-events:none;
+  }
+
+  /* body */
+  .team-body{ padding:26px 24px 28px; flex:1; display:flex; flex-direction:column; gap:0; }
+  .team-name{
+    font-family:'Archivo',sans-serif; font-weight:900; font-size:20px; text-transform:uppercase;
+    letter-spacing:-0.01em; color:var(--white); margin-bottom:6px;
+  }
+  .team-role{
+    font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--red); margin-bottom:16px;
+  }
+  .team-bio{ font-size:14.5px; color:var(--steel); line-height:1.65; flex:1; }
+  .team-tags{
+    display:flex; flex-wrap:wrap; gap:6px; margin-top:20px;
+    padding-top:18px; border-top:1px solid rgba(255,255,255,0.07);
+  }
+  .team-tag{
+    font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.05em; text-transform:uppercase;
+    color:var(--steel-dim); border:1px solid rgba(255,255,255,0.1); padding:5px 10px; border-radius:2px;
+    transition:border-color .2s, color .2s;
+  }
+  .team-card:hover .team-tag{ border-color:rgba(226,55,43,0.3); color:var(--steel); }
+
   /* ================= FAQ ================= */
   .faq{ background:var(--paper); color:var(--ink); padding:96px 0; }
   .faq .eyebrow{ color:var(--red-dim); }
@@ -675,6 +740,7 @@
     <a href="#systems" data-nav>Systems</a>
     <a href="#portfolio" data-nav>Portfolio</a>
     <a href="#estimator" data-nav>Estimator</a>
+    <a href="#team" data-nav>Team</a>
     <a href="#faq" data-nav>FAQ</a>
     <a href="#contact" data-nav>Contact</a>
   </nav>
@@ -689,6 +755,7 @@
   <a href="#systems">Systems</a>
   <a href="#portfolio">Portfolio</a>
   <a href="#estimator">Estimator</a>
+  <a href="#team">Team</a>
   <a href="#faq">FAQ</a>
   <a href="#contact">Contact</a>
   <a href="#contact" class="mm-cta">Request a Quote →</a>
@@ -1060,6 +1127,107 @@
         <div class="t-dots" id="tDots"></div>
         <button class="t-arrow" id="tNext" aria-label="Next testimonial">→</button>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= OUR TEAM ================= -->
+<section class="team" id="team">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">Our Team</div>
+        <h2>The engineers<br>behind the systems.</h2>
+      </div>
+      <p class="desc">Each project is led by a senior engineer — the same person from the first site walk-through to handover and monitoring.</p>
+    </div>
+    <div class="team-grid">
+
+      <div class="team-card reveal">
+        <div class="team-avatar">
+          <svg viewBox="0 0 120 120" fill="none" aria-hidden="true">
+            <rect width="120" height="120" fill="#141416"/>
+            <circle cx="60" cy="60" r="56" stroke="#e2372b" stroke-width="1" stroke-dasharray="4 6"/>
+            <circle cx="60" cy="46" r="18" stroke="#f6f5f2" stroke-width="1.4" fill="none"/>
+            <path d="M34 90 C34 73 86 73 86 90" stroke="#f6f5f2" stroke-width="1.4" fill="none"/>
+            <line x1="4" y1="60" x2="20" y2="60" stroke="#e2372b" stroke-width="1"/>
+            <line x1="100" y1="60" x2="116" y2="60" stroke="#e2372b" stroke-width="1"/>
+            <line x1="60" y1="4" x2="60" y2="20" stroke="#e2372b" stroke-width="1"/>
+            <circle cx="20" cy="60" r="2.5" fill="#e2372b"/>
+            <circle cx="100" cy="60" r="2.5" fill="#e2372b"/>
+            <circle cx="60" cy="20" r="2.5" fill="#e2372b"/>
+          </svg>
+          <div class="team-initials">KN</div>
+        </div>
+        <div class="team-body">
+          <div class="team-name">Khurram Naeem</div>
+          <div class="team-role">Partner &amp; Systems Architect</div>
+          <p class="team-bio">A seasoned partner with over a decade of experience in designing and implementing integrated security systems. Leads every major system design from first principles.</p>
+          <div class="team-tags">
+            <span class="team-tag">System Design</span>
+            <span class="team-tag">Fire Detection</span>
+            <span class="team-tag">10+ Years</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="team-card reveal">
+        <div class="team-avatar">
+          <svg viewBox="0 0 120 120" fill="none" aria-hidden="true">
+            <rect width="120" height="120" fill="#141416"/>
+            <rect x="6" y="6" width="108" height="108" stroke="#e2372b" stroke-width="1" stroke-dasharray="4 6" fill="none"/>
+            <circle cx="60" cy="46" r="18" stroke="#f6f5f2" stroke-width="1.4" fill="none"/>
+            <path d="M34 90 C34 73 86 73 86 90" stroke="#f6f5f2" stroke-width="1.4" fill="none"/>
+            <line x1="6"  y1="38" x2="22" y2="38" stroke="#e2372b" stroke-width="1"/>
+            <line x1="6"  y1="82" x2="22" y2="82" stroke="#e2372b" stroke-width="1"/>
+            <line x1="98" y1="38" x2="114" y2="38" stroke="#e2372b" stroke-width="1"/>
+            <line x1="98" y1="82" x2="114" y2="82" stroke="#e2372b" stroke-width="1"/>
+            <circle cx="22" cy="38" r="2.5" fill="#e2372b"/>
+            <circle cx="22" cy="82" r="2.5" fill="#e2372b"/>
+            <circle cx="98" cy="38" r="2.5" fill="#e2372b"/>
+            <circle cx="98" cy="82" r="2.5" fill="#e2372b"/>
+          </svg>
+          <div class="team-initials">NA</div>
+        </div>
+        <div class="team-body">
+          <div class="team-name">Naeem Ahmad</div>
+          <div class="team-role">Project Manager</div>
+          <p class="team-bio">An expert project manager with extensive knowledge in coordinating complex security projects from inception to completion. Ensures every install runs on time, on scope and with zero disruption to operations.</p>
+          <div class="team-tags">
+            <span class="team-tag">Project Delivery</span>
+            <span class="team-tag">Client Liaison</span>
+            <span class="team-tag">Multi-site</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="team-card reveal">
+        <div class="team-avatar">
+          <svg viewBox="0 0 120 120" fill="none" aria-hidden="true">
+            <rect width="120" height="120" fill="#141416"/>
+            <polygon points="60,6 112,34 112,86 60,114 8,86 8,34" stroke="#e2372b" stroke-width="1" stroke-dasharray="4 6" fill="none"/>
+            <circle cx="60" cy="46" r="18" stroke="#f6f5f2" stroke-width="1.4" fill="none"/>
+            <path d="M34 90 C34 73 86 73 86 90" stroke="#f6f5f2" stroke-width="1.4" fill="none"/>
+            <line x1="8"  y1="60" x2="24" y2="60" stroke="#e2372b" stroke-width="1"/>
+            <line x1="96" y1="60" x2="112" y2="60" stroke="#e2372b" stroke-width="1"/>
+            <circle cx="24" cy="60" r="2.5" fill="#e2372b"/>
+            <circle cx="96" cy="60" r="2.5" fill="#e2372b"/>
+            <circle cx="60" cy="6"  r="2.5" fill="#e2372b"/>
+          </svg>
+          <div class="team-initials">RA</div>
+        </div>
+        <div class="team-body">
+          <div class="team-name">Rehan Ali</div>
+          <div class="team-role">Director Technical</div>
+          <p class="team-bio">Oversees the strategic integration of advanced laboratory infrastructure and enterprise-grade security systems. The technical authority on every complex or multi-system deployment ISE·PK undertakes.</p>
+          <div class="team-tags">
+            <span class="team-tag">Technical Direction</span>
+            <span class="team-tag">Enterprise Systems</span>
+            <span class="team-tag">Lab Infrastructure</span>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
