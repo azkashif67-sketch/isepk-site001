@@ -20,7 +20,7 @@
   html{scroll-behavior:smooth;}
   body{ background:var(--bg); color:var(--white); font-family:'Inter',sans-serif; font-size:18px; line-height:1.6; overflow-x:hidden; }
   @media (prefers-reduced-motion: reduce){
-    *{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important;}
+    *{animation-duration:.001ms !important; animation-iteration-count:1 !important; animation-delay:0ms !important; transition-duration:.001ms !important; scroll-behavior:auto !important;}
   }
   a{color:inherit; text-decoration:none;}
   button{ font:inherit; }
@@ -226,23 +226,22 @@
     position:absolute; top:28px; right:28px; z-index:5; display:flex; align-items:center; gap:8px;
     background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); padding:8px 14px; border-radius:20px;
     backdrop-filter:blur(6px); font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--steel);
-    opacity:0; transform:translateY(-8px); animation:popIn .6s ease .9s forwards;
   }
   @media (max-width:700px){ .badge-chip{ position:static; margin-bottom:24px; width:fit-content; } }
   .badge-chip .live{ width:6px; height:6px; border-radius:50%; background:var(--green); position:relative; }
   .badge-chip .live::after{ content:''; position:absolute; inset:-5px; border-radius:50%; border:1px solid var(--green); animation:pulseRing 2s ease-out infinite; }
-  @keyframes pulseRing{ 0%{ transform:scale(.6); opacity:.8;} 100%{ transform:scale(2.2); opacity:0;} }
-  @keyframes popIn{ to{ opacity:1; transform:translateY(0); } }
-  .hero-grid{ position:relative; display:grid; grid-template-columns:1.1fr .9fr; gap:24px; align-items:center; }
+  /* Reduced-motion: zero delays too so nothing stays invisible */
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-delay:0ms !important; }
+  } position:relative; display:grid; grid-template-columns:1.1fr .9fr; gap:24px; align-items:center; }
   @media (max-width:900px){ .hero-grid{ grid-template-columns:1fr; } }
   .hero-copy h1{ font-size:clamp(32px,5.4vw,62px); margin-top:16px; }
   .hero-copy .line{ overflow:hidden; }
-  .hero-copy h1 span{ display:inline-block; transform:translateY(110%); opacity:0; animation:lineUp .7s cubic-bezier(.2,.8,.2,1) forwards; }
-  .hero-copy h1 .l1 span{ animation-delay:.15s; } .hero-copy h1 .l2 span{ animation-delay:.3s; }
-  @keyframes lineUp{ to{ transform:translateY(0); opacity:1; } }
-  .hero-copy p.lede{ font-size:18.5px; color:var(--steel); max-width:460px; margin-top:22px; opacity:0; animation:fadeUp .7s ease .55s forwards; }
+  .hero-copy h1 span{ display:inline-block; }
+  .hero-copy h1 .l1 span{ } .hero-copy h1 .l2 span{ }
+  .hero-copy p.lede{ font-size:18.5px; color:var(--steel); max-width:460px; margin-top:22px; }
   @keyframes fadeUp{ from{ opacity:0; transform:translateY(10px);} to{ opacity:1; transform:translateY(0);} }
-  .hero-actions{ display:flex; gap:12px; margin-top:32px; flex-wrap:wrap; opacity:0; animation:fadeUp .7s ease .7s forwards; }
+  .hero-actions{ display:flex; gap:12px; margin-top:32px; flex-wrap:wrap; }
   .btn-ghost-red{
     border:1.4px solid var(--red); color:var(--red); background:transparent; font-family:'IBM Plex Mono',monospace;
     font-size:14px; letter-spacing:.08em; text-transform:uppercase; padding:15px 24px; cursor:pointer;
@@ -1504,12 +1503,69 @@
     }
   });
 
-  /* ---- reveal + count-up ---- */
-  var revealObs = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in-view'); revealObs.unobserve(e.target); } });
-  }, { threshold:0.15 });
-  document.querySelectorAll('.chip, .reveal, .pf-card').forEach(function(el){ revealObs.observe(el); });
+  /* ---- hero entrance — JS driven so resize/tab-switch can't break it ---- */
+  var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  function animateHero(){
+    if(reducedMotion){
+      // Just show everything immediately — no animation
+      document.querySelectorAll('.hero-copy h1 span, .hero-copy p.lede, .hero-actions, .badge-chip').forEach(function(el){
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      });
+      return;
+    }
+    var ease  = 'cubic-bezier(.2,.8,.2,1)';
+    var spans = document.querySelectorAll('.hero-copy h1 span');
+    spans.forEach(function(el){
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(110%)';
+    });
+    var lede    = document.querySelector('.hero-copy p.lede');
+    var actions = document.querySelector('.hero-actions');
+    var chip    = document.querySelector('.badge-chip');
+    if(lede)   { lede.style.opacity='0';    lede.style.transform='translateY(10px)'; }
+    if(actions){ actions.style.opacity='0'; actions.style.transform='translateY(10px)'; }
+    if(chip)   { chip.style.opacity='0';    chip.style.transform='translateY(-8px)'; }
+
+    function reveal(el, delay, easing){
+      setTimeout(function(){
+        if(!el) return;
+        el.style.transition = 'opacity .7s '+easing+', transform .7s '+easing;
+        el.style.opacity    = '1';
+        el.style.transform  = 'none';
+      }, delay);
+    }
+    spans.forEach(function(el, i){ reveal(el, 150 + i * 160, ease); });
+    reveal(lede,    560, 'ease');
+    reveal(actions, 720, 'ease');
+    reveal(chip,    920, 'ease');
+  }
+  animateHero();
+
+  /* ---- reveal observer — covers ALL animated sections ---- */
+  function revealEl(el){ el.classList.add('in-view'); }
+
+  var revealObs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ revealEl(e.target); revealObs.unobserve(e.target); }
+    });
+  }, { threshold:0.12, rootMargin:'0px 0px -5% 0px' });
+
+  var revealTargets = document.querySelectorAll(
+    '.chip, .reveal, .pf-card, .sys-card, .how-card, .log-entry'
+  );
+  revealTargets.forEach(function(el){
+    // If already in viewport on load — show immediately, no observer needed
+    var r = el.getBoundingClientRect();
+    if(r.top < window.innerHeight && r.bottom > 0){
+      revealEl(el);
+    } else {
+      revealObs.observe(el);
+    }
+  });
+
+  /* ---- count-up ---- */
   var countObs = new IntersectionObserver(function(entries){
     entries.forEach(function(e){
       if(!e.isIntersecting) return;
