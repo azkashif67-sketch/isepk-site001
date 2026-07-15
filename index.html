@@ -252,7 +252,8 @@
   .btn-ghost-red:hover::before{ transform:scaleX(1); }
   .btn-solid-white{ border:none; background:var(--white); color:var(--ink); font-family:'IBM Plex Mono',monospace; font-size:14px; letter-spacing:.08em; text-transform:uppercase; padding:15px 24px; cursor:pointer; transition:transform .2s; }
   .btn-solid-white:hover{ transform:translateY(-2px); }
-  .hero-visual{ position:relative; height:340px; will-change:transform; }
+  .hero-copy{ position:relative; z-index:2; }
+  .hero-visual{ position:relative; height:340px; pointer-events:none; }
   @media (max-width:900px){ .hero-visual{ height:220px; margin-top:8px; } }
   .skyline{ position:absolute; right:-10px; bottom:-10px; width:100%; opacity:.35; }
   .cam-illustration{ position:absolute; left:0; bottom:0; width:190px; animation:float 5s ease-in-out infinite; }
@@ -1490,17 +1491,24 @@
     requestAnimationFrame(function(){ requestAnimationFrame(function(){ path.style.strokeDashoffset = 0; }); });
   });
 
-  /* ---- hero parallax ---- */
+  /* ---- hero parallax (desktop only — keeps heroVisual out of stacking context on mobile) ---- */
   var heroVisual = document.getElementById('heroVisual');
   var mx = 0, my = 0, rafQ = false;
   document.getElementById('deviceFrame').addEventListener('mousemove', function(e){
+    if(window.innerWidth <= 900) return;   // skip on single-column layout
     var r = e.currentTarget.getBoundingClientRect();
     mx = ((e.clientX - r.left) / r.width - 0.5) * 2;
     my = ((e.clientY - r.top) / r.height - 0.5) * 2;
     if(!rafQ){
       rafQ = true;
-      requestAnimationFrame(function(){ heroVisual.style.transform = 'translate(' + (mx*8) + 'px,' + (my*6) + 'px)'; rafQ = false; });
+      requestAnimationFrame(function(){
+        heroVisual.style.transform = 'translate(' + (mx*8) + 'px,' + (my*6) + 'px)';
+        rafQ = false;
+      });
     }
+  });
+  document.getElementById('deviceFrame').addEventListener('mouseleave', function(){
+    heroVisual.style.transform = '';   // reset on mouse-out
   });
 
   /* ---- hero entrance — JS driven so resize/tab-switch can't break it ---- */
