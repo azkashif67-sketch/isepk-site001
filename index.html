@@ -336,6 +336,11 @@
   .svc-tab[aria-selected="true"]::after{ transform:scaleX(1); }
   .svc-panel{ display:none; }
   .svc-panel.active{ display:grid; grid-template-columns:1.05fr .95fr; gap:48px; animation:panelIn .45s ease; }
+  /* Category panels (new 4-tab structure) override the old 2-col panel grid */
+  #panel-surveillance.active,
+  #panel-safety.active,
+  #panel-accessauto.active,
+  #panel-professional.active{ display:block; }
   @media (max-width:900px){ .svc-panel.active{ grid-template-columns:1fr; gap:28px; } }
   @keyframes panelIn{ from{ opacity:0; transform:translateY(12px);} to{ opacity:1; transform:translateY(0);} }
   .svc-detail h3{ font-size:clamp(22px,3vw,32px); margin-bottom:16px; }
@@ -1035,6 +1040,55 @@
   .pf-modal-client{
     font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.06em;
     text-transform:uppercase; color:var(--red); margin-bottom:8px;
+  }
+
+  /* ── svc-mini full-width guarantee ── */
+  .svc-cat-grid{ width:100%; }
+  .svc-mini{ width:100%; }
+
+  /* ── 640px: svc-mini tighter padding ── */
+  @media(max-width:640px){
+    .svc-mini{ padding:18px 16px; }
+    .svc-mini-name{ font-size:12.5px; }
+    .svc-mini-desc{ font-size:12.5px; }
+    .svc-mini-features li{ font-size:12px; }
+  }
+
+  /* ── Hero panels responsive ── */
+  @media(max-width:900px){
+    .sp-cycle-dots{ padding-top:2px; }
+    .sp-cycle-dot{ width:16px; }
+    .sp-cycle-dot.active{ width:24px; }
+  }
+  @media(max-width:480px){
+    .sp-vis{ height:44px; }
+    .sp-label{ font-size:9.5px; }
+    .sp-badge{ font-size:8px; padding:2px 5px; }
+  }
+
+  /* ── All-services grid mobile ── */
+  @media(max-width:540px){
+    .all-svc-grid{ grid-template-columns:1fr; }
+    .asvc-title{ font-size:13.5px; }
+    .asvc-desc{ font-size:13px; }
+  }
+
+  /* ── Portfolio pf-client line ── */
+  @media(max-width:640px){
+    .pf-client{ font-size:9.5px; }
+  }
+
+  /* ── Estimator 7-option multi-select wrap ── */
+  .est-opts.multi{ flex-wrap:wrap; }
+  @media(max-width:640px){
+    .est-opts.multi .est-opt{ font-size:13px; padding:9px 12px; }
+  }
+
+  @media(max-width:540px){
+    .svc-tab{ font-size:11px; padding:9px 10px 11px; letter-spacing:0.02em; }
+  }
+  @media(max-width:400px){
+    .svc-tab{ font-size:10px; padding:8px 8px 10px; }
   }
 </style>
 </head>
@@ -2410,6 +2464,7 @@
       return;
     }
     estState.systems.forEach(function(s){
+      if(!PKR[s]) return;  // skip any system not in pricing table
       var r = PKR[s][estState.size];
       var m = typeMult[estState.type];
       var a = Math.round(r[0] * m), b = Math.round(r[1] * m);
