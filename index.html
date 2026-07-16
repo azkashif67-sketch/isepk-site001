@@ -2158,59 +2158,47 @@
     }, 1000);
   }
 
-  /* ---- hidden iframe for form submission (avoids CORS/file:// issues) ---- */
-  var ifrm = document.createElement('iframe');
-  ifrm.name = 'ise_submit_frame';
-  ifrm.id   = 'ise_submit_frame';
-  ifrm.setAttribute('aria-hidden', 'true');
-  ifrm.style.cssText = 'display:none;width:0;height:0;border:0;position:absolute;';
-  document.body.appendChild(ifrm);
+  /* ---- Web3Forms submission handler ---- */
+  var W3F_KEY = '4a0caaac-bba5-4b06-9e7c-41c642ce6b15';
 
   function submitToFormSubmit(formEl, msgEl, extraFields) {
     var btn = formEl.querySelector('.form-submit-btn');
+    var originalLabel = btn.getAttribute('data-label') || btn.textContent;
     btn.disabled = true;
     btn.textContent = 'Sending…';
     msgEl.style.display = 'none';
     msgEl.className = 'form-msg';
 
-    // Collect visible form data + extras
-    var allData = {};
-    new FormData(formEl).forEach(function(v, k){ allData[k] = v; });
-    Object.assign(allData, extraFields, {
-      _captcha:  'false',
-      _template: 'table',
-      _subject:  extraFields._subject || 'ISE PK Inquiry'
-    });
+    var payload = { access_key: W3F_KEY };
+    new FormData(formEl).forEach(function(v, k){ payload[k] = v; });
+    Object.assign(payload, extraFields);
 
-    // Build a transient hidden form that posts into the iframe
-    var hf = document.createElement('form');
-    hf.method  = 'POST';
-    hf.action  = 'https://formsubmit.co/azkashif67@gmail.com';
-    hf.target  = 'ise_submit_frame';
-    hf.style.display = 'none';
-
-    Object.keys(allData).forEach(function(k){
-      var inp = document.createElement('input');
-      inp.type  = 'hidden';
-      inp.name  = k;
-      inp.value = allData[k] || '';
-      hf.appendChild(inp);
-    });
-
-    document.body.appendChild(hf);
-    hf.submit();
-
-    // Give the iframe 2s to load, then show success and clean up
-    setTimeout(function(){
-      if(document.body.contains(hf)) document.body.removeChild(hf);
+    fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(d){
       btn.disabled = false;
-      btn.textContent = btn.getAttribute('data-label') || 'Send →';
-      msgEl.className = 'form-msg success';
-      msgEl.innerHTML = '✓ Submitted! An engineer will contact you within one business day.<br>'
-        + '<small style="opacity:.7">First-time use: check <b>azkashif67@gmail.com</b> for a one-click activation email from FormSubmit, then resubmit.</small>';
+      btn.textContent = originalLabel;
+      if(d.success){
+        msgEl.className = 'form-msg success';
+        msgEl.innerHTML = '✓ Received — an engineer will contact you within one business day.';
+        msgEl.style.display = 'block';
+        formEl.reset();
+      } else {
+        throw new Error(d.message || 'Submission failed');
+      }
+    })
+    .catch(function(err){
+      btn.disabled = false;
+      btn.textContent = originalLabel;
+      msgEl.className = 'form-msg error';
+      msgEl.innerHTML = 'Could not send — please call <b>+92 300 7017786</b> or email <b>ise@isepk.com.pk</b> directly.';
       msgEl.style.display = 'block';
-      formEl.reset();
-    }, 2000);
+      console.error('Web3Forms error:', err);
+    });
   }
 
   /* ---- estimator form ---- */
