@@ -2168,31 +2168,59 @@
 
     var fd = {};
     new FormData(formEl).forEach(function(v, k){ fd[k] = v; });
-    Object.assign(fd, extraFields);
+    Object.assign(fd, extraFields, {
+      _captcha: 'false',
+      _template: 'table'
+    });
+
+    // Build a mailto: fallback URI from the same data
+    var bodyLines = Object.keys(fd)
+      .filter(function(k){ return k.indexOf('_') !== 0; })
+      .map(function(k){ return k.toUpperCase() + ': ' + fd[k]; });
+    var mailtoFallback = 'mailto:ise@isepk.com.pk'
+      + '?subject=' + encodeURIComponent(extraFields._subject || 'ISE PK Inquiry')
+      + '&body=' + encodeURIComponent(bodyLines.join('\n'));
 
     fetch('https://formsubmit.co/ajax/ise@isepk.com.pk', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body: JSON.stringify(fd)
     })
-    .then(function(r){ return r.json(); })
+    .then(function(r){
+      // FormSubmit returns HTML on first-submission (activation flow) — handle gracefully
+      return r.text().then(function(text){
+        try { return JSON.parse(text); }
+        catch(e) {
+          // Non-JSON = activation email was triggered
+          return { success: false, activation: true };
+        }
+      });
+    })
     .then(function(d){
       btn.disabled = false;
       btn.textContent = 'Send Inquiry →';
       if(d.success === 'true' || d.success === true){
         msgEl.className = 'form-msg success';
-        msgEl.textContent = '✓ Received — an engineer will contact you within one business day.';
+        msgEl.innerHTML = '✓ Received — an engineer will contact you within one business day.';
         msgEl.style.display = 'block';
         formEl.reset();
+      } else if(d.activation){
+        // First-time use — activation email sent to ise@isepk.com.pk
+        msgEl.className = 'form-msg success';
+        msgEl.innerHTML = '📧 Almost there — a one-time activation email was sent to <b>ise@isepk.com.pk</b>. Click the confirmation link in that email, then resubmit and it will go through. '
+          + 'Or <a href="' + mailtoFallback + '" style="color:inherit;text-decoration:underline;">click here to send via your mail app</a>.';
+        msgEl.style.display = 'block';
       } else {
-        throw new Error('FormSubmit error');
+        throw new Error(d.message || 'Unknown error');
       }
     })
-    .catch(function(){
+    .catch(function(err){
       btn.disabled = false;
       btn.textContent = 'Send Inquiry →';
       msgEl.className = 'form-msg error';
-      msgEl.textContent = 'Could not send — please call +92 300 7017786 or email ise@isepk.com.pk directly.';
+      msgEl.innerHTML = 'Could not send automatically. '
+        + '<a href="' + mailtoFallback + '" style="color:var(--red);font-weight:700;text-decoration:underline;">Click here to send via your mail app</a>, '
+        + 'or call <b>+92 300 7017786</b>.';
       msgEl.style.display = 'block';
     });
   }
