@@ -1322,7 +1322,7 @@
             <button class="est-opt" data-v="plan">Planning stage</button>
           </div>
         </div>
-        <div class="est-q">
+        <div class="est-q est-q-input">
           <div class="q-label">06 — Site Location (City &amp; Area)</div>
           <input type="text" id="estLocation" placeholder="e.g. Karachi — Defence Phase V" style="width:100%;background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,.22);color:var(--white);font-family:Inter,sans-serif;font-size:14.5px;padding:10px 0;outline:none;" />
         </div>
@@ -1986,7 +1986,9 @@
 
   document.querySelectorAll('.est-q').forEach(function(q){
     var key = q.getAttribute('data-q');
-    var multi = q.querySelector('.est-opts').classList.contains('multi');
+    var optsEl = q.querySelector('.est-opts');
+    if(!optsEl) return;                          // skip fields without button groups (e.g. text inputs)
+    var multi = optsEl.classList.contains('multi');
     q.querySelectorAll('.est-opt').forEach(function(opt){
       opt.addEventListener('click', function(){
         var v = opt.getAttribute('data-v');
