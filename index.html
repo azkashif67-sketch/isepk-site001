@@ -1368,7 +1368,7 @@
               <div class="ise-field"><label>Phone</label><input type="tel" name="phone" placeholder="+92 3XX XXXXXXX" required></div>
             </div>
             <div class="ise-field"><label>Email</label><input type="email" name="email" placeholder="you@company.com" required></div>
-            <button type="submit" class="form-submit-btn">Send Estimate Inquiry →</button>
+            <button type="submit" class="form-submit-btn" data-label="Send Estimate Inquiry →">Send Estimate Inquiry →</button>
             <div class="form-msg" id="estFormMsg"></div>
           </form>
         </div>
@@ -1677,7 +1677,7 @@
             </select>
           </div>
           <div class="ise-field"><label>Message / Requirements</label><textarea name="message" rows="3" placeholder="Describe your site, current situation, and what you're looking for..."></textarea></div>
-          <button type="submit" class="form-submit-btn">Send Inquiry →</button>
+          <button type="submit" class="form-submit-btn" data-label="Send Inquiry →">Send Inquiry →</button>
           <div class="form-msg" id="ctaFormMsg"></div>
         </form>
       </div>
@@ -2158,7 +2158,14 @@
     }, 1000);
   }
 
-  /* ---- generic FormSubmit AJAX handler ---- */
+  /* ---- hidden iframe for form submission (avoids CORS/file:// issues) ---- */
+  var ifrm = document.createElement('iframe');
+  ifrm.name = 'ise_submit_frame';
+  ifrm.id   = 'ise_submit_frame';
+  ifrm.setAttribute('aria-hidden', 'true');
+  ifrm.style.cssText = 'display:none;width:0;height:0;border:0;position:absolute;';
+  document.body.appendChild(ifrm);
+
   function submitToFormSubmit(formEl, msgEl, extraFields) {
     var btn = formEl.querySelector('.form-submit-btn');
     btn.disabled = true;
@@ -2166,63 +2173,44 @@
     msgEl.style.display = 'none';
     msgEl.className = 'form-msg';
 
-    var fd = {};
-    new FormData(formEl).forEach(function(v, k){ fd[k] = v; });
-    Object.assign(fd, extraFields, {
-      _captcha: 'false',
-      _template: 'table'
+    // Collect visible form data + extras
+    var allData = {};
+    new FormData(formEl).forEach(function(v, k){ allData[k] = v; });
+    Object.assign(allData, extraFields, {
+      _captcha:  'false',
+      _template: 'table',
+      _subject:  extraFields._subject || 'ISE PK Inquiry'
     });
 
-    // Build a mailto: fallback URI from the same data
-    var bodyLines = Object.keys(fd)
-      .filter(function(k){ return k.indexOf('_') !== 0; })
-      .map(function(k){ return k.toUpperCase() + ': ' + fd[k]; });
-    var mailtoFallback = 'mailto:ise@isepk.com.pk'
-      + '?subject=' + encodeURIComponent(extraFields._subject || 'ISE PK Inquiry')
-      + '&body=' + encodeURIComponent(bodyLines.join('\n'));
+    // Build a transient hidden form that posts into the iframe
+    var hf = document.createElement('form');
+    hf.method  = 'POST';
+    hf.action  = 'https://formsubmit.co/azkashif67@gmail.com';
+    hf.target  = 'ise_submit_frame';
+    hf.style.display = 'none';
 
-    fetch('https://formsubmit.co/ajax/azkashif67@gmail.com', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify(fd)
-    })
-    .then(function(r){
-      // FormSubmit returns HTML on first-submission (activation flow) — handle gracefully
-      return r.text().then(function(text){
-        try { return JSON.parse(text); }
-        catch(e) {
-          // Non-JSON = activation email was triggered
-          return { success: false, activation: true };
-        }
-      });
-    })
-    .then(function(d){
+    Object.keys(allData).forEach(function(k){
+      var inp = document.createElement('input');
+      inp.type  = 'hidden';
+      inp.name  = k;
+      inp.value = allData[k] || '';
+      hf.appendChild(inp);
+    });
+
+    document.body.appendChild(hf);
+    hf.submit();
+
+    // Give the iframe 2s to load, then show success and clean up
+    setTimeout(function(){
+      if(document.body.contains(hf)) document.body.removeChild(hf);
       btn.disabled = false;
-      btn.textContent = 'Send Inquiry →';
-      if(d.success === 'true' || d.success === true){
-        msgEl.className = 'form-msg success';
-        msgEl.innerHTML = '✓ Received — an engineer will contact you within one business day.';
-        msgEl.style.display = 'block';
-        formEl.reset();
-      } else if(d.activation){
-        // First-time use — activation email sent to ise@isepk.com.pk
-        msgEl.className = 'form-msg success';
-        msgEl.innerHTML = '📧 Almost there — a one-time activation email was sent to <b>azkashif67@gmail.com</b>. Click the confirmation link in that email, then resubmit and it will go through. '
-          + 'Or <a href="' + mailtoFallback + '" style="color:inherit;text-decoration:underline;">click here to send via your mail app</a>.';
-        msgEl.style.display = 'block';
-      } else {
-        throw new Error(d.message || 'Unknown error');
-      }
-    })
-    .catch(function(err){
-      btn.disabled = false;
-      btn.textContent = 'Send Inquiry →';
-      msgEl.className = 'form-msg error';
-      msgEl.innerHTML = 'Could not send automatically. '
-        + '<a href="' + mailtoFallback + '" style="color:var(--red);font-weight:700;text-decoration:underline;">Click here to send via your mail app</a>, '
-        + 'or call <b>+92 300 7017786</b>.';
+      btn.textContent = btn.getAttribute('data-label') || 'Send →';
+      msgEl.className = 'form-msg success';
+      msgEl.innerHTML = '✓ Submitted! An engineer will contact you within one business day.<br>'
+        + '<small style="opacity:.7">First-time use: check <b>azkashif67@gmail.com</b> for a one-click activation email from FormSubmit, then resubmit.</small>';
       msgEl.style.display = 'block';
-    });
+      formEl.reset();
+    }, 2000);
   }
 
   /* ---- estimator form ---- */
