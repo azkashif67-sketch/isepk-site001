@@ -866,8 +866,16 @@
   .cta-form-box{ background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.1); padding:32px; }
   .cta-form-box h4{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--steel-dim); margin-bottom:22px; }
 
-  /* Estimator email form */
-  .est-form-box{ margin-top:18px; padding-top:18px; border-top:1px solid rgba(255,255,255,.1); }
+  /* Estimator text-input field (Q6 location) */
+  .est-q-input input{
+    width:100%; background:transparent; border:none;
+    border-bottom:1px solid rgba(255,255,255,.22);
+    color:var(--white); font-family:'Inter',sans-serif; font-size:14.5px;
+    padding:10px 0; outline:none;
+    transition:border-color .2s;
+  }
+  .est-q-input input:focus{ border-color:var(--red); }
+  .est-q-input input::placeholder{ color:var(--steel-dim); } margin-top:18px; padding-top:18px; border-top:1px solid rgba(255,255,255,.1); }
   .est-form-box h5{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--steel-dim); margin-bottom:14px; }
 </style>
 </head>
@@ -1324,7 +1332,7 @@
         </div>
         <div class="est-q est-q-input">
           <div class="q-label">06 — Site Location (City &amp; Area)</div>
-          <input type="text" id="estLocation" placeholder="e.g. Karachi — Defence Phase V" style="width:100%;background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,.22);color:var(--white);font-family:Inter,sans-serif;font-size:14.5px;padding:10px 0;outline:none;" />
+          <input type="text" id="estLocation" placeholder="e.g. Karachi — Defence Phase V" />
         </div>
       </div>
       <div class="est-result" aria-live="polite">
