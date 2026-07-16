@@ -1354,7 +1354,7 @@
         <div class="eyebrow">Instant Estimator</div>
         <h2>Scope your system<br>in 20 seconds.</h2>
       </div>
-      <p class="desc">Pick what matches your site and get a ballpark scope. An engineer confirms everything on the free site walk-through.</p>
+      <p class="desc">Pick what matches your site and get a ballpark scope. An engineer confirms everything on the site survey. Free for Karachi; inter-city visits may carry a commute fee.</p>
     </div>
     <div class="est-grid">
       <div>
@@ -1414,10 +1414,10 @@
           <span class="lbl">Ballpark range</span>
           <span class="amt" id="estAmt">—</span>
         </div>
-        <p class="est-note">Indicative only — final quote follows the free site survey. Hardware tier, cabling runs and civil work shift the number.</p>
+        <p class="est-note">Indicative only — final scope follows the site survey. Hardware tier, cabling runs and civil work shift the number. Site surveys are free for Karachi; inter-city visits may carry a commute fee.</p>
 
         <div class="est-form-box">
-          <h5>Send this estimate — we'll confirm in 1 day</h5>
+          <h5>Send this estimate — we'll respond within 1–5 business days</h5>
           <form class="ise-form" id="estForm" novalidate>
             <div class="ise-field-row">
               <div class="ise-field" id="estFieldName">
@@ -1634,7 +1634,7 @@
       </div>
       <div class="faq-item" data-cat="services">
         <button class="faq-q" aria-expanded="false">How can I get a quote for your services?<span class="plus"></span></button>
-        <div class="faq-a"><p>Request a quote through this site or call us directly. We start with a free site survey — an engineer walks the property, maps risk points and produces a written scope and proposal with no obligation to proceed.</p></div>
+        <div class="faq-a"><p>Request a quote through this site or call us directly. We start with a site survey — an engineer walks the property, maps risk points and produces a written scope and proposal with no obligation to proceed. Surveys are free within Karachi; inter-city visits may carry a commute fee.</p></div>
       </div>
       <div class="faq-item" data-cat="services">
         <button class="faq-q" aria-expanded="false">How do I know which security solution is right for my business?<span class="plus"></span></button>
@@ -1648,7 +1648,7 @@
       </div>
       <div class="faq-item" data-cat="install">
         <button class="faq-q" aria-expanded="false">Is the site survey really free?<span class="plus"></span></button>
-        <div class="faq-a"><p>Yes, in all covered cities. An engineer walks the site, maps every risk point, and gives you a written scope you're free to take to any vendor — including not us.</p></div>
+        <div class="faq-a"><p>Site surveys are free for Karachi. For inter-city clients in Lahore, Islamabad, Faisalabad and Multan, a commute fee may apply — confirmed before the visit with no surprises. The written scope is yours to take to any vendor, including not us.</p></div>
       </div>
       <div class="faq-item" data-cat="install">
         <button class="faq-q" aria-expanded="false">Do you provide documentation for insurance and Civil Defence?<span class="plus"></span></button>
@@ -1686,7 +1686,7 @@
     <div class="cta-head">
       <div class="eyebrow">Get Started</div>
       <h2>Don't wait for a breach<br>to install a system.</h2>
-      <p>An engineer will call within one business day — no sales script, just the walk-through.</p>
+      <p>Our team will respond within 1–3 business days — no automated replies, no sales script.</p>
     </div>
     <div class="contact-row">
       <a class="contact-pill contact-pill--primary" href="tel:+923007017786"><svg viewBox="0 0 20 20"><path d="M4 3 L8 3 L9.5 7 L7 9 C8 12 10 14 13 15 L15 12.5 L19 14 V18 C19 18.5 18.5 19 18 19 C10 19 1 10 1 2 C1 1.5 1.5 1 2 1"/></svg> +92 300 7017786</a>
@@ -1731,10 +1731,10 @@
     <div class="cta-two-col">
       <div class="cta-left-info">
         <h3>Send us a direct inquiry.</h3>
-        <p>Fill in the form and one of our engineers will respond within one business day — no automated replies, no hold queues.</p>
+        <p>Fill in the form and one of our engineers will respond within 1–3 business days — no automated replies, no hold queues.</p>
         <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px;">
           <div style="display:flex;align-items:center;gap:10px;font-family:IBM Plex Mono,monospace;font-size:12.5px;color:rgba(255,255,255,.7);">
-            <span style="color:var(--red);">✓</span> Free site survey included
+            <span style="color:var(--red);">✓</span> Free site survey (Karachi) · commute fee may apply inter-city
           </div>
           <div style="display:flex;align-items:center;gap:10px;font-family:IBM Plex Mono,monospace;font-size:12.5px;color:rgba(255,255,255,.7);">
             <span style="color:var(--red);">✓</span> Response within 1 business day
@@ -2277,7 +2277,7 @@
       btn.textContent = originalLabel;
       if(d.success){
         msgEl.className = 'form-msg success';
-        msgEl.innerHTML = '✓ Received — an engineer will contact you within one business day.';
+        msgEl.innerHTML = extraFields._successMsg || '✓ Received — our team will respond within 1–3 business days.';
         msgEl.style.display = 'block';
         formEl.reset();
       } else {
@@ -2366,6 +2366,7 @@
       // Build comprehensive payload
       submitToFormSubmit(estForm, document.getElementById('estFormMsg'), {
         subject:           'ISE PK — Estimate Request from ' + (nameEl ? nameEl.value.trim() : ''),
+        _successMsg:       '✓ Received — our team will respond within 1–5 business days.',
         // Site details
         '01_Site_Type':    typeLabels[estState.type]    || estState.type,
         '02_Site_Size':    sizeLabels[estState.size]    || estState.size,
@@ -2400,7 +2401,8 @@
     ctaForm.addEventListener('submit', function(e){
       e.preventDefault();
       submitToFormSubmit(ctaForm, document.getElementById('ctaFormMsg'), {
-        _subject: 'ISE PK — Website Inquiry'
+        subject:     'ISE PK — Website Inquiry',
+        _successMsg: '✓ Received — our team will respond within 1–3 business days.'
       });
     });
   }
