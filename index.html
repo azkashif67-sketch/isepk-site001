@@ -985,6 +985,57 @@
     .asvc-title{ font-size:14.5px; }
     .asvc-desc{ font-size:13px; }
   }
+
+  /* Hero panel hover focus & auto-cycle */
+  .hero-visual:hover .sys-panel:not(:hover){ opacity:.5; transform:scale(.98); }
+  .hero-visual .sys-panel{ transition:opacity .35s ease, transform .35s ease, border-color .35s; }
+  .sys-panel.sp-active{ border-color:rgba(226,55,43,.5) !important; background:rgba(255,255,255,.07) !important; }
+  .sp-cycle-dots{ display:flex; gap:6px; justify-content:center; padding-top:4px; }
+  .sp-cycle-dot{ width:20px; height:2px; border-radius:1px; background:rgba(255,255,255,.2); cursor:pointer; transition:background .3s, width .3s; }
+  .sp-cycle-dot.active{ background:var(--red); width:32px; }
+
+  /* ── Category panel grids ── */
+  .svc-cat-grid{ display:grid; gap:16px; }
+  .svc-2col{ grid-template-columns:1fr 1fr; }
+  .svc-3col{ grid-template-columns:1fr 1fr 1fr; }
+  @media(max-width:900px){ .svc-2col,.svc-3col{ grid-template-columns:1fr; } }
+  @media(max-width:640px){ .svc-cat-grid{ gap:12px; } }
+
+  .svc-mini{
+    background:var(--card-2); border:1px solid rgba(255,255,255,.08);
+    border-radius:8px; padding:22px 20px; display:flex; flex-direction:column; gap:10px;
+    transition:border-color .3s ease, background .3s ease;
+  }
+  .svc-mini:hover{ border-color:rgba(226,55,43,.4); background:rgba(255,255,255,.05); }
+  .svc-mini-head{ display:flex; align-items:center; gap:12px; }
+  .svc-mini-icon{ width:36px; height:36px; flex:none; }
+  .svc-mini-name{
+    font-family:'Archivo',sans-serif; font-weight:900; font-size:13.5px;
+    text-transform:uppercase; letter-spacing:.02em; color:#fff; line-height:1.2;
+  }
+  .svc-mini-desc{ font-size:13px; color:var(--steel); line-height:1.6; }
+  .svc-mini-features{ list-style:none; display:flex; flex-direction:column; gap:4px; }
+  .svc-mini-features li{
+    font-size:12.5px; color:var(--steel-dim); display:flex; gap:8px; align-items:baseline;
+  }
+  .svc-mini-features li::before{ content:'→'; color:var(--red); flex:none; font-size:11px; }
+  .svc-mini-specs{
+    border-top:1px solid rgba(255,255,255,.06); padding-top:10px;
+    display:flex; flex-direction:column; gap:0;
+  }
+  .svc-mini-fit{
+    font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.06em;
+    text-transform:uppercase; color:var(--red); margin-top:2px;
+  }
+
+  .pf-client{
+    font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--red); margin-bottom:4px;
+  }
+  .pf-modal-client{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.06em;
+    text-transform:uppercase; color:var(--red); margin-bottom:8px;
+  }
 </style>
 </head>
 <body>
@@ -1044,102 +1095,126 @@
         <div class="hero-visual" id="heroVisual" aria-hidden="true">
 
           <!-- FIRE DETECTION panel -->
-          <div class="sys-panel">
+          <div class="sys-panel" data-sys="fire">
             <div class="sp-header">
               <span class="sp-dot fire"></span>
-              <span class="sp-label">Fire Detection</span>
+              <span class="sp-label">Fire &amp; Hazard Detection</span>
               <span class="sp-badge fire">Armed</span>
             </div>
             <div class="sp-vis">
-              <svg viewBox="0 0 280 54" fill="none">
-                <!-- detector disc -->
-                <circle cx="40" cy="27" r="20" stroke="#ff6835" stroke-width="1.3" fill="rgba(255,104,53,.07)"/>
-                <circle cx="40" cy="27" r="11" stroke="#ff6835" stroke-width="1" fill="none"/>
-                <circle cx="40" cy="27" r="4" fill="#ff6835" opacity=".8"/>
-                <!-- heat waves -->
-                <path d="M40 3 Q44 9 40 15 Q36 21 40 27" stroke="#ff6835" stroke-width="1.2" fill="none" opacity=".6" style="animation:fireScan 2s ease-in-out infinite"/>
-                <path d="M50 5 Q54 11 50 17 Q46 23 50 29" stroke="#ff6835" stroke-width="1" fill="none" opacity=".4" style="animation:fireScan 2s ease-in-out .3s infinite"/>
-                <path d="M30 5 Q34 11 30 17 Q26 23 30 29" stroke="#ff6835" stroke-width="1" fill="none" opacity=".4" style="animation:fireScan 2s ease-in-out .6s infinite"/>
-                <!-- panel body -->
-                <rect x="75" y="10" width="190" height="34" rx="3" stroke="rgba(255,255,255,.2)" stroke-width="1" fill="rgba(255,255,255,.04)"/>
-                <text x="86" y="25" font-family="monospace" font-size="8" fill="rgba(255,255,255,.5)">ADDRESSABLE PANEL</text>
-                <text x="86" y="37" font-family="monospace" font-size="9" fill="#3fbf6a">ALL ZONES NORMAL</text>
-                <circle cx="250" cy="21" r="4" fill="#3fbf6a" opacity=".8"/>
+              <svg viewBox="0 0 280 60" fill="none">
+                <!-- building floor plan silhouette -->
+                <rect x="68" y="8" width="200" height="46" rx="2" stroke="rgba(255,255,255,.12)" stroke-width="1" fill="rgba(255,255,255,.03)"/>
+                <line x1="143" y1="8" x2="143" y2="54" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+                <line x1="68" y1="31" x2="268" y2="31" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+                <!-- detector icons on plan -->
+                <circle cx="105" cy="20" r="5" stroke="#ff6835" stroke-width="1.2" fill="rgba(255,104,53,.15)"/>
+                <circle cx="180" cy="20" r="5" stroke="#ff6835" stroke-width="1.2" fill="rgba(255,104,53,.15)"/>
+                <circle cx="230" cy="20" r="5" stroke="#3fbf6a" stroke-width="1.2" fill="rgba(63,191,106,.1)" style="animation:blinkDot 2s steps(1) infinite"/>
+                <circle cx="105" cy="42" r="5" stroke="#3fbf6a" stroke-width="1.2" fill="rgba(63,191,106,.1)"/>
+                <circle cx="200" cy="42" r="5" stroke="#3fbf6a" stroke-width="1.2" fill="rgba(63,191,106,.1)"/>
+                <!-- flame animation on one detector -->
+                <path d="M180 10 C178 13 177.5 15 178 17 C178.5 19 179.5 19.5 180 19.5 C180.5 19.5 181.5 19 182 17 C182.5 15 182 13 180 10Z" fill="#ff6835" opacity=".9" style="animation:fireScan 1.4s ease-in-out infinite"/>
+                <!-- alert rings expanding from alarming detector -->
+                <circle cx="230" cy="20" r="9"  stroke="#ff6835" stroke-width=".8" fill="none" opacity=".5" style="animation:pulseRing 2s ease-out .0s infinite"/>
+                <circle cx="230" cy="20" r="13" stroke="#ff6835" stroke-width=".6" fill="none" opacity=".3" style="animation:pulseRing 2s ease-out .5s infinite"/>
+                <!-- detector label -->
+                <text x="8" y="26" font-family="monospace" font-size="7.5" fill="#ff6835">ALERT</text>
+                <text x="8" y="36" font-family="monospace" font-size="7" fill="rgba(255,255,255,.5)">Zone 03</text>
+                <text x="8" y="46" font-family="monospace" font-size="7" fill="rgba(255,255,255,.35)">R.Rm. East</text>
               </svg>
             </div>
             <div class="sp-data">
-              <div class="sp-row"><span class="k">Zone 01 — Perimeter</span><span class="v ok">Normal</span></div>
-              <div class="sp-row"><span class="k">Zone 02 — Server Room</span><span class="v ok">Normal</span></div>
+              <div class="sp-row"><span class="k">Zone 01 &amp; 02</span><span class="v ok">Normal</span></div>
+              <div class="sp-row"><span class="k">Zone 03 — Server Rm</span><span class="v warn">Smoke Detected</span></div>
             </div>
           </div>
 
           <!-- CCTV panel -->
-          <div class="sys-panel">
+          <div class="sys-panel" data-sys="cctv">
             <div class="sp-header">
               <span class="sp-dot cctv"></span>
-              <span class="sp-label">CCTV Surveillance</span>
+              <span class="sp-label">CCTV &amp; Surveillance</span>
               <span class="sp-badge cctv">● Rec</span>
             </div>
             <div class="sp-vis">
-              <svg viewBox="0 0 280 54" fill="none">
+              <svg viewBox="0 0 280 60" fill="none">
+                <!-- camera FOV triangle -->
+                <path d="M30 30 L90 8 L90 52 Z" stroke="rgba(226,55,43,.2)" stroke-width="1" fill="rgba(226,55,43,.06)"/>
                 <!-- camera body -->
-                <rect x="10" y="16" width="80" height="22" rx="4" stroke="rgba(255,255,255,.7)" stroke-width="1.3" fill="rgba(255,255,255,.05)"/>
-                <path d="M90 20 L108 13 L108 41 L90 34 Z" stroke="rgba(255,255,255,.7)" stroke-width="1.3" fill="rgba(255,255,255,.04)"/>
-                <circle cx="40" cy="27" r="7" stroke="#e2372b" stroke-width="1.2" fill="rgba(226,55,43,.1)"/>
-                <circle cx="40" cy="27" r="3" fill="#e2372b"/>
-                <!-- sweep arc -->
+                <rect x="8" y="22" width="28" height="16" rx="3" stroke="rgba(255,255,255,.7)" stroke-width="1.3" fill="rgba(255,255,255,.06)"/>
+                <path d="M36 24 L46 18 L46 42 L36 36 Z" stroke="rgba(255,255,255,.5)" stroke-width="1.2" fill="rgba(255,255,255,.04)"/>
+                <circle cx="22" cy="30" r="5" stroke="#e2372b" stroke-width="1.2" fill="rgba(226,55,43,.1)"/>
+                <circle cx="22" cy="30" r="2" fill="#e2372b"/>
+                <!-- rotating sweep line -->
                 <g class="cctv-arc">
-                  <path d="M60 27 L80 8" stroke="rgba(226,55,43,.5)" stroke-width="1" fill="none"/>
-                  <path d="M60 27 L85 20" stroke="rgba(226,55,43,.25)" stroke-width="1" fill="none"/>
+                  <line x1="30" y1="30" x2="88" y2="10" stroke="rgba(226,55,43,.6)" stroke-width="1.5"/>
+                  <path d="M30 30 L88 10 L88 18 Z" fill="rgba(226,55,43,.08)"/>
                 </g>
-                <!-- grid feeds -->
-                <rect x="125" y="5" width="65" height="44" rx="2" stroke="rgba(255,255,255,.2)" stroke-width="1" fill="rgba(255,255,255,.04)"/>
-                <rect x="198" y="5" width="65" height="44" rx="2" stroke="rgba(255,255,255,.2)" stroke-width="1" fill="rgba(255,255,255,.04)"/>
-                <text x="130" y="16" font-family="monospace" font-size="7" fill="rgba(255,255,255,.4)">CAM 01</text>
-                <text x="203" y="16" font-family="monospace" font-size="7" fill="rgba(255,255,255,.4)">CAM 02</text>
-                <!-- scan line -->
-                <line x1="125" y1="30" x2="190" y2="30" stroke="rgba(226,55,43,.35)" stroke-width="1" style="animation:fireScan 3s ease-in-out infinite"/>
+                <!-- person detected marker -->
+                <circle cx="75" cy="35" r="4" stroke="#e2372b" stroke-width="1.2" fill="rgba(226,55,43,.15)" style="animation:blinkDot 1s steps(1) infinite"/>
+                <text x="82" y="38" font-family="monospace" font-size="7" fill="#e2372b">MOTION</text>
+                <!-- feed grid -->
+                <rect x="108" y="4"  width="54" height="36" rx="2" stroke="rgba(255,255,255,.18)" stroke-width="1" fill="rgba(255,255,255,.03)"/>
+                <rect x="166" y="4"  width="54" height="36" rx="2" stroke="rgba(255,255,255,.18)" stroke-width="1" fill="rgba(255,255,255,.03)"/>
+                <rect x="220" y="4"  width="54" height="36" rx="2" stroke="rgba(255,255,255,.18)" stroke-width="1" fill="rgba(255,255,255,.03)"/>
+                <rect x="108" y="44" width="80" height="12" rx="1" stroke="rgba(255,255,255,.1)" stroke-width="1" fill="rgba(255,255,255,.02)"/>
+                <text x="112" y="8"  font-family="monospace" font-size="6.5" fill="rgba(255,255,255,.4)">CAM01 LOBBY</text>
+                <text x="170" y="8"  font-family="monospace" font-size="6.5" fill="rgba(255,255,255,.4)">CAM02 GATE</text>
+                <text x="224" y="8"  font-family="monospace" font-size="6.5" fill="rgba(255,255,255,.4)">CAM03 PARK</text>
+                <!-- scan line on first feed -->
+                <line x1="108" y1="24" x2="162" y2="24" stroke="rgba(226,55,43,.4)" stroke-width="1" style="animation:fireScan 2.5s ease-in-out infinite"/>
+                <text x="112" y="52" font-family="monospace" font-size="6.5" fill="rgba(255,255,255,.35)">● REC  14:23:09  8/8 feeds active</text>
               </svg>
             </div>
             <div class="sp-data">
               <div class="sp-row"><span class="k">Active feeds</span><span class="v">8 / 8</span></div>
-              <div class="sp-row"><span class="k">Retention</span><span class="v">90-day storage</span></div>
+              <div class="sp-row"><span class="k">Motion — CAM01 Lobby</span><span class="v warn">Alert sent</span></div>
             </div>
           </div>
 
           <!-- ACCESS CONTROL panel -->
-          <div class="sys-panel">
+          <div class="sys-panel" data-sys="access">
             <div class="sp-header">
               <span class="sp-dot access"></span>
-              <span class="sp-label">Access Control</span>
+              <span class="sp-label">Access &amp; Intrusion</span>
               <span class="sp-badge access">Secure</span>
             </div>
             <div class="sp-vis">
-              <svg viewBox="0 0 280 54" fill="none">
-                <!-- reader -->
-                <rect x="10" y="6" width="30" height="42" rx="3" stroke="rgba(255,255,255,.6)" stroke-width="1.3" fill="rgba(255,255,255,.05)"/>
-                <rect x="16" y="14" width="18" height="12" rx="1" stroke="rgba(255,255,255,.35)" stroke-width="1" fill="rgba(255,255,255,.05)"/>
-                <circle cx="25" cy="37" r="4" fill="#3fbf6a" opacity=".8"/>
-                <!-- sliding card -->
+              <svg viewBox="0 0 280 60" fill="none">
+                <!-- door frame + door -->
+                <rect x="10" y="4" width="56" height="52" rx="2" stroke="rgba(255,255,255,.2)" stroke-width="1" fill="rgba(255,255,255,.02)"/>
+                <rect x="13" y="7" width="46" height="46" rx="1" stroke="rgba(255,255,255,.35)" stroke-width="1" fill="rgba(255,255,255,.04)"/>
+                <circle cx="54" cy="30" r="3.5" fill="#3fbf6a" opacity=".9"/>
+                <!-- card reader -->
+                <rect x="70" y="20" width="20" height="28" rx="2" stroke="rgba(255,255,255,.5)" stroke-width="1.2" fill="rgba(255,255,255,.04)"/>
+                <rect x="73" y="25" width="14" height="9" rx="1" stroke="rgba(255,255,255,.25)" stroke-width="1" fill="rgba(255,255,255,.04)"/>
+                <circle cx="80" cy="40" r="3" fill="#3fbf6a" style="animation:blinkDot 1.8s steps(1) 0.9s infinite"/>
+                <!-- approaching card -->
                 <g class="access-card">
-                  <rect x="45" y="16" width="36" height="22" rx="2" stroke="#3fbf6a" stroke-width="1.2" fill="rgba(63,191,106,.08)"/>
-                  <line x1="50" y1="22" x2="76" y2="22" stroke="#3fbf6a" stroke-width="1" opacity=".5"/>
-                  <line x1="50" y1="27" x2="70" y2="27" stroke="#3fbf6a" stroke-width="1" opacity=".35"/>
+                  <rect x="94" y="22" width="28" height="18" rx="2" stroke="#3fbf6a" stroke-width="1.2" fill="rgba(63,191,106,.1)"/>
+                  <line x1="98" y1="27" x2="118" y2="27" stroke="#3fbf6a" stroke-width="1" opacity=".6"/>
+                  <line x1="98" y1="32" x2="112" y2="32" stroke="#3fbf6a" stroke-width="1" opacity=".4"/>
                 </g>
-                <!-- door -->
-                <rect x="100" y="4" width="50" height="46" rx="2" stroke="rgba(255,255,255,.25)" stroke-width="1" fill="rgba(255,255,255,.03)"/>
-                <circle cx="143" cy="27" r="3" fill="rgba(255,255,255,.35)"/>
-                <!-- audit log -->
-                <rect x="162" y="4" width="112" height="46" rx="2" stroke="rgba(255,255,255,.14)" stroke-width="1" fill="rgba(255,255,255,.03)"/>
-                <text x="168" y="16" font-family="monospace" font-size="7" fill="rgba(255,255,255,.4)">AUDIT LOG</text>
-                <text x="168" y="27" font-family="monospace" font-size="7.5" fill="#3fbf6a">14:23:07 — GRANTED</text>
-                <text x="168" y="38" font-family="monospace" font-size="7.5" fill="rgba(255,255,255,.45)">09:11:44 — GRANTED</text>
+                <!-- GRANTED text -->
+                <text x="130" y="22" font-family="monospace" font-size="8.5" fill="#3fbf6a" font-weight="bold">GRANTED</text>
+                <text x="130" y="33" font-family="monospace" font-size="7" fill="rgba(255,255,255,.4)">EMP-0142 · Main Gate</text>
+                <!-- audit scroll -->
+                <rect x="130" y="39" width="142" height="18" rx="1" stroke="rgba(255,255,255,.08)" stroke-width="1" fill="rgba(255,255,255,.02)"/>
+                <text x="133" y="48" font-family="monospace" font-size="6.5" fill="rgba(255,255,255,.35)">14:23:07 EMP-0142 GRANTED · 14:22:51 EMP-0139 DENIED</text>
               </svg>
             </div>
             <div class="sp-data">
-              <div class="sp-row"><span class="k">Doors controlled</span><span class="v">74 active</span></div>
+              <div class="sp-row"><span class="k">Active doors</span><span class="v">74 online</span></div>
               <div class="sp-row"><span class="k">Last event</span><span class="v ok" id="heroAccessTime">14:23:07</span></div>
             </div>
+          </div>
+
+          <!-- cycle indicator -->
+          <div class="sp-cycle-dots" id="spCycleDots">
+            <span class="sp-cycle-dot active" data-idx="0"></span>
+            <span class="sp-cycle-dot" data-idx="1"></span>
+            <span class="sp-cycle-dot" data-idx="2"></span>
           </div>
 
         </div>
@@ -1270,84 +1345,193 @@
 
     </div><!-- /all-svc-grid -->
 
-    <!-- ── CORE SYSTEMS DEEP-DIVE ── -->
+    <!-- ── ALL SERVICES DEEP-DIVE — 4 CATEGORY TABS ── -->
     <div class="section-head" style="margin-top:72px;">
       <div>
-        <div class="eyebrow">Core Detection Systems</div>
-        <h2>Explore in detail.</h2>
+        <div class="eyebrow">All Services — In Detail</div>
+        <h2>Every service, fully explored.</h2>
       </div>
-      <p class="desc">Our three primary detection systems — spec sheets, feature breakdowns and site-fit guidance.</p>
+      <p class="desc">Four categories, ten services. Click a category for features, specs and site-fit guidance for each service within it.</p>
     </div>
 
-    <div class="svc-tabs" role="tablist" aria-label="Security systems">
-      <button class="svc-tab" role="tab" aria-selected="true" aria-controls="panel-fire" id="tab-fire">01 — Fire Detection</button>
-      <button class="svc-tab" role="tab" aria-selected="false" aria-controls="panel-cctv" id="tab-cctv">02 — CCTV Surveillance</button>
-      <button class="svc-tab" role="tab" aria-selected="false" aria-controls="panel-access" id="tab-access">03 — Access Control</button>
+    <div class="svc-tabs" role="tablist" aria-label="Service categories">
+      <button class="svc-tab" role="tab" aria-selected="true"  aria-controls="panel-surveillance" id="tab-surveillance">01 — Surveillance &amp; Detection</button>
+      <button class="svc-tab" role="tab" aria-selected="false" aria-controls="panel-safety"       id="tab-safety"      >02 — Safety &amp; Hazard</button>
+      <button class="svc-tab" role="tab" aria-selected="false" aria-controls="panel-accessauto"   id="tab-accessauto"  >03 — Access &amp; Automation</button>
+      <button class="svc-tab" role="tab" aria-selected="false" aria-controls="panel-professional" id="tab-professional">04 — Professional Services</button>
     </div>
 
-    <div class="svc-panel active" id="panel-fire" role="tabpanel" aria-labelledby="tab-fire">
-      <div class="svc-detail">
-        <h3>Fire Detection &amp; Alarm</h3>
-        <p class="sum">Addressable smoke, heat and gas detection wired into a single panel, with early-warning routing to your team before a site-wide alarm triggers.</p>
-        <div class="svc-feature"><div class="fic"><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M10 6 V10 L13 12"/></svg></div><div><h4>Zone-by-zone early warning</h4><p>The panel identifies the exact detector that fired, so your team responds to a room, not a building.</p></div></div>
-        <div class="svc-feature"><div class="fic"><svg viewBox="0 0 20 20"><path d="M3 10 L8 15 L17 5"/></svg></div><div><h4>Factory &amp; warehouse rated detectors</h4><p>Heat and gas sensing where dust, humidity or fumes would false-trigger ordinary smoke heads.</p></div></div>
-        <div class="svc-feature"><div class="fic"><svg viewBox="0 0 20 20"><rect x="4" y="3" width="12" height="14" rx="1"/><path d="M8 7 H12 M8 10 H12"/></svg></div><div><h4>Civil Defence documentation</h4><p>System drawings and test certificates prepared for building-approval and insurance inspections.</p></div></div>
-        <div class="svc-feature"><div class="fic"><svg viewBox="0 0 20 20"><path d="M10 3 L10 11 M6 7 L10 3 L14 7"/><rect x="4" y="13" width="12" height="4"/></svg></div><div><h4>Voice evacuation &amp; PA integration</h4><p>Alarm events can trigger floor-specific announcements instead of one deafening siren.</p></div></div>
-      </div>
-      <div class="svc-side">
-        <div class="spec-box">
-          <h4>Typical Scope</h4>
-          <div class="spec-line"><span class="k">Panel type</span><span class="v">Addressable, 1–8 loops</span></div>
-          <div class="spec-line"><span class="k">Detectors</span><span class="v">Smoke · heat · gas · beam</span></div>
-          <div class="spec-line"><span class="k">Install time</span><span class="v">1–4 weeks</span></div>
-          <div class="spec-line"><span class="k">Maintenance</span><span class="v">Quarterly test visits</span></div>
-          <div class="spec-line"><span class="k">Compliance</span><span class="v">PSQCA / NFPA-aligned</span></div>
+    <!-- ── Panel 1: Surveillance & Detection ── -->
+    <div class="svc-panel active" id="panel-surveillance" role="tabpanel" aria-labelledby="tab-surveillance">
+      <div class="svc-cat-grid svc-2col">
+        <div class="svc-mini">
+          <div class="svc-mini-head"><svg class="svc-mini-icon" viewBox="0 0 36 36" fill="none"><rect x="4" y="11" width="18" height="14" rx="2" stroke="#f6f5f2" stroke-width="1.3"/><path d="M22 14 L32 10 V26 L22 22" stroke="#f6f5f2" stroke-width="1.3"/><circle cx="13" cy="18" r="3.5" stroke="#e2372b" stroke-width="1.3"/></svg><span class="svc-mini-name">CCTV Surveillance</span></div>
+          <p class="svc-mini-desc">State-of-the-art IP cameras with AI analytics, remote mobile viewing and up to 90-day retention for any commercial site.</p>
+          <ul class="svc-mini-features">
+            <li>Loitering, line-crossing &amp; motion analytics</li>
+            <li>4MP–8K resolution with IR night vision</li>
+            <li>Battery-backed — records through load-shedding</li>
+            <li>Remote live feed on any device</li>
+          </ul>
+          <div class="svc-mini-specs">
+            <div class="spec-line"><span class="k">Cameras</span><span class="v">8 – 400+</span></div>
+            <div class="spec-line"><span class="k">Install time</span><span class="v">3 days – 3 weeks</span></div>
+          </div>
+          <div class="svc-mini-fit">Best for: Retail, malls, logistics, gated communities</div>
         </div>
-        <div class="fit-box"><h4>Best fit for</h4><p>Textile mills, warehouses, hospitals and any site with an insurance or Civil Defence inspection requirement.</p></div>
+        <div class="svc-mini">
+          <div class="svc-mini-head"><svg class="svc-mini-icon" viewBox="0 0 36 36" fill="none"><path d="M18 4 L32 11 V18 C32 26 26 32 18 34 C10 32 4 26 4 18 V11 Z" stroke="#f6f5f2" stroke-width="1.3"/><path d="M12 18 L16 22 L24 14" stroke="#e2372b" stroke-width="1.6"/></svg><span class="svc-mini-name">Intrusion Detection</span></div>
+          <p class="svc-mini-desc">Advanced motion sensors, PIR detectors and perimeter alarms that protect your property from unauthorised access — day or night.</p>
+          <ul class="svc-mini-features">
+            <li>Zone-based motion &amp; door/window sensors</li>
+            <li>Perimeter beam detection for yards &amp; warehouses</li>
+            <li>Instant SMS &amp; app alert on trigger</li>
+            <li>Integrated with CCTV for auto-recording on breach</li>
+          </ul>
+          <div class="svc-mini-specs">
+            <div class="spec-line"><span class="k">Zones</span><span class="v">4 – 128 per site</span></div>
+            <div class="spec-line"><span class="k">Install time</span><span class="v">1 – 5 days</span></div>
+          </div>
+          <div class="svc-mini-fit">Best for: Warehouses, factories, offices after hours</div>
+        </div>
       </div>
     </div>
 
-    <div class="svc-panel" id="panel-cctv" role="tabpanel" aria-labelledby="tab-cctv" hidden>
-      <div class="svc-detail">
-        <h3>CCTV Surveillance</h3>
-        <p class="sum">High-resolution IP coverage with analytics that flag events as they happen — reviewed live from anywhere, or pulled from 90-day retention.</p>
-        <div class="svc-feature"><div class="fic"><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="4"/><path d="M10 2 V5 M10 15 V18 M2 10 H5 M15 10 H18"/></svg></div><div><h4>Analytics, not just recording</h4><p>Loitering, line-crossing, tailgating and after-hours motion raise alerts instead of waiting to be discovered in playback.</p></div></div>
-        <div class="svc-feature"><div class="fic"><svg viewBox="0 0 20 20"><rect x="3" y="5" width="14" height="10" rx="1"/><path d="M7 15 V17 M13 15 V17"/></svg></div><div><h4>Remote viewing on mobile</h4><p>Owners and managers watch live feeds and receive event clips on their phone — from any city.</p></div></div>
-        <div class="svc-feature"><div class="fic"><svg viewBox="0 0 20 20"><path d="M4 16 C4 10 8 10 10 7 C12 10 16 10 16 16"/><circle cx="10" cy="4" r="1.6"/></svg></div><div><h4>Night &amp; low-light performance</h4><p>IR and starlight sensors keep plates and faces readable across parking areas and perimeters after dark.</p></div></div>
-        <div class="svc-feature"><div class="fic"><svg viewBox="0 0 20 20"><path d="M10 2 L17 5 V10 C17 14 14 17 10 18 C6 17 3 14 3 10 V5 Z"/></svg></div><div><h4>Tamper-resistant recording</h4><p>Footage is duplicated to secure storage, so a damaged recorder doesn't mean lost evidence.</p></div></div>
-      </div>
-      <div class="svc-side">
-        <div class="spec-box">
-          <h4>Typical Scope</h4>
-          <div class="spec-line"><span class="k">Cameras</span><span class="v">8 – 400+ per site</span></div>
-          <div class="spec-line"><span class="k">Resolution</span><span class="v">4MP – 8MP (4K)</span></div>
-          <div class="spec-line"><span class="k">Retention</span><span class="v">30 / 60 / 90 days</span></div>
-          <div class="spec-line"><span class="k">Install time</span><span class="v">3 days – 3 weeks</span></div>
-          <div class="spec-line"><span class="k">Power</span><span class="v">Battery-backed, standard</span></div>
+    <!-- ── Panel 2: Safety & Hazard ── -->
+    <div class="svc-panel" id="panel-safety" role="tabpanel" aria-labelledby="tab-safety" hidden>
+      <div class="svc-cat-grid svc-3col">
+        <div class="svc-mini">
+          <div class="svc-mini-head"><svg class="svc-mini-icon" viewBox="0 0 36 36" fill="none"><path d="M18 5 C14 10 13 14 14 19 C15 23 17 25 18 25 C19 25 21 23 22 19 C23 14 22 10 18 5Z" stroke="#e2372b" stroke-width="1.3"/><circle cx="18" cy="19" r="3" stroke="#f6f5f2" stroke-width="1.3"/><line x1="10" y1="30" x2="26" y2="30" stroke="#f6f5f2" stroke-width="1.3"/></svg><span class="svc-mini-name">Fire Alarm Systems</span></div>
+          <p class="svc-mini-desc">Addressable smoke, heat and gas detection with Civil Defence documentation — PSQCA-compliant for insurance and regulatory requirements.</p>
+          <ul class="svc-mini-features">
+            <li>Zone-by-zone early warning panel</li>
+            <li>Beam, heat &amp; gas detectors for industrial use</li>
+            <li>Voice evacuation &amp; PA integration</li>
+            <li>Quarterly maintenance &amp; test certification</li>
+          </ul>
+          <div class="svc-mini-specs">
+            <div class="spec-line"><span class="k">Panel</span><span class="v">1–8 addressable loops</span></div>
+            <div class="spec-line"><span class="k">Compliance</span><span class="v">PSQCA / NFPA</span></div>
+          </div>
+          <div class="svc-mini-fit">Best for: Mills, hospitals, warehouses, offices</div>
         </div>
-        <div class="fit-box"><h4>Best fit for</h4><p>Retail, malls, gated communities, logistics yards — anywhere theft, disputes or liability claims need footage.</p></div>
+        <div class="svc-mini">
+          <div class="svc-mini-head"><svg class="svc-mini-icon" viewBox="0 0 36 36" fill="none"><path d="M18 28 C18 28 8 21 8 13 A10 10 0 0 1 28 13 C28 21 18 28 18 28Z" stroke="#f6f5f2" stroke-width="1.3"/><circle cx="18" cy="13" r="3.5" stroke="#e2372b" stroke-width="1.3"/><line x1="18" y1="28" x2="18" y2="34" stroke="#f6f5f2" stroke-width="1.3"/></svg><span class="svc-mini-name">Gas Detection Systems</span></div>
+          <p class="svc-mini-desc">Real-time identification of hazardous gas leaks with multi-point sensors and immediate alarm routing — protecting personnel and assets.</p>
+          <ul class="svc-mini-features">
+            <li>LPG, methane, CO &amp; H₂S sensor support</li>
+            <li>Multi-zone fixed &amp; portable detectors</li>
+            <li>Auto-shutoff valve integration</li>
+            <li>Ideal for kitchens, boiler rooms &amp; factories</li>
+          </ul>
+          <div class="svc-mini-specs">
+            <div class="spec-line"><span class="k">Gas types</span><span class="v">LPG · CO · H₂S · CH₄</span></div>
+            <div class="spec-line"><span class="k">Install time</span><span class="v">2 days – 2 weeks</span></div>
+          </div>
+          <div class="svc-mini-fit">Best for: Industrial, food &amp; hospitality, boiler rooms</div>
+        </div>
+        <div class="svc-mini">
+          <div class="svc-mini-head"><svg class="svc-mini-icon" viewBox="0 0 36 36" fill="none"><path d="M18 4 L30 10 V18 C30 25 25 31 18 33 C11 31 6 25 6 18 V10 Z" stroke="#f6f5f2" stroke-width="1.3"/><path d="M18 12 C16 15 15.5 17 16 19 C16.5 21 17.5 22 18 22 C18.5 22 19.5 21 20 19 C20.5 17 20 15 18 12Z" stroke="#e2372b" stroke-width="1.2"/><circle cx="18" cy="19" r="2" stroke="#f6f5f2" stroke-width="1.2"/></svg><span class="svc-mini-name">Hazard Detection</span></div>
+          <p class="svc-mini-desc">Integrated fire alarms and smoke detectors engineered for early warning — providing maximum safety and rapid evacuation response.</p>
+          <ul class="svc-mini-features">
+            <li>Combined smoke, heat &amp; CO detection</li>
+            <li>Interconnected multi-zone coverage</li>
+            <li>Emergency lighting integration</li>
+            <li>Local regulation &amp; insurance compliant</li>
+          </ul>
+          <div class="svc-mini-specs">
+            <div class="spec-line"><span class="k">Coverage</span><span class="v">Multi-zone, floor-by-floor</span></div>
+            <div class="spec-line"><span class="k">Install time</span><span class="v">1 – 3 weeks</span></div>
+          </div>
+          <div class="svc-mini-fit">Best for: Hotels, schools, hospitals, multi-storey offices</div>
+        </div>
       </div>
     </div>
 
-    <div class="svc-panel" id="panel-access" role="tabpanel" aria-labelledby="tab-access" hidden>
-      <div class="svc-detail">
-        <h3>Access Control</h3>
-        <p class="sum">Card, biometric and mobile-credential entry with a full audit trail of who opened what door, and when — down to the second.</p>
-        <div class="svc-feature"><div class="fic"><svg viewBox="0 0 20 20"><circle cx="10" cy="7" r="3.4"/><path d="M4 17 C4 13 16 13 16 17"/></svg></div><div><h4>Biometric + card + mobile</h4><p>Fingerprint or face for sensitive areas, cards for general staff, phone credentials for management.</p></div></div>
-        <div class="svc-feature"><div class="fic"><svg viewBox="0 0 20 20"><rect x="3" y="4" width="14" height="12" rx="1"/><path d="M3 8 H17"/></svg></div><div><h4>Attendance built in</h4><p>The same badge events feed HR attendance reports — no separate time-clock hardware.</p></div></div>
-        <div class="svc-feature"><div class="fic"><svg viewBox="0 0 20 20"><path d="M10 3 V10 L14 13"/><circle cx="10" cy="10" r="7"/></svg></div><div><h4>Time-zoned permissions</h4><p>Contractors get weekday daytime access; stores and server rooms lock outside approved hours automatically.</p></div></div>
-        <div class="svc-feature"><div class="fic"><svg viewBox="0 0 20 20"><path d="M4 10 L9 15 L16 5"/></svg></div><div><h4>Instant revocation</h4><p>A departed employee's credential dies in one click — across every door, every site, at once.</p></div></div>
-      </div>
-      <div class="svc-side">
-        <div class="spec-box">
-          <h4>Typical Scope</h4>
-          <div class="spec-line"><span class="k">Doors</span><span class="v">2 – 200+ per site</span></div>
-          <div class="spec-line"><span class="k">Credentials</span><span class="v">Card · biometric · mobile</span></div>
-          <div class="spec-line"><span class="k">Audit trail</span><span class="v">Per-event, exportable</span></div>
-          <div class="spec-line"><span class="k">Install time</span><span class="v">2 days – 2 weeks</span></div>
-          <div class="spec-line"><span class="k">Integration</span><span class="v">HR &amp; CCTV linked</span></div>
+    <!-- ── Panel 3: Access & Automation ── -->
+    <div class="svc-panel" id="panel-accessauto" role="tabpanel" aria-labelledby="tab-accessauto" hidden>
+      <div class="svc-cat-grid svc-2col">
+        <div class="svc-mini">
+          <div class="svc-mini-head"><svg class="svc-mini-icon" viewBox="0 0 36 36" fill="none"><rect x="8" y="4" width="20" height="28" rx="2" stroke="#f6f5f2" stroke-width="1.3"/><circle cx="18" cy="16" r="4.5" stroke="#e2372b" stroke-width="1.3"/><path d="M12 28 C12 23 24 23 24 28" stroke="#f6f5f2" stroke-width="1.3"/></svg><span class="svc-mini-name">Access Control</span></div>
+          <p class="svc-mini-desc">Biometric, smart card and mobile-credential entry with full audit trails, time-zoned permissions and HR attendance — all from one platform.</p>
+          <ul class="svc-mini-features">
+            <li>Fingerprint, face, card &amp; mobile credentials</li>
+            <li>Floor-by-floor &amp; time-based permissions</li>
+            <li>HR attendance feed from badge events</li>
+            <li>Visitor credentialing &amp; QR day-passes</li>
+          </ul>
+          <div class="svc-mini-specs">
+            <div class="spec-line"><span class="k">Doors</span><span class="v">2 – 200+ per site</span></div>
+            <div class="spec-line"><span class="k">Audit trail</span><span class="v">Per-event, exportable</span></div>
+          </div>
+          <div class="svc-mini-fit">Best for: Offices, banks, campuses, server rooms</div>
         </div>
-        <div class="fit-box"><h4>Best fit for</h4><p>Corporate offices, banks, campuses and factories where who-went-where must be provable.</p></div>
+        <div class="svc-mini">
+          <div class="svc-mini-head"><svg class="svc-mini-icon" viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="10" stroke="#f6f5f2" stroke-width="1.3"/><path d="M18 8 V12 M18 24 V28 M8 18 H12 M24 18 H28" stroke="#e2372b" stroke-width="1.3"/><circle cx="18" cy="18" r="4" stroke="#f6f5f2" stroke-width="1.3"/></svg><span class="svc-mini-name">Industrial Automation</span></div>
+          <p class="svc-mini-desc">Automation solutions that enhance operational efficiency, enforce safety protocols and integrate security monitoring within manufacturing environments.</p>
+          <ul class="svc-mini-features">
+            <li>PLC &amp; SCADA integration for process safety</li>
+            <li>Machine area access control &amp; lockout</li>
+            <li>Production floor surveillance &amp; analytics</li>
+            <li>Alarm management &amp; incident reporting</li>
+          </ul>
+          <div class="svc-mini-specs">
+            <div class="spec-line"><span class="k">Environments</span><span class="v">Manufacturing, processing</span></div>
+            <div class="spec-line"><span class="k">Integration</span><span class="v">SCADA / PLC / ERP</span></div>
+          </div>
+          <div class="svc-mini-fit">Best for: Textile mills, food processing, pharmaceuticals</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Panel 4: Professional Services ── -->
+    <div class="svc-panel" id="panel-professional" role="tabpanel" aria-labelledby="tab-professional" hidden>
+      <div class="svc-cat-grid svc-3col">
+        <div class="svc-mini">
+          <div class="svc-mini-head"><svg class="svc-mini-icon" viewBox="0 0 36 36" fill="none"><path d="M8 28 L13 18 L18 23 L23 12 L28 28" stroke="#f6f5f2" stroke-width="1.3" stroke-linejoin="round"/><path d="M6 17 L3 13 M3 13 L6 9 M3 13 H12" stroke="#e2372b" stroke-width="1.3"/></svg><span class="svc-mini-name">System Installation</span></div>
+          <p class="svc-mini-desc">Professional installation and full commissioning of all security systems by PEC-licensed technicians — tested zone-by-zone with the client present.</p>
+          <ul class="svc-mini-features">
+            <li>PEC-licensed certified technicians</li>
+            <li>Phased installation — no operational disruption</li>
+            <li>Night &amp; weekend work available</li>
+            <li>Full handover documentation provided</li>
+          </ul>
+          <div class="svc-mini-specs">
+            <div class="spec-line"><span class="k">Timeline</span><span class="v">2 days – 8 weeks</span></div>
+            <div class="spec-line"><span class="k">Coverage</span><span class="v">Karachi · Lahore · ISB</span></div>
+          </div>
+          <div class="svc-mini-fit">Required with: Every system ISE PK supplies</div>
+        </div>
+        <div class="svc-mini">
+          <div class="svc-mini-head"><svg class="svc-mini-icon" viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="12" stroke="#f6f5f2" stroke-width="1.3"/><path d="M18 9 V18 L23 22" stroke="#e2372b" stroke-width="1.6"/></svg><span class="svc-mini-name">System Maintenance</span></div>
+          <p class="svc-mini-desc">Scheduled maintenance visits, firmware updates and emergency call-out — keeping every system performing at peak and audit-ready year round.</p>
+          <ul class="svc-mini-features">
+            <li>Quarterly fire panel &amp; detector testing</li>
+            <li>CCTV lens cleaning, HDD health checks</li>
+            <li>Access system firmware &amp; credential review</li>
+            <li>Emergency call-out SLA across all cities</li>
+          </ul>
+          <div class="svc-mini-specs">
+            <div class="spec-line"><span class="k">Visit frequency</span><span class="v">Quarterly / bi-annual</span></div>
+            <div class="spec-line"><span class="k">Contract</span><span class="v">Annual AMC available</span></div>
+          </div>
+          <div class="svc-mini-fit">Best for: All ISE-installed systems post-warranty</div>
+        </div>
+        <div class="svc-mini">
+          <div class="svc-mini-head"><svg class="svc-mini-icon" viewBox="0 0 36 36" fill="none"><rect x="6" y="6" width="24" height="18" rx="2" stroke="#f6f5f2" stroke-width="1.3"/><path d="M6 16 H30" stroke="#f6f5f2" stroke-width="1"/><path d="M11 22 H19 M11 26 H16" stroke="#e2372b" stroke-width="1.3"/><path d="M14 24 L14 32 M10 32 H18" stroke="#f6f5f2" stroke-width="1.3"/></svg><span class="svc-mini-name">Security Consulting</span></div>
+          <p class="svc-mini-desc">Customised security assessments and vulnerability analysis from licensed engineers — identifying gaps and producing a written recommendations report.</p>
+          <ul class="svc-mini-features">
+            <li>On-site risk &amp; vulnerability assessment</li>
+            <li>Written report with prioritised recommendations</li>
+            <li>Regulatory compliance gap analysis</li>
+            <li>Budget-aligned solution roadmap</li>
+          </ul>
+          <div class="svc-mini-specs">
+            <div class="spec-line"><span class="k">Deliverable</span><span class="v">Written assessment report</span></div>
+            <div class="spec-line"><span class="k">Duration</span><span class="v">1–3 days on-site</span></div>
+          </div>
+          <div class="svc-mini-fit">Best for: New builds, audits, compliance reviews</div>
+        </div>
       </div>
     </div>
   </div>
@@ -1377,78 +1561,84 @@
     <div class="pf-grid" id="pfGrid">
 
       <button class="pf-card" data-tags="cctv karachi" data-id="LOG–0121"
-        data-title="Dolmen-scale shopping mall, Karachi"
+        data-client="Confidential — Premium Retail Group"
+        data-title="Shopping Mall, Karachi (Five Floors)"
         data-desc="A five-floor retail mall with two basement parking levels needed unified surveillance after a string of parking-area thefts. We replaced fragmented analogue clusters with a single IP network and people-counting analytics at every entrance."
         data-specs='[["Cameras installed","318 IP (4MP–8MP)"],["Analytics","People counting · loitering"],["Retention","90 days, duplicated"],["Timeline","6 weeks, nights only"],["Status","Monitored since 2024"]]'>
         <div class="pf-visual"><svg viewBox="0 0 300 150" preserveAspectRatio="none"><rect width="300" height="150" fill="#1a1a1c"/><g stroke="#5c5c60" stroke-width="1" fill="none"><rect x="40" y="40" width="220" height="90"/><line x1="40" y1="70" x2="260" y2="70"/><line x1="40" y1="100" x2="260" y2="100"/><line x1="110" y1="40" x2="110" y2="130"/><line x1="190" y1="40" x2="190" y2="130"/></g><circle cx="75" cy="55" r="5" fill="none" stroke="#e2372b" stroke-width="1.4"/><circle cx="225" cy="115" r="5" fill="none" stroke="#e2372b" stroke-width="1.4"/><circle cx="150" cy="85" r="5" fill="none" stroke="#e2372b" stroke-width="1.4"/></svg></div>
         <div class="pf-body">
           <div class="pf-tags"><span class="pf-tag red">CCTV</span><span class="pf-tag">Karachi</span><span class="pf-tag">Retail</span></div>
-          <h3>Shopping mall, five floors</h3>
+          <div class="pf-client">Confidential — Premium Retail Group</div><h3>Shopping Mall, Five Floors</h3>
           <p>318-camera IP network with people-counting analytics across retail floors and parking.</p>
           <div class="pf-meta"><span>Scale <b>318 cameras</b></span><span>View scope →</span></div>
         </div>
       </button>
 
       <button class="pf-card" data-tags="fire cctv" data-id="LOG–0114"
-        data-title="Textile spinning mill, Faisalabad"
+        data-client="Confidential — Major Textile Manufacturer"
+        data-title="Textile Spinning Mill, Faisalabad"
         data-desc="Cotton dust makes ordinary smoke detection useless and fire risk severe. We engineered heat and beam detection rated for the spinning floors, paired with 64 IP cameras, and tied both to one panel monitored around the clock."
         data-specs='[["Fire system","Addressable, 4 loops, beam + heat"],["Cameras","64 IP across 3 floors"],["Compliance","Insurance inspection passed"],["Timeline","4 weeks, phased by floor"],["Status","Monitored since 2023"]]'>
         <div class="pf-visual"><svg viewBox="0 0 300 150" preserveAspectRatio="none"><rect width="300" height="150" fill="#1a1a1c"/><g stroke="#5c5c60" stroke-width="1" fill="none"><path d="M30 130 L30 60 L80 60 L80 45 L130 45 L130 60 L180 60 L180 45 L230 45 L230 60 L270 60 L270 130 Z"/><line x1="30" y1="95" x2="270" y2="95"/></g><path d="M150 70 C146 76 145 80 146.5 84 C147.5 87 149.5 88.5 150 88.5 C150.5 88.5 152.5 87 153.5 84 C155 80 154 76 150 70 Z" fill="none" stroke="#e2372b" stroke-width="1.4"/></svg></div>
         <div class="pf-body">
           <div class="pf-tags"><span class="pf-tag red">Fire</span><span class="pf-tag red">CCTV</span><span class="pf-tag">Faisalabad</span></div>
-          <h3>Textile mill, dust-rated detection</h3>
+          <div class="pf-client">Confidential — Major Textile Manufacturer</div><h3>Textile Mill, Dust-Rated Detection</h3>
           <p>Beam and heat detection engineered for spinning floors, plus a 64-camera network.</p>
           <div class="pf-meta"><span>Scale <b>3 floors</b></span><span>View scope →</span></div>
         </div>
       </button>
 
       <button class="pf-card" data-tags="access karachi" data-id="LOG–0109"
-        data-title="Corporate headquarters, Karachi"
+        data-client="Confidential — FMCG Holding Group"
+        data-title="Corporate Headquarters, Karachi"
         data-desc="A 900-staff head office was running on a single lobby reader and paper visitor logs. We built floor-by-floor access with biometric entry to finance and server floors, visitor credentialing at reception, and HR attendance from the same badge events."
         data-specs='[["Doors controlled","74 across 11 floors"],["Credentials","Card + biometric + mobile"],["Visitor system","QR day-passes at reception"],["Timeline","3 weeks, zero downtime"],["Status","Monitored since 2024"]]'>
         <div class="pf-visual"><svg viewBox="0 0 300 150" preserveAspectRatio="none"><rect width="300" height="150" fill="#1a1a1c"/><g stroke="#5c5c60" stroke-width="1" fill="none"><rect x="110" y="20" width="80" height="115"/><line x1="110" y1="43" x2="190" y2="43"/><line x1="110" y1="66" x2="190" y2="66"/><line x1="110" y1="89" x2="190" y2="89"/><line x1="110" y1="112" x2="190" y2="112"/></g><rect x="140" y="120" width="20" height="15" fill="none" stroke="#e2372b" stroke-width="1.4"/><circle cx="150" cy="55" r="4" fill="none" stroke="#e2372b" stroke-width="1.4"/></svg></div>
         <div class="pf-body">
           <div class="pf-tags"><span class="pf-tag red">Access</span><span class="pf-tag">Karachi</span><span class="pf-tag">Corporate</span></div>
-          <h3>Head office, 74 doors</h3>
+          <div class="pf-client">Confidential — FMCG Holding Group</div><h3>Head Office, 74 Controlled Doors</h3>
           <p>Floor-by-floor access with biometrics on sensitive floors and QR visitor passes.</p>
           <div class="pf-meta"><span>Scale <b>11 floors</b></span><span>View scope →</span></div>
         </div>
       </button>
 
       <button class="pf-card" data-tags="cctv fire lahore" data-id="LOG–0097"
-        data-title="Logistics warehouse complex, Lahore"
+        data-client="Confidential — National Logistics Operator"
+        data-title="Logistics Warehouse Complex, Lahore"
         data-desc="Three warehouses on one yard, hit twice by after-hours break-ins. We integrated perimeter cameras with the fire panel so any breach after hours triggers both alert paths — control room and owner's phone — inside 30 seconds."
         data-specs='[["Perimeter cameras","28 with line-crossing alerts"],["Fire system","Addressable, 2 loops"],["Alert time","Under 30 seconds"],["Timeline","2 weeks"],["Status","Monitored since 2023"]]'>
         <div class="pf-visual"><svg viewBox="0 0 300 150" preserveAspectRatio="none"><rect width="300" height="150" fill="#1a1a1c"/><g stroke="#5c5c60" stroke-width="1" fill="none"><path d="M30 130 L30 80 L70 55 L110 80 L110 130 Z"/><path d="M120 130 L120 80 L160 55 L200 80 L200 130 Z"/><path d="M210 130 L210 80 L250 55 L290 80 L290 130 Z"/></g><path d="M20 40 L280 40" stroke="#e2372b" stroke-width="1.2" stroke-dasharray="6 5"/></svg></div>
         <div class="pf-body">
           <div class="pf-tags"><span class="pf-tag red">CCTV</span><span class="pf-tag red">Fire</span><span class="pf-tag">Lahore</span></div>
-          <h3>Warehouse yard, integrated alerts</h3>
+          <div class="pf-client">Confidential — National Logistics Operator</div><h3>Warehouse Yard, Integrated Alerts</h3>
           <p>Perimeter breach after hours triggers CCTV and fire-panel alert paths at once.</p>
           <div class="pf-meta"><span>Scale <b>3 warehouses</b></span><span>View scope →</span></div>
         </div>
       </button>
 
       <button class="pf-card" data-tags="access cctv islamabad" data-id="LOG–0092"
-        data-title="Private university campus, Islamabad"
+        data-client="Confidential — Private University"
+        data-title="University Campus, Islamabad (9 Buildings)"
         data-desc="A 6,000-student campus needed to control who enters which building without turning the campus into a checkpoint. Card access on academic blocks and hostels, cameras at every gate, and time-zoned permissions so labs lock automatically at night."
         data-specs='[["Doors controlled","96 across 9 buildings"],["Cameras","142 at gates and corridors"],["Permissions","Time-zoned by role"],["Timeline","8 weeks, semester break"],["Status","Monitored since 2022"]]'>
         <div class="pf-visual"><svg viewBox="0 0 300 150" preserveAspectRatio="none"><rect width="300" height="150" fill="#1a1a1c"/><g stroke="#5c5c60" stroke-width="1" fill="none"><rect x="40" y="60" width="60" height="70"/><rect x="120" y="40" width="60" height="90"/><rect x="200" y="60" width="60" height="70"/><path d="M120 40 L150 22 L180 40"/></g><circle cx="150" cy="85" r="5" fill="none" stroke="#e2372b" stroke-width="1.4"/><rect x="62" y="110" width="16" height="20" fill="none" stroke="#e2372b" stroke-width="1.2"/></svg></div>
         <div class="pf-body">
           <div class="pf-tags"><span class="pf-tag red">Access</span><span class="pf-tag red">CCTV</span><span class="pf-tag">Islamabad</span></div>
-          <h3>University campus, 9 buildings</h3>
+          <div class="pf-client">Confidential — Private University</div><h3>University Campus, 9 Buildings</h3>
           <p>Card access with time-zoned lab permissions and 142 cameras across the campus.</p>
           <div class="pf-meta"><span>Scale <b>6,000 students</b></span><span>View scope →</span></div>
         </div>
       </button>
 
       <button class="pf-card" data-tags="fire access karachi" data-id="LOG–0086"
-        data-title="Private hospital, Karachi"
+        data-client="Confidential — Private Healthcare Group"
+        data-title="Private Hospital, Karachi (240 Beds)"
         data-desc="Hospitals can't evacuate on a false alarm. We installed zoned detection with staged alerts — nurse-station warning first, zone alarm second — plus biometric access on pharmacy, records and ICU so controlled areas are provably controlled."
         data-specs='[["Fire system","Zoned, staged alerting"],["Doors controlled","31 (pharmacy, ICU, records)"],["False-alarm rate","Zero evacuations since install"],["Timeline","5 weeks, ward by ward"],["Status","Monitored since 2023"]]'>
         <div class="pf-visual"><svg viewBox="0 0 300 150" preserveAspectRatio="none"><rect width="300" height="150" fill="#1a1a1c"/><g stroke="#5c5c60" stroke-width="1" fill="none"><rect x="60" y="35" width="180" height="95"/><line x1="60" y1="82" x2="240" y2="82"/><line x1="150" y1="35" x2="150" y2="130"/></g><path d="M150 55 V75 M140 65 H160" stroke="#e2372b" stroke-width="1.6"/></svg></div>
         <div class="pf-body">
           <div class="pf-tags"><span class="pf-tag red">Fire</span><span class="pf-tag red">Access</span><span class="pf-tag">Karachi</span></div>
-          <h3>Hospital, staged fire alerting</h3>
+          <div class="pf-client">Confidential — Private Healthcare Group</div><h3>Hospital, Staged Fire Alerting</h3>
           <p>Nurse-station-first alerts prevent false evacuations; biometrics guard pharmacy and ICU.</p>
           <div class="pf-meta"><span>Scale <b>240 beds</b></span><span>View scope →</span></div>
         </div>
@@ -1463,6 +1653,7 @@
   <div class="pf-modal-card">
     <button class="pf-modal-close" id="pfModalClose" aria-label="Close project details">✕</button>
     <div class="m-id" id="pfModalId"></div>
+    <div class="pf-modal-client" id="pfModalClient"></div>
     <h3 id="pfModalTitle"></h3>
     <p class="m-desc" id="pfModalDesc"></p>
     <div class="m-specs" id="pfModalSpecs"></div>
@@ -1493,17 +1684,21 @@
         <div class="est-q" data-q="size">
           <div class="q-label">02 — Approximate size</div>
           <div class="est-opts">
-            <button class="est-opt selected" data-v="small">Under 10,000 sq ft</button>
-            <button class="est-opt" data-v="medium">10,000 – 50,000 sq ft</button>
-            <button class="est-opt" data-v="large">Over 50,000 sq ft</button>
+            <button class="est-opt selected" data-v="small">Under 500 sq yards</button>
+            <button class="est-opt" data-v="medium">500 – 2,000 sq yards</button>
+            <button class="est-opt" data-v="large">Over 2,000 sq yards</button>
           </div>
         </div>
         <div class="est-q" data-q="systems">
           <div class="q-label">03 — Systems needed <span style="color:var(--red)">(pick any)</span></div>
           <div class="est-opts multi" id="estSystemsOpts">
-            <button class="est-opt selected" data-v="cctv">CCTV</button>
-            <button class="est-opt" data-v="fire">Fire Detection</button>
+            <button class="est-opt selected" data-v="cctv">CCTV Surveillance</button>
+            <button class="est-opt" data-v="fire">Fire Alarm</button>
             <button class="est-opt" data-v="access">Access Control</button>
+            <button class="est-opt" data-v="intrusion">Intrusion Detection</button>
+            <button class="est-opt" data-v="gas">Gas Detection</button>
+            <button class="est-opt" data-v="industrial">Industrial Automation</button>
+            <button class="est-opt" data-v="hazard">Hazard Detection</button>
           </div>
           <span class="est-systems-err" id="estSystemsErr">Please select at least one system.</span>
         </div>
@@ -2120,7 +2315,7 @@
 
   /* ---- service tabs (keyboard accessible) ---- */
   var tabs = Array.prototype.slice.call(document.querySelectorAll('.svc-tab'));
-  var panels = { 'tab-fire':'panel-fire', 'tab-cctv':'panel-cctv', 'tab-access':'panel-access' };
+  var panels = { 'tab-surveillance':'panel-surveillance', 'tab-safety':'panel-safety', 'tab-accessauto':'panel-accessauto', 'tab-professional':'panel-professional' };
   function selectTab(tab){
     tabs.forEach(function(t){
       var on = t === tab;
@@ -2168,6 +2363,7 @@
   function openModal(card){
     lastFocus = card;
     document.getElementById('pfModalId').textContent = card.getAttribute('data-id');
+    document.getElementById('pfModalClient').textContent = card.getAttribute('data-client') || '';
     document.getElementById('pfModalTitle').textContent = card.getAttribute('data-title');
     document.getElementById('pfModalDesc').textContent = card.getAttribute('data-desc');
     var specs = JSON.parse(card.getAttribute('data-specs'));
@@ -2190,9 +2386,15 @@
 
   /* ---- estimator ---- */
   var estState = { type:'office', size:'small', systems:['cctv'], monitoring:'self' };
-  var PKR = { cctv:{ small:[350,700], medium:[800,1800], large:[2000,5000] },
-              fire:{ small:[400,900], medium:[1000,2500], large:[2800,7000] },
-              access:{ small:[250,550], medium:[600,1400], large:[1500,3500] } };
+  var PKR = {
+    cctv:      { small:[350,700],   medium:[800,1800],  large:[2000,5000]  },
+    fire:      { small:[400,900],   medium:[1000,2500], large:[2800,7000]  },
+    access:    { small:[250,550],   medium:[600,1400],  large:[1500,3500]  },
+    intrusion: { small:[200,450],   medium:[500,1200],  large:[1300,3000]  },
+    gas:       { small:[150,320],   medium:[380,900],   large:[1000,2500]  },
+    industrial:{ small:[500,1200],  medium:[1500,3500], large:[4000,10000] },
+    hazard:    { small:[350,750],   medium:[850,2000],  large:[2300,5500]  }
+  };
   var typeMult = { office:1, retail:1.15, industrial:1.25, residential:1.1 };
   var sysNames = { cctv:'CCTV Surveillance', fire:'Fire Detection', access:'Access Control' };
 
@@ -2364,6 +2566,52 @@
     });
   });
 
+
+  /* ---- hero panel auto-cycle ---- */
+  var spPanels = document.querySelectorAll('.sys-panel[data-sys]');
+  var spDots   = document.querySelectorAll('.sp-cycle-dot');
+  var spIdx    = 0;
+  var spTimer  = null;
+
+  function activatePanel(idx) {
+    spIdx = idx;
+    spPanels.forEach(function(p, i){
+      p.classList.toggle('sp-active', i === idx);
+    });
+    spDots.forEach(function(d, i){
+      d.classList.toggle('active', i === idx);
+    });
+  }
+
+  function startCycle() {
+    clearInterval(spTimer);
+    if(!reducedMotion){
+      spTimer = setInterval(function(){
+        activatePanel((spIdx + 1) % spPanels.length);
+      }, 4500);
+    }
+  }
+
+  if(spPanels.length){
+    activatePanel(0);
+    startCycle();
+    spPanels.forEach(function(p, i){
+      p.addEventListener('mouseenter', function(){
+        clearInterval(spTimer);
+        activatePanel(i);
+      });
+      p.addEventListener('mouseleave', function(){
+        startCycle();
+      });
+    });
+    spDots.forEach(function(d){
+      d.addEventListener('click', function(){
+        activatePanel(parseInt(d.getAttribute('data-idx'), 10));
+        startCycle();
+      });
+    });
+  }
+
   /* ---- access panel live clock ---- */
   var heroClockEl = document.getElementById('heroAccessTime');
   if(heroClockEl){
@@ -2422,8 +2670,8 @@
 
   // Human-readable label maps
   var typeLabels     = { office:'Corporate Office', retail:'Retail / Mall', industrial:'Factory / Warehouse', residential:'Gated Community' };
-  var sizeLabels     = { small:'Under 10,000 sq ft', medium:'10,000 – 50,000 sq ft', large:'Over 50,000 sq ft' };
-  var sysLabels      = { cctv:'CCTV Surveillance', fire:'Fire Detection', access:'Access Control' };
+  var sizeLabels     = { small:'Under 500 sq yards', medium:'500 – 2,000 sq yards', large:'Over 2,000 sq yards' };
+  var sysLabels      = { cctv:'CCTV Surveillance', fire:'Fire Alarm Systems', access:'Access Control', intrusion:'Intrusion Detection', gas:'Gas Detection', industrial:'Industrial Automation', hazard:'Hazard Detection' };
   var monitorLabels  = { self:'Self-monitored (mobile app)', pro:'24/7 ISE·PK Professional Monitoring' };
   var timelineLabels = { asap:'ASAP', '1m':'Within 1 month', '3m':'1–3 months', '6m':'3–6 months', plan:'Planning stage' };
 
