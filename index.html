@@ -912,6 +912,41 @@
   .est-q-input input:focus{ border-color:var(--red); }
   .est-q-input input::placeholder{ color:var(--steel-dim); } margin-top:18px; padding-top:18px; border-top:1px solid rgba(255,255,255,.1); }
   .est-form-box h5{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--steel-dim); margin-bottom:14px; }
+  /* ===== GOOGLE MAP EMBED ===== */
+  .map-embed-wrap{
+    position:relative; margin:40px 0 0;
+    border:1px solid rgba(255,255,255,0.12); border-radius:8px; overflow:hidden;
+  }
+  .map-embed-label{
+    display:flex; align-items:center; gap:10px;
+    padding:14px 20px; background:rgba(255,255,255,0.04);
+    border-bottom:1px solid rgba(255,255,255,0.1);
+    font-family:'IBM Plex Mono',monospace; font-size:12.5px;
+    letter-spacing:.03em; color:rgba(255,255,255,0.75);
+  }
+  .map-embed-label svg{ width:14px; height:18px; flex:none; }
+  .map-embed-frame{
+    position:relative; width:100%; height:380px;
+    background:var(--card);
+  }
+  @media (max-width:768px){ .map-embed-frame{ height:280px; } }
+  @media (max-width:480px){ .map-embed-frame{ height:220px; } }
+  .map-embed-frame iframe{
+    width:100%; height:100%; border:0; display:block;
+    filter:grayscale(30%) contrast(1.05);
+    transition:filter .3s ease;
+  }
+  .map-embed-frame:hover iframe{ filter:grayscale(0%) contrast(1); }
+  .map-directions-btn{
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    padding:13px 20px; background:rgba(255,255,255,0.04);
+    border-top:1px solid rgba(255,255,255,0.1);
+    font-family:'Archivo',sans-serif; font-weight:900; font-size:12px;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--red);
+    text-decoration:none; transition:background .2s, color .2s;
+  }
+  .map-directions-btn:hover{ background:rgba(226,55,43,0.12); color:#fff; }
+  .map-directions-btn svg{ width:16px; height:16px; }
 </style>
 </head>
 <body>
@@ -1665,6 +1700,31 @@
     </div>
     <div class="credentials">
       <span>PEC Licensed Engineers</span><span>PSQCA Compliant Fire Systems</span><span>SECP Registered</span>
+    </div>
+
+    <!-- Google Maps embed -->
+    <div class="map-embed-wrap">
+      <div class="map-embed-label">
+        <svg viewBox="0 0 18 22" fill="none" aria-hidden="true"><path d="M9 1C5.134 1 2 4.134 2 8c0 5.25 7 13 7 13s7-7.75 7-13c0-3.866-3.134-7-7-7Z" stroke="#e2372b" stroke-width="1.4"/><circle cx="9" cy="8" r="2.5" stroke="#e2372b" stroke-width="1.4"/></svg>
+        Office #102, A-31, Block 7/8, KCHS Union, Shahrah-e-Faisal, Karachi
+      </div>
+      <div class="map-embed-frame">
+        <iframe
+          src="https://www.google.com/maps?q=Office+102,+A-31,+Block+7-8,+KCHS+Union,+Shahrah-e-Faisal,+Karachi,+Pakistan&output=embed"
+          width="100%" height="100%"
+          style="border:0; display:block;"
+          allowfullscreen
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="ISE PK Head Office — Karachi"
+        ></iframe>
+      </div>
+      <a class="map-directions-btn"
+         href="https://share.google/JZZs9AF5RW155lq9H"
+         target="_blank" rel="noopener">
+        <svg viewBox="0 0 20 20" fill="none"><path d="M10 2L18 10L10 18M2 10h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Get Directions
+      </a>
     </div>
 
     <!-- Inquiry form -->
