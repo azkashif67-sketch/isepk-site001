@@ -105,15 +105,18 @@
 
   /* Desktop links */
   nav.links{
-    display:flex; gap:32px;
-    font-family:'Archivo',sans-serif; font-weight:900;
-    font-size:13px; letter-spacing:0.07em; text-transform:uppercase;
-    flex:1; justify-content:center;
+    display:flex; gap:32px; flex:1; justify-content:center;
   }
   nav.links a{
-    color:rgba(255,255,255,0.65);
+    font-family:'Archivo',sans-serif;
+    font-weight:900;
+    font-size:13px;
+    letter-spacing:0.07em;
+    text-transform:uppercase;
+    color:rgba(255,255,255,0.7);
     position:relative; padding-bottom:4px;
     transition:color .2s; white-space:nowrap;
+    text-decoration:none;
   }
   nav.links a:hover, nav.links a.active{ color:#fff; }
   nav.links a::after{
