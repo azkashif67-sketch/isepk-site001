@@ -882,7 +882,26 @@
   .cta-form-box{ background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.1); padding:32px; }
   .cta-form-box h4{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--steel-dim); margin-bottom:22px; }
 
-  /* Estimator text-input field (Q6 location) */
+  /* Input validation states */
+  .ise-field.has-error input,
+  .ise-field.has-error select,
+  .ise-field.has-error textarea{ border-color:var(--red) !important; }
+  .ise-field .field-err{
+    display:none; font-family:'IBM Plex Mono',monospace; font-size:10.5px;
+    color:var(--red); margin-top:5px; letter-spacing:.03em;
+  }
+  .ise-field.has-error .field-err{ display:block; }
+  .est-q-input.has-error input{ border-bottom-color:var(--red) !important; }
+  .est-q-input .field-err{
+    display:none; font-family:'IBM Plex Mono',monospace; font-size:10.5px;
+    color:var(--red); margin-top:5px; letter-spacing:.03em;
+  }
+  .est-q-input.has-error .field-err{ display:block; }
+  .est-systems-err{
+    display:none; font-family:'IBM Plex Mono',monospace; font-size:10.5px;
+    color:var(--red); margin-top:6px; letter-spacing:.03em;
+  }
+  .systems-invalid .est-systems-err{ display:block; }
   .est-q-input input{
     width:100%; background:transparent; border:none;
     border-bottom:1px solid rgba(255,255,255,.22);
@@ -1323,11 +1342,12 @@
         </div>
         <div class="est-q" data-q="systems">
           <div class="q-label">03 — Systems needed <span style="color:var(--red)">(pick any)</span></div>
-          <div class="est-opts multi">
+          <div class="est-opts multi" id="estSystemsOpts">
             <button class="est-opt selected" data-v="cctv">CCTV</button>
             <button class="est-opt" data-v="fire">Fire Detection</button>
             <button class="est-opt" data-v="access">Access Control</button>
           </div>
+          <span class="est-systems-err" id="estSystemsErr">Please select at least one system.</span>
         </div>
         <div class="est-q" data-q="monitoring">
           <div class="q-label">04 — Monitoring</div>
@@ -1346,9 +1366,10 @@
             <button class="est-opt" data-v="plan">Planning stage</button>
           </div>
         </div>
-        <div class="est-q est-q-input">
+        <div class="est-q est-q-input" id="estLocationWrap">
           <div class="q-label">06 — Site Location (City &amp; Area)</div>
           <input type="text" id="estLocation" placeholder="e.g. Karachi — Defence Phase V" />
+          <span class="field-err">Please enter the site location.</span>
         </div>
       </div>
       <div class="est-result" aria-live="polite">
@@ -1364,10 +1385,22 @@
           <h5>Send this estimate — we'll confirm in 1 day</h5>
           <form class="ise-form" id="estForm" novalidate>
             <div class="ise-field-row">
-              <div class="ise-field"><label>Your Name</label><input type="text" name="name" placeholder="Full name" required></div>
-              <div class="ise-field"><label>Phone</label><input type="tel" name="phone" placeholder="+92 3XX XXXXXXX" required></div>
+              <div class="ise-field" id="estFieldName">
+                <label>Your Name</label>
+                <input type="text" name="name" placeholder="Full name" required>
+                <span class="field-err">Please enter your name.</span>
+              </div>
+              <div class="ise-field" id="estFieldPhone">
+                <label>Phone</label>
+                <input type="tel" name="phone" placeholder="+92 3XX XXXXXXX" required>
+                <span class="field-err">Please enter your phone number.</span>
+              </div>
             </div>
-            <div class="ise-field"><label>Email</label><input type="email" name="email" placeholder="you@company.com" required></div>
+            <div class="ise-field" id="estFieldEmail">
+              <label>Email</label>
+              <input type="email" name="email" placeholder="you@company.com" required>
+              <span class="field-err">Please enter a valid email address.</span>
+            </div>
             <button type="submit" class="form-submit-btn" data-label="Send Estimate Inquiry →">Send Estimate Inquiry →</button>
             <div class="form-msg" id="estFormMsg"></div>
           </form>
@@ -2201,23 +2234,104 @@
     });
   }
 
-  /* ---- estimator form ---- */
+  /* ---- estimator form — full validation + complete payload ---- */
   var estForm = document.getElementById('estForm');
+
+  // Human-readable label maps
+  var typeLabels     = { office:'Corporate Office', retail:'Retail / Mall', industrial:'Factory / Warehouse', residential:'Gated Community' };
+  var sizeLabels     = { small:'Under 10,000 sq ft', medium:'10,000 – 50,000 sq ft', large:'Over 50,000 sq ft' };
+  var sysLabels      = { cctv:'CCTV Surveillance', fire:'Fire Detection', access:'Access Control' };
+  var monitorLabels  = { self:'Self-monitored (mobile app)', pro:'24/7 ISE·PK Professional Monitoring' };
+  var timelineLabels = { asap:'ASAP', '1m':'Within 1 month', '3m':'1–3 months', '6m':'3–6 months', plan:'Planning stage' };
+
+  function clearEstErrors() {
+    ['estFieldName','estFieldPhone','estFieldEmail'].forEach(function(id){
+      var el = document.getElementById(id);
+      if(el) el.classList.remove('has-error');
+    });
+    var locWrap = document.getElementById('estLocationWrap');
+    if(locWrap) locWrap.classList.remove('has-error');
+    var sysOpts = document.getElementById('estSystemsOpts');
+    if(sysOpts) sysOpts.parentElement.classList.remove('systems-invalid');
+  }
+
   if(estForm){
     estForm.addEventListener('submit', function(e){
       e.preventDefault();
-      var sysNames = { cctv:'CCTV Surveillance', fire:'Fire Detection', access:'Access Control' };
+      clearEstErrors();
+
+      var valid = true;
+
+      // Validate systems (at least one selected)
+      if(estState.systems.length === 0){
+        var sysOpts = document.getElementById('estSystemsOpts');
+        if(sysOpts) sysOpts.parentElement.classList.add('systems-invalid');
+        valid = false;
+      }
+
+      // Validate location
+      var locEl  = document.getElementById('estLocation');
+      var locVal = locEl ? locEl.value.trim() : '';
+      if(!locVal){
+        var locWrap = document.getElementById('estLocationWrap');
+        if(locWrap) locWrap.classList.add('has-error');
+        if(locEl) locEl.focus();
+        valid = false;
+      }
+
+      // Validate name
+      var nameEl = estForm.querySelector('[name="name"]');
+      if(!nameEl || !nameEl.value.trim()){
+        document.getElementById('estFieldName').classList.add('has-error');
+        valid = false;
+      }
+
+      // Validate phone
+      var phoneEl = estForm.querySelector('[name="phone"]');
+      if(!phoneEl || !phoneEl.value.trim()){
+        document.getElementById('estFieldPhone').classList.add('has-error');
+        valid = false;
+      }
+
+      // Validate email
+      var emailEl = estForm.querySelector('[name="email"]');
+      var emailOk = emailEl && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value.trim());
+      if(!emailOk){
+        document.getElementById('estFieldEmail').classList.add('has-error');
+        valid = false;
+      }
+
+      if(!valid) return;
+
+      // Build comprehensive payload
       submitToFormSubmit(estForm, document.getElementById('estFormMsg'), {
-        _subject: 'ISE PK — Estimate Request',
-        site_type:  estState.type,
-        size:       estState.size,
-        systems:    estState.systems.map(function(s){ return sysNames[s]; }).join(', '),
-        monitoring: estState.monitoring === 'pro' ? '24/7 ISE PK' : 'Self-monitored',
-        timeline:   estState.timeline,
-        location:   (document.getElementById('estLocation') || {}).value || '—',
-        estimated_range: document.getElementById('estAmt').textContent
+        subject:           'ISE PK — Estimate Request from ' + (nameEl ? nameEl.value.trim() : ''),
+        // Site details
+        '01_Site_Type':    typeLabels[estState.type]    || estState.type,
+        '02_Site_Size':    sizeLabels[estState.size]    || estState.size,
+        '03_Systems':      estState.systems.map(function(s){ return sysLabels[s] || s; }).join(', '),
+        '04_Monitoring':   monitorLabels[estState.monitoring] || estState.monitoring,
+        '05_Timeline':     timelineLabels[estState.timeline]  || estState.timeline,
+        '06_Location':     locVal,
+        // Estimate
+        Estimated_Range:   document.getElementById('estAmt').textContent
       });
     });
+
+    // Clear error on input
+    estForm.querySelectorAll('input').forEach(function(inp){
+      inp.addEventListener('input', function(){
+        var wrap = inp.closest('.ise-field');
+        if(wrap) wrap.classList.remove('has-error');
+      });
+    });
+    var locEl2 = document.getElementById('estLocation');
+    if(locEl2){
+      locEl2.addEventListener('input', function(){
+        var w = document.getElementById('estLocationWrap');
+        if(w) w.classList.remove('has-error');
+      });
+    }
   }
 
   /* ---- CTA inquiry form ---- */
