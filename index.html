@@ -1090,6 +1090,18 @@
   @media(max-width:400px){
     .svc-tab{ font-size:10px; padding:8px 8px 10px; }
   }
+
+  /* Team sub-section */
+  .team-sub{ margin-top:56px; }
+  .team-sub-head{ display:flex; align-items:center; gap:16px; margin-bottom:28px; }
+  .team-sub-label{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--steel-dim); white-space:nowrap;
+  }
+  .team-sub-rule{ flex:1; height:1px; background:rgba(255,255,255,.1); }
+  .team-grid-sub .team-card{ opacity:.9; }
+  .team-pioneers{ margin-bottom:0; }
+  @media(max-width:640px){ .team-sub{ margin-top:36px; } }
 </style>
 </head>
 <body>
@@ -1101,7 +1113,6 @@
   <nav class="links nav-hide-mobile" aria-label="Primary">
     <a href="#systems"   data-nav data-target="systems">Systems</a>
     <a href="#portfolio" data-nav data-target="portfolio">Portfolio</a>
-    <a href="#estimator" data-nav data-target="estimator">Estimator</a>
     <a href="#team"      data-nav data-target="team">Team</a>
     <a href="#faq"       data-nav data-target="faq">FAQ</a>
     <a href="#contact"   data-nav data-target="contact">Contact</a>
@@ -1116,7 +1127,6 @@
 <div class="mobile-menu" id="mobileMenu">
   <a href="#systems"   data-target="systems">Systems</a>
   <a href="#portfolio" data-target="portfolio">Portfolio</a>
-  <a href="#estimator" data-target="estimator">Estimator</a>
   <a href="#team"      data-target="team">Team</a>
   <a href="#faq"       data-target="faq">FAQ</a>
   <a href="#contact"   data-target="contact">Contact</a>
@@ -1140,9 +1150,9 @@
             <div class="line l1"><span>FIRE. SURVEILLANCE. ACCESS.</span></div>
             <div class="line l2"><span>ENGINEERED AS ONE SYSTEM.</span></div>
           </h1>
-          <p class="lede">From fire alarms and CCTV to intrusion detection, gas monitoring, access control and industrial automation — we design, install and maintain the full security stack for commercial sites across Pakistan — engineered to fit your site, compliant with local regulations, and maintained by the same engineers who installed it.</p>
+          <p class="lede">From fire alarms and CCTV to intrusion detection, gas monitoring, access control and industrial automation — we design, install and maintain the full security stack for commercial sites across Pakistan — with UPS, generator and battery backup systems that keep every device live through load-shedding.</p>
           <div class="hero-actions">
-            <button class="btn-solid-white" data-target="estimator">Get an Estimate</button>
+            <button class="btn-solid-white" data-target="contact">Get Started</button>
             <a class="btn-ghost-red" href="tel:+923007017786">Call +92 300 7017786</a>
           </div>
         </div>
@@ -1292,9 +1302,9 @@
     <div class="section-head">
       <div>
         <div class="eyebrow">Why Pakistani businesses choose ISE·PK</div>
-        <h2>Systems that stay live.<br>Engineers who stay close.</h2>
+        <h2>Systems that stay live<br>through every outage.</h2>
       </div>
-      <p class="desc">Local engineers, local response times, and systems built to the specific layout and risk profile of your site — not a catalogue package.</p>
+      <p class="desc">Local engineers, local response times, and power-continuity systems built to your site's load-shedding pattern — so nothing goes dark when the grid does.</p>
     </div>
     <div class="stat-row">
       <div class="stat-cell"><div class="num" data-count="180" data-suffix="+">0</div><div class="lbl">Sites monitored</div></div>
@@ -1305,8 +1315,8 @@
     <div class="power-note reveal">
       <div class="ic"><svg viewBox="0 0 42 42" fill="none"><path d="M23 4 L10 24 H20 L17 38 L32 16 H21 Z"/></svg></div>
       <div>
-        <h3>Power continuity? We can arrange a compliant provider.</h3>
-        <p>ISE PK does not supply UPS or generator systems directly, but we work with vetted power-continuity partners. Ask us during your site survey and we'll coordinate the right solution alongside your security install.</p>
+        <h3>Power continuity — UPS, generators &amp; battery backup.</h3>
+        <p>ISE PK supplies and installs complete power-continuity systems — from UPS units and battery backup to generator solutions — sized to your site's load-shedding pattern so every camera, panel and reader stays live through outages.</p>
       </div>
     </div>
   </div>
@@ -1397,6 +1407,13 @@
         <p class="asvc-desc">Expert installation of integrated fire alarms, smoke detectors and early-warning systems — engineered for rapid response and compliance with local safety regulations.</p>
       </div>
 
+      <div class="asvc-card reveal">
+        <div class="asvc-icon"><svg viewBox="0 0 44 44" fill="none"><circle cx="22" cy="22" r="14" stroke="#f6f5f2" stroke-width="1.4"/><path d="M22 12 V22 L28 26" stroke="#e2372b" stroke-width="1.6"/><rect x="10" y="34" width="24" height="6" rx="1" stroke="#f6f5f2" stroke-width="1.2" fill="none"/><line x1="15" y1="34" x2="15" y2="40" stroke="#f6f5f2" stroke-width="1"/><line x1="22" y1="34" x2="22" y2="40" stroke="#f6f5f2" stroke-width="1"/><line x1="29" y1="34" x2="29" y2="40" stroke="#f6f5f2" stroke-width="1"/></svg></div>
+        <div class="asvc-cat">Automation</div>
+        <h3 class="asvc-title">Centralized Clocking Systems</h3>
+        <p class="asvc-desc">Biometric and RFID-based centralized time &amp; attendance systems that consolidate workforce clocking across all locations into one management platform — accurate, tamper-proof and HR-ready.</p>
+      </div>
+
     </div><!-- /all-svc-grid -->
 
     <!-- ── ALL SERVICES DEEP-DIVE — 4 CATEGORY TABS ── -->
@@ -1424,7 +1441,7 @@
           <ul class="svc-mini-features">
             <li>Loitering, line-crossing &amp; motion analytics</li>
             <li>4MP–8K resolution with IR night vision</li>
-            <li>Tamper-resistant, duplicated recording storage</li>
+            <li>Battery-backed — keeps recording through load-shedding</li>
             <li>Remote live feed on any device</li>
           </ul>
           <div class="svc-mini-specs">
@@ -1714,109 +1731,6 @@
   </div>
 </div>
 
-<!-- ================= ESTIMATOR ================= -->
-<section class="estimator" id="estimator">
-  <div class="wrap">
-    <div class="section-head">
-      <div>
-        <div class="eyebrow">Instant Estimator</div>
-        <h2>Scope your system<br>in 20 seconds.</h2>
-      </div>
-      <p class="desc">Pick what matches your site and get a ballpark scope. An engineer confirms everything on the site survey. Free for Karachi; inter-city visits may carry a commute fee.</p>
-    </div>
-    <div class="est-grid">
-      <div>
-        <div class="est-q" data-q="type">
-          <div class="q-label">01 — Site type</div>
-          <div class="est-opts">
-            <button class="est-opt selected" data-v="office">Office</button>
-            <button class="est-opt" data-v="retail">Retail / Mall</button>
-            <button class="est-opt" data-v="industrial">Factory / Warehouse</button>
-            <button class="est-opt" data-v="residential">Gated Community</button>
-          </div>
-        </div>
-        <div class="est-q" data-q="size">
-          <div class="q-label">02 — Approximate size</div>
-          <div class="est-opts">
-            <button class="est-opt selected" data-v="small">Under 500 sq yards</button>
-            <button class="est-opt" data-v="medium">500 – 2,000 sq yards</button>
-            <button class="est-opt" data-v="large">Over 2,000 sq yards</button>
-          </div>
-        </div>
-        <div class="est-q" data-q="systems">
-          <div class="q-label">03 — Systems needed <span style="color:var(--red)">(pick any)</span></div>
-          <div class="est-opts multi" id="estSystemsOpts">
-            <button class="est-opt selected" data-v="cctv">CCTV Surveillance</button>
-            <button class="est-opt" data-v="fire">Fire Alarm</button>
-            <button class="est-opt" data-v="access">Access Control</button>
-            <button class="est-opt" data-v="intrusion">Intrusion Detection</button>
-            <button class="est-opt" data-v="gas">Gas Detection</button>
-            <button class="est-opt" data-v="industrial">Industrial Automation</button>
-            <button class="est-opt" data-v="hazard">Hazard Detection</button>
-          </div>
-          <span class="est-systems-err" id="estSystemsErr">Please select at least one system.</span>
-        </div>
-        <div class="est-q" data-q="monitoring">
-          <div class="q-label">04 — Monitoring</div>
-          <div class="est-opts">
-            <button class="est-opt selected" data-v="self">Self-monitored</button>
-            <button class="est-opt" data-v="pro">24/7 ISE·PK monitoring</button>
-          </div>
-        </div>
-        <div class="est-q" data-q="timeline">
-          <div class="q-label">05 — When is the new system needed</div>
-          <div class="est-opts">
-            <button class="est-opt selected" data-v="asap">ASAP</button>
-            <button class="est-opt" data-v="1m">Within 1 month</button>
-            <button class="est-opt" data-v="3m">1–3 months</button>
-            <button class="est-opt" data-v="6m">3–6 months</button>
-            <button class="est-opt" data-v="plan">Planning stage</button>
-          </div>
-        </div>
-        <div class="est-q est-q-input" id="estLocationWrap">
-          <div class="q-label">06 — Site Location (City &amp; Area)</div>
-          <input type="text" id="estLocation" placeholder="e.g. Karachi — Defence Phase V" />
-          <span class="field-err">Please enter the site location.</span>
-        </div>
-      </div>
-      <div class="est-result" aria-live="polite">
-        <h4>Your estimated scope</h4>
-        <div class="est-items" id="estItems"></div>
-        <div class="est-total">
-          <span class="lbl">Ballpark range</span>
-          <span class="amt" id="estAmt">—</span>
-        </div>
-        <p class="est-note">Indicative only — final scope follows the site survey. Hardware tier, cabling runs and civil work shift the number. Site surveys are free for Karachi; inter-city visits may carry a commute fee.</p>
-
-        <div class="est-form-box">
-          <h5>Send this estimate — we'll respond within 1–5 business days</h5>
-          <form class="ise-form" id="estForm" novalidate>
-            <div class="ise-field-row">
-              <div class="ise-field" id="estFieldName">
-                <label>Your Name</label>
-                <input type="text" name="name" placeholder="Full name" required>
-                <span class="field-err">Please enter your name.</span>
-              </div>
-              <div class="ise-field" id="estFieldPhone">
-                <label>Phone</label>
-                <input type="tel" name="phone" placeholder="+92 3XX XXXXXXX" required>
-                <span class="field-err">Please enter your phone number.</span>
-              </div>
-            </div>
-            <div class="ise-field" id="estFieldEmail">
-              <label>Email</label>
-              <input type="email" name="email" placeholder="you@company.com" required>
-              <span class="field-err">Please enter a valid email address.</span>
-            </div>
-            <button type="submit" class="form-submit-btn" data-label="Send Estimate Inquiry →">Send Estimate Inquiry →</button>
-            <div class="form-msg" id="estFormMsg"></div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ================= TESTIMONIALS ================= -->
 <section class="testimonials" id="testimonials">
   <div class="wrap">
@@ -1847,11 +1761,12 @@
     <div class="section-head">
       <div>
         <div class="eyebrow">Our Team</div>
-        <h2>The engineers<br>behind the systems.</h2>
+        <h2>The pioneers<br>behind the systems.</h2>
       </div>
-      <p class="desc">Each project is led by a senior engineer — the same person from the first site walk-through to handover and monitoring.</p>
+      <p class="desc">The leadership driving ISE·PK's vision — from system architecture to project delivery across every commercial engagement.</p>
     </div>
-    <div class="team-grid">
+    <!-- Pioneers -->
+    <div class="team-grid team-pioneers">
 
       <div class="team-card reveal">
         <div class="team-avatar">
@@ -1871,8 +1786,8 @@
         </div>
         <div class="team-body">
           <div class="team-name">Khurram Naeem</div>
-          <div class="team-role">Partner &amp; Systems Architect</div>
-          <p class="team-bio">A seasoned partner with over a decade of experience in designing and implementing integrated security systems. Leads every major system design from first principles.</p>
+          <div class="team-role">Project Director</div>
+          <p class="team-bio">Leads every major system engagement from first-principles design through to handover. A decade of integrated security engineering across commercial, industrial and healthcare sites across Pakistan.</p>
           <div class="team-tags">
             <span class="team-tag">System Design</span>
             <span class="team-tag">Fire Detection</span>
@@ -1901,43 +1816,81 @@
         </div>
         <div class="team-body">
           <div class="team-name">Naeem Ahmad</div>
-          <div class="team-role">Project Manager</div>
-          <p class="team-bio">An expert project manager with extensive knowledge in coordinating complex security projects from inception to completion. Ensures every install runs on time, on scope and with zero disruption to operations.</p>
+          <div class="team-role">Managing Director</div>
+          <p class="team-bio">Drives the strategic direction and commercial growth of ISE·PK. Oversees all client relationships, multi-site project delivery, and ensures every engagement runs on time and on scope.</p>
           <div class="team-tags">
-            <span class="team-tag">Project Delivery</span>
-            <span class="team-tag">Client Liaison</span>
+            <span class="team-tag">Strategic Direction</span>
+            <span class="team-tag">Client Relations</span>
             <span class="team-tag">Multi-site</span>
           </div>
         </div>
       </div>
 
-      <div class="team-card reveal">
-        <div class="team-avatar">
-          <svg viewBox="0 0 120 120" fill="none" aria-hidden="true">
-            <rect width="120" height="120" fill="#141416"/>
-            <polygon points="60,6 112,34 112,86 60,114 8,86 8,34" stroke="#e2372b" stroke-width="1" stroke-dasharray="4 6" fill="none"/>
-            <circle cx="60" cy="46" r="18" stroke="#f6f5f2" stroke-width="1.4" fill="none"/>
-            <path d="M34 90 C34 73 86 73 86 90" stroke="#f6f5f2" stroke-width="1.4" fill="none"/>
-            <line x1="8"  y1="60" x2="24" y2="60" stroke="#e2372b" stroke-width="1"/>
-            <line x1="96" y1="60" x2="112" y2="60" stroke="#e2372b" stroke-width="1"/>
-            <circle cx="24" cy="60" r="2.5" fill="#e2372b"/>
-            <circle cx="96" cy="60" r="2.5" fill="#e2372b"/>
-            <circle cx="60" cy="6"  r="2.5" fill="#e2372b"/>
-          </svg>
-          <div class="team-initials">RA</div>
-        </div>
-        <div class="team-body">
-          <div class="team-name">Rehan Ali</div>
-          <div class="team-role">Director Technical</div>
-          <p class="team-bio">Oversees the strategic integration of advanced laboratory infrastructure and enterprise-grade security systems. The technical authority on every complex or multi-system deployment ISE·PK undertakes.</p>
-          <div class="team-tags">
-            <span class="team-tag">Technical Direction</span>
-            <span class="team-tag">Enterprise Systems</span>
-            <span class="team-tag">Lab Infrastructure</span>
+    </div>
+
+    <!-- Team sub-section -->
+    <div class="team-sub">
+      <div class="team-sub-head">
+        <span class="team-sub-label">Team</span>
+        <div class="team-sub-rule"></div>
+      </div>
+      <div class="team-grid team-grid-sub">
+
+        <div class="team-card reveal">
+          <div class="team-avatar">
+            <svg viewBox="0 0 120 120" fill="none" aria-hidden="true">
+              <rect width="120" height="120" fill="#141416"/>
+              <polygon points="60,6 112,34 112,86 60,114 8,86 8,34" stroke="#e2372b" stroke-width="1" stroke-dasharray="4 6" fill="none"/>
+              <circle cx="60" cy="46" r="18" stroke="#f6f5f2" stroke-width="1.4" fill="none"/>
+              <path d="M34 90 C34 73 86 73 86 90" stroke="#f6f5f2" stroke-width="1.4" fill="none"/>
+              <line x1="8"  y1="60" x2="24" y2="60" stroke="#e2372b" stroke-width="1"/>
+              <line x1="96" y1="60" x2="112" y2="60" stroke="#e2372b" stroke-width="1"/>
+              <circle cx="24" cy="60" r="2.5" fill="#e2372b"/>
+              <circle cx="96" cy="60" r="2.5" fill="#e2372b"/>
+              <circle cx="60" cy="6"  r="2.5" fill="#e2372b"/>
+            </svg>
+            <div class="team-initials">RA</div>
+          </div>
+          <div class="team-body">
+            <div class="team-name">Rehan Ali</div>
+            <div class="team-role">Technical Executive</div>
+            <p class="team-bio">Handles technical execution across installations and system integrations. Responsible for commissioning, quality checks and on-site coordination across ISE·PK deployments.</p>
+            <div class="team-tags">
+              <span class="team-tag">Installation</span>
+              <span class="team-tag">Commissioning</span>
+              <span class="team-tag">Integration</span>
+            </div>
           </div>
         </div>
-      </div>
 
+        <div class="team-card reveal">
+          <div class="team-avatar">
+            <svg viewBox="0 0 120 120" fill="none" aria-hidden="true">
+              <rect width="120" height="120" fill="#141416"/>
+              <path d="M60 6 L114 60 L60 114 L6 60 Z" stroke="#e2372b" stroke-width="1" stroke-dasharray="4 6" fill="none"/>
+              <circle cx="60" cy="46" r="18" stroke="#f6f5f2" stroke-width="1.4" fill="none"/>
+              <path d="M34 90 C34 73 86 73 86 90" stroke="#f6f5f2" stroke-width="1.4" fill="none"/>
+              <line x1="6"  y1="60" x2="22" y2="60" stroke="#e2372b" stroke-width="1"/>
+              <line x1="98" y1="60" x2="114" y2="60" stroke="#e2372b" stroke-width="1"/>
+              <circle cx="22" cy="60" r="2.5" fill="#e2372b"/>
+              <circle cx="98" cy="60" r="2.5" fill="#e2372b"/>
+              <circle cx="60" cy="98" r="2.5" fill="#e2372b"/>
+            </svg>
+            <div class="team-initials">SZ</div>
+          </div>
+          <div class="team-body">
+            <div class="team-name">Syed Zeeshan Ahmed</div>
+            <div class="team-role">Executive Manager</div>
+            <p class="team-bio">Manages day-to-day operations, vendor coordination and project scheduling. Ensures smooth communication between clients, field teams and the ISE·PK leadership throughout every engagement.</p>
+            <div class="team-tags">
+              <span class="team-tag">Operations</span>
+              <span class="team-tag">Coordination</span>
+              <span class="team-tag">Scheduling</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 </section>
@@ -2029,8 +1982,8 @@
 
       <!-- TECHNICAL -->
       <div class="faq-item" data-cat="technical">
-        <button class="faq-q" aria-expanded="false">Can you help ensure the system keeps working during load-shedding?<span class="plus"></span></button>
-        <div class="faq-a"><p>ISE PK does not supply UPS, battery backup or generator systems directly. However, we work with vetted, compliant power-continuity partners and can coordinate their involvement alongside your security installation — so your cameras, panels and access readers are covered. Raise this during your free site survey and we'll map out the right solution for your outage pattern.</p></div>
+        <button class="faq-q" aria-expanded="false">Will the system keep working during load-shedding?<span class="plus"></span></button>
+        <div class="faq-a"><p>Yes — ISE PK supplies and installs UPS systems, generators and battery backup solutions alongside your security installation. We size the power-continuity solution to your site's load-shedding pattern so every camera, panel and access reader stays live through outages with no gaps in footage or alarm coverage.</p></div>
       </div>
       <div class="faq-item" data-cat="technical">
         <button class="faq-q" aria-expanded="false">What does monitoring cost after installation?<span class="plus"></span></button>
@@ -2068,7 +2021,7 @@
     </div>
     <div class="contact-address">
       <svg viewBox="0 0 18 22" fill="none"><path d="M9 1C5.134 1 2 4.134 2 8c0 5.25 7 13 7 13s7-7.75 7-13c0-3.866-3.134-7-7-7Z" stroke="#e2372b" stroke-width="1.4"/><circle cx="9" cy="8" r="2.5" stroke="#e2372b" stroke-width="1.4"/></svg>
-      <span>A-31, Block 7/8, KCHS Union Ltd, Al Rehman Centre, Office No. 102, Shaheed-e-Millat Rd, Bangalore Town, Karachi, PK</span>
+      <span>Office No. 102, Building A-31, Block 7/8, Al Rehman Centre, KCHS Union Ltd, Shaheed-e-Millat Rd, Bangalore Town, Karachi, PK</span>
     </div>
     <div class="credentials">
       <span>PEC Licensed Engineers</span><span>PSQCA Compliant Fire Systems</span><span>SECP Registered</span>
@@ -2082,7 +2035,7 @@
       </div>
       <div class="map-embed-frame">
         <iframe
-          src="https://www.google.com/maps?q=A-31,+Block+7/8,+KCHS+Union+Ltd,+Al+Rehman+Centre,+Office+No.+102,+Shaheed-e-Millat+Road,+Bangalore+Town,+Karachi,+Pakistan&output=embed"
+          src="https://www.google.com/maps?q=Office+No.+102,+Building+A-31,+Block+7%2F8,+Al+Rehman+Centre,+KCHS+Union+Ltd,+Shaheed-e-Millat+Road,+Bangalore+Town,+Karachi,+Pakistan&output=embed"
           width="100%" height="100%"
           style="border:0; display:block;"
           allowfullscreen
@@ -2158,8 +2111,8 @@
         <p>Integrated Security Engineering. Fire, CCTV and access control, engineered and monitored across Pakistan.</p>
       </div>
       <div><h4>Offices</h4><p>Karachi — HQ</p><p>Lahore</p><p>Islamabad</p></div>
-      <div><h4>Services</h4><a href="#systems">CCTV Surveillance</a><a href="#systems">Fire Alarm Systems</a><a href="#systems">Access Control</a><a href="#systems">Intrusion Detection</a><a href="#systems">Gas Detection</a><a href="#systems">Industrial Automation</a><a href="#systems">Installation &amp; Maintenance</a><a href="#systems">Security Consulting</a></div>
-      <div><h4>Contact</h4><a href="tel:+923007017786" style="font-weight:700;color:#fff;">+92 300 7017786</a><a href="tel:+923453168517">+92 345 3168517</a><a href="mailto:ise@isepk.com.pk">ise@isepk.com.pk</a><a href="https://wa.me/923007017786">WhatsApp</a><p style="margin-top:10px;font-size:13px;color:var(--steel-dim);line-height:1.5;">A-31, Block 7/8, KCHS Union Ltd,<br>Al Rehman Centre, Office No. 102,<br>Shaheed-e-Millat Rd, Bangalore Town,<br>Karachi, PK</p></div>
+      <div><h4>Services</h4><a href="#systems">CCTV Surveillance</a><a href="#systems">Fire Alarm Systems</a><a href="#systems">Access Control</a><a href="#systems">Intrusion Detection</a><a href="#systems">Gas Detection</a><a href="#systems">Industrial Automation</a><a href="#systems">Installation &amp; Maintenance</a><a href="#systems">Security Consulting</a><a href="#systems">Centralized Clocking</a></div>
+      <div><h4>Contact</h4><a href="tel:+923007017786" style="font-weight:700;color:#fff;">+92 300 7017786</a><a href="tel:+923453168517">+92 345 3168517</a><a href="mailto:ise@isepk.com.pk">ise@isepk.com.pk</a><a href="https://wa.me/923007017786">WhatsApp</a><p style="margin-top:10px;font-size:13px;color:var(--steel-dim);line-height:1.5;">Office No. 102, Building A-31,<br>Block 7/8, Al Rehman Centre,<br>KCHS Union Ltd, Shaheed-e-Millat Rd,<br>Bangalore Town, Karachi, PK</p></div>
     </div>
     <div class="footer-bottom">
       <span>© ISE·PK — Integrated Security Engineering</span>
