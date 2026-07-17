@@ -2409,7 +2409,7 @@
 
   function renderEstimate(){
     var items = document.getElementById('estItems');
-    var html = '';
+    if(!items) return;   // estimator section not present
     var lo = 0, hi = 0;
     if(estState.systems.length === 0){
       items.innerHTML = '<div class="est-item"><span class="k">Select at least one system</span><span class="v">—</span></div>';
