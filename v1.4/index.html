@@ -1296,18 +1296,13 @@
   }
   .v14-in .eyebrow::before,.section-head.v14-in .eyebrow::before{ transform:scaleX(1); }
 
-  /* ── Stats section pulse bar ── */
+  /* ── Stats section ── */
   .stat-cell{
     position:relative;
     transition:transform var(--dur-base) var(--ease-premium);
   }
   .stat-cell:hover{ transform:translateY(-3px); }
-  .stat-cell .num{
-    font-variant-numeric:tabular-nums;
-    background:linear-gradient(135deg,var(--white) 0%,rgba(226,55,43,0.85) 120%);
-    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-    background-clip:text;
-  }
+  .stat-cell .num{ font-variant-numeric:tabular-nums; }
 
   /* ── FAQ item hover ── */
   .faq-item{
