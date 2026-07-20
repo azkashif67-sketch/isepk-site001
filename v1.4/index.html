@@ -1173,24 +1173,17 @@
   .hero-copy,.hero-visual{ position:relative; z-index:2; }
 
   /* ── Scroll reveal ── */
-  [data-reveal]{
-    opacity:0;
-    transform:translateY(22px);
-    transition:opacity var(--dur-slow) var(--ease-premium),
-                transform var(--dur-slow) var(--ease-premium);
-    will-change:opacity,transform;
-  }
-  [data-reveal="left"]{ transform:translateX(-22px) translateY(0); }
-  [data-reveal="right"]{ transform:translateX(22px) translateY(0); }
-  [data-reveal].v14-in{ opacity:1; transform:none; }
+  /* start visible — motion is progressive enhancement */
+  [data-reveal]{ transition:opacity var(--dur-slow) var(--ease-premium), transform var(--dur-slow) var(--ease-premium); will-change:opacity,transform; }
+  .js-motion [data-reveal]{ opacity:0; transform:translateY(22px); }
+  .js-motion [data-reveal="left"]{ transform:translateX(-22px); }
+  .js-motion [data-reveal="right"]{ transform:translateX(22px); }
+  [data-reveal].v14-in{ opacity:1 !important; transform:none !important; }
 
   /* ── Stagger grid reveal ── */
-  [data-stagger]>*{
-    opacity:0; transform:translateY(18px);
-    transition:opacity var(--dur-base) var(--ease-premium),
-                transform var(--dur-base) var(--ease-premium);
-    will-change:opacity,transform;
-  }
+  /* start visible — motion is progressive enhancement */
+  [data-stagger]>*{ transition:opacity var(--dur-base) var(--ease-premium), transform var(--dur-base) var(--ease-premium); will-change:opacity,transform; }
+  .js-motion [data-stagger]>*{ opacity:0; transform:translateY(18px); }
   [data-stagger].v14-in>*:nth-child(1) { transition-delay:0.00s; }
   [data-stagger].v14-in>*:nth-child(2) { transition-delay:0.07s; }
   [data-stagger].v14-in>*:nth-child(3) { transition-delay:0.14s; }
@@ -1201,7 +1194,7 @@
   [data-stagger].v14-in>*:nth-child(8) { transition-delay:0.49s; }
   [data-stagger].v14-in>*:nth-child(9) { transition-delay:0.56s; }
   [data-stagger].v14-in>*:nth-child(n+10){ transition-delay:0.60s; }
-  [data-stagger].v14-in>*{ opacity:1; transform:none; }
+  [data-stagger].v14-in>*{ opacity:1 !important; transform:none !important; }
 
   /* ── Card lift & glow on hover ── */
   .asvc-card{
@@ -2464,7 +2457,7 @@
     });
   });
   // Phone link in mobile menu — let it through naturally
-  var mmPhone = mobileMenu.querySelector('.mm-phone');
+  var mmPhone = mobileMenu ? mobileMenu.querySelector('.mm-phone') : null;
   if(mmPhone){ mmPhone.addEventListener('click', function(){ toggleMenu(false); }); }
 
   document.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ toggleMenu(false); closeModal(); } });
@@ -2590,9 +2583,8 @@
     tabs.forEach(function(t){
       var on = t === tab;
       t.setAttribute('aria-selected', on);
-      var p = document.getElementById(panels[t.id]);
-      p.classList.toggle('active', on);
-      p.hidden = !on;
+      var p = panels[t.id] ? document.getElementById(panels[t.id]) : null;
+      if(p){ p.classList.toggle('active', on); p.hidden = !on; }
     });
   }
   tabs.forEach(function(t, i){
@@ -3054,9 +3046,14 @@
      ║  V1.4 — MOTION ENGINE                     ║
      ╚═══════════════════════════════════════════╝ */
 
+  /* Enable motion-system CSS — content visible by default without this class */
+  document.documentElement.classList.add('js-motion');
   var reducedMotion = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if(reducedMotion){ document.documentElement.classList.remove('js-motion'); }
 
   /* ── IntersectionObserver: reveal + stagger ── */
+  if(!window.IntersectionObserver) return;  // skip motion on old browsers
+  try{
   var v14Obs = new IntersectionObserver(function(entries){
     entries.forEach(function(entry){
       if(entry.isIntersecting){
@@ -3159,6 +3156,7 @@
     ctaObs.observe(ctaSec);
   }
 
+  } catch(e){ console.warn('ISE v1.4 motion system:', e.message); }
 
 })();
 </script>
