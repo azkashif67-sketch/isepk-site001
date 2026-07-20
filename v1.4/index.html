@@ -2450,13 +2450,13 @@
   function toggleMenu(force){
     var open = force !== undefined ? force : !document.body.classList.contains('menu-open');
     document.body.classList.toggle('menu-open', open);
-    mobileMenu.classList.toggle('open', open);
-    burger.setAttribute('aria-expanded', open);
+    if(mobileMenu) mobileMenu.classList.toggle('open', open);
+    if(burger) burger.setAttribute('aria-expanded', open);
   }
-  burger.addEventListener('click', function(){ toggleMenu(); });
+  if(burger) burger.addEventListener('click', function(){ toggleMenu(); });
 
   // Mobile menu nav links — scroll and close
-  mobileMenu.querySelectorAll('a[data-target]').forEach(function(a){
+  if(mobileMenu) mobileMenu.querySelectorAll('a[data-target]').forEach(function(a){
     a.addEventListener('click', function(e){
       e.preventDefault();
       toggleMenu(false);
@@ -3106,7 +3106,7 @@
   var statSection = document.getElementById('stats');
   if(statSection){
     var statObs = new IntersectionObserver(function(entries){
-      if(entries[0].isIntersecting){
+      if(entries && entries[0] && entries[0].isIntersecting){
         statSection.querySelectorAll('.stat-cell').forEach(function(cell, i){
           cell.style.transition = 'opacity 0.5s ease '+(i*0.12)+'s, transform 0.5s ease '+(i*0.12)+'s';
           cell.style.opacity = '0'; cell.style.transform = 'translateY(16px)';
@@ -3126,7 +3126,7 @@
   var faqGrid = document.getElementById('faqGrid');
   if(faqGrid){
     var faqObs = new IntersectionObserver(function(entries){
-      if(entries[0].isIntersecting){
+      if(entries && entries[0] && entries[0].isIntersecting){
         faqGrid.querySelectorAll('.faq-item').forEach(function(item, i){
           item.style.opacity='0'; item.style.transform='translateY(14px)';
           item.style.transition='opacity 0.4s ease '+(i*0.04)+'s,transform 0.4s ease '+(i*0.04)+'s';
@@ -3147,7 +3147,7 @@
   var ctaSec = document.getElementById('contact');
   if(ctaSec){
     var ctaObs = new IntersectionObserver(function(entries){
-      if(entries[0].isIntersecting){
+      if(entries && entries[0] && entries[0].isIntersecting){
         ctaSec.querySelectorAll('.contact-pill,.cta-left-info,.cta-form-box').forEach(function(el,i){
           el.style.opacity='0'; el.style.transform='translateY(16px)';
           el.style.transition='opacity 0.5s ease '+(i*0.08)+'s,transform 0.5s ease '+(i*0.08)+'s';
