@@ -2218,7 +2218,7 @@
 </section>
 
 <!-- portfolio modal -->
-<div class="pf-modal" id="pfModal" role="dialog" aria-modal="true" aria-labelledby="pfModalTitle">
+<div class="pf-modal" id="pfModal" role="dialog" aria-modal="true" aria-labelledby="pfModalTitle" aria-label="Project details">
   <div class="pf-modal-card">
     <button class="pf-modal-close" id="pfModalClose" aria-label="Close project details">✕</button>
     <div class="m-id" id="pfModalId"></div>
@@ -2571,16 +2571,16 @@
         <h4>Inquiry Form</h4>
         <form class="ise-form" id="ctaForm" novalidate>
           <div class="ise-field-row">
-            <div class="ise-field"><label>Full Name</label><input type="text" name="name" placeholder="Your name" required></div>
-            <div class="ise-field"><label>Company</label><input type="text" name="company" placeholder="Company name"></div>
+            <div class="ise-field"><label for="fName">Full Name</label><input type="text" name="name" id="fName" aria-label="Full Name" placeholder="Your name" required></div>
+            <div class="ise-field"><label for="fCompany">Company</label><input type="text" name="company" id="fCompany" aria-label="Company" placeholder="Company name"></div>
           </div>
           <div class="ise-field-row">
-            <div class="ise-field"><label>Phone</label><input type="tel" name="phone" placeholder="+92 3XX XXXXXXX" required></div>
-            <div class="ise-field"><label>Email</label><input type="email" name="email" placeholder="you@company.com" required></div>
+            <div class="ise-field"><label for="fPhone">Phone</label><input type="tel" name="phone" id="fPhone" aria-label="Phone" placeholder="+92 3XX XXXXXXX" required></div>
+            <div class="ise-field"><label for="fEmail">Email</label><input type="email" name="email" id="fEmail" aria-label="Email" placeholder="you@company.com" required></div>
           </div>
           <div class="ise-field">
-            <label>Site Type</label>
-            <select name="site_type">
+            <label for="siteTypeSelect">Site Type</label>
+            <select name="site_type" id="siteTypeSelect" aria-label="Site Type">
               <option value="">Select site type</option>
               <option>Corporate Office</option>
               <option>Retail / Shopping Mall</option>
@@ -2592,7 +2592,7 @@
               <option>Other</option>
             </select>
           </div>
-          <div class="ise-field"><label>Message / Requirements</label><textarea name="message" rows="3" placeholder="Describe your site, current situation, and what you're looking for..."></textarea></div>
+          <div class="ise-field"><label for="fMessage">Message / Requirements</label><textarea name="message" id="fMessage" aria-label="Message / Requirements" rows="3" placeholder="Describe your site, current situation, and what you're looking for..."></textarea></div>
           <button type="submit" class="form-submit-btn" data-label="Send Inquiry →">Send Inquiry →</button>
           <div class="form-msg" id="ctaFormMsg"></div>
         </form>
