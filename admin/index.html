@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>ISE PK — Lead CRM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0b0c; --bg-2:#141416; --card:#1a1a1c; --card-2:#202023;
+    --frame:#3c3c3f; --blue:#34AAFB; --blue-deep:#0c66b0;
+    --white:#f6f5f2; --steel:#a3a3a6; --steel-dim:#888890;
+    --green:#3fbf6a; --amber:#e2a83c; --red:#e2372b;
+    --ease:cubic-bezier(0.25,0.46,0.45,0.94);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--white);
+    font-family:'Inter',sans-serif; min-height:100vh;
+    background-image:
+      linear-gradient(rgba(52,170,251,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(52,170,251,0.02) 1px, transparent 1px);
+    background-size:52px 52px;
+  }
+  .mono{font-family:'IBM Plex Mono',monospace}
+  .arch{font-family:'Archivo',sans-serif;font-weight:900}
+
+  /* ══ LOGIN ══ */
+  #login{
+    min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;
+  }
+  .login-box{
+    width:100%; max-width:380px; background:var(--card);
+    border:1px solid rgba(255,255,255,.08); border-radius:10px; padding:40px 34px;
+  }
+  .login-logo{
+    font-family:'Archivo',sans-serif; font-weight:900; font-size:26px;
+    letter-spacing:-1px; margin-bottom:4px;
+  }
+  .login-logo span{color:var(--blue)}
+  .login-sub{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--steel-dim); margin-bottom:30px;
+  }
+  .field{margin-bottom:18px}
+  .field label{
+    display:block; font-family:'IBM Plex Mono',monospace; font-size:10.5px;
+    letter-spacing:.09em; text-transform:uppercase; color:var(--steel-dim); margin-bottom:7px;
+  }
+  .field input{
+    width:100%; background:var(--bg); border:1px solid rgba(255,255,255,.14);
+    border-radius:6px; color:var(--white); font-family:'Inter',sans-serif;
+    font-size:15px; padding:12px 14px; outline:none; transition:border-color .2s;
+  }
+  .field input:focus{border-color:var(--blue)}
+  .btn-primary{
+    width:100%; background:var(--blue); border:none; color:#04263f;
+    font-family:'Archivo',sans-serif; font-weight:900; font-size:13px; letter-spacing:.06em;
+    text-transform:uppercase; padding:14px; border-radius:6px; cursor:pointer;
+    transition:transform .15s, box-shadow .2s;
+  }
+  .btn-primary:hover{transform:translateY(-2px); box-shadow:0 10px 24px -8px rgba(52,170,251,.5)}
+  .btn-primary:disabled{opacity:.55; cursor:not-allowed; transform:none}
+  .login-err{
+    font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--red);
+    margin-top:14px; display:none;
+  }
+
+  /* ══ APP SHELL ══ */
+  #app{display:none}
+  .topbar{
+    display:flex; align-items:center; gap:16px; padding:16px 28px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    background:rgba(11,11,12,.85); backdrop-filter:blur(12px);
+    position:sticky; top:0; z-index:50;
+  }
+  .topbar .logo{font-family:'Archivo',sans-serif;font-weight:900;font-size:19px;letter-spacing:-.5px}
+  .topbar .logo span{color:var(--blue)}
+  .topbar .tag{
+    font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--steel-dim); padding:4px 9px;
+    border:1px solid rgba(255,255,255,.12); border-radius:3px;
+  }
+  .topbar .spacer{flex:1}
+  .btn-ghost{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.06em;
+    text-transform:uppercase; color:var(--steel); background:transparent;
+    border:1px solid rgba(255,255,255,.14); border-radius:5px; padding:8px 14px;
+    cursor:pointer; transition:border-color .2s, color .2s;
+  }
+  .btn-ghost:hover{border-color:var(--blue); color:var(--blue)}
+
+  .wrap{max-width:1400px; margin:0 auto; padding:28px}
+
+  /* ══ STAT PIPELINE BAR ══ */
+  .pipeline{
+    display:grid; grid-template-columns:repeat(6,1fr); gap:12px; margin-bottom:26px;
+  }
+  @media(max-width:900px){ .pipeline{grid-template-columns:repeat(3,1fr)} }
+  @media(max-width:520px){ .pipeline{grid-template-columns:repeat(2,1fr)} }
+  .stat{
+    background:var(--card); border:1px solid rgba(255,255,255,.07);
+    border-radius:8px; padding:16px 18px; cursor:pointer;
+    transition:border-color .2s, transform .2s;
+  }
+  .stat:hover{transform:translateY(-2px); border-color:rgba(52,170,251,.4)}
+  .stat.active{border-color:var(--blue); background:rgba(52,170,251,.06)}
+  .stat .n{font-family:'Archivo',sans-serif;font-weight:900;font-size:28px;line-height:1}
+  .stat .l{
+    font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--steel-dim); margin-top:7px;
+  }
+  .stat.s-new .n{color:var(--blue)}
+  .stat.s-contacted .n{color:var(--amber)}
+  .stat.s-survey .n{color:#b98cff}
+  .stat.s-quoted .n{color:#5ad0e6}
+  .stat.s-won .n{color:var(--green)}
+  .stat.s-lost .n{color:var(--steel-dim)}
+
+  /* ══ TOOLBAR ══ */
+  .toolbar{display:flex; gap:12px; margin-bottom:18px; flex-wrap:wrap; align-items:center}
+  .search{
+    flex:1; min-width:220px; background:var(--card); border:1px solid rgba(255,255,255,.1);
+    border-radius:6px; color:var(--white); font-family:'Inter',sans-serif; font-size:14px;
+    padding:11px 14px; outline:none; transition:border-color .2s;
+  }
+  .search:focus{border-color:var(--blue)}
+  .refresh-btn{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.05em;
+    text-transform:uppercase; color:var(--steel); background:var(--card);
+    border:1px solid rgba(255,255,255,.12); border-radius:6px; padding:11px 16px;
+    cursor:pointer; transition:border-color .2s,color .2s;
+  }
+  .refresh-btn:hover{border-color:var(--blue); color:var(--blue)}
+
+  /* ══ LEAD TABLE ══ */
+  .lead-table{
+    background:var(--card); border:1px solid rgba(255,255,255,.07);
+    border-radius:10px; overflow:hidden;
+  }
+  .lt-head, .lt-row{
+    display:grid;
+    grid-template-columns:96px 1.4fr 1fr 130px 120px 40px;
+    gap:14px; align-items:center; padding:14px 20px;
+  }
+  .lt-head{
+    background:var(--bg-2); border-bottom:1px solid rgba(255,255,255,.08);
+    font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--steel-dim);
+  }
+  .lt-row{
+    border-bottom:1px solid rgba(255,255,255,.05); cursor:pointer;
+    transition:background .15s;
+  }
+  .lt-row:hover{background:rgba(52,170,251,.04)}
+  .lt-row:last-child{border-bottom:none}
+  .lt-ref{font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--steel)}
+  .lt-name{font-weight:600; font-size:14.5px}
+  .lt-company{font-size:12px; color:var(--steel-dim); margin-top:2px}
+  .lt-contact{font-size:13px; color:var(--steel)}
+  .lt-service{font-size:12px; color:var(--steel-dim)}
+  .lt-date{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--steel-dim)}
+
+  .badge{
+    display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:10px;
+    letter-spacing:.05em; text-transform:uppercase; padding:4px 9px; border-radius:3px;
+    white-space:nowrap;
+  }
+  .badge.new{background:rgba(52,170,251,.12); color:var(--blue); border:1px solid rgba(52,170,251,.3)}
+  .badge.contacted{background:rgba(226,168,60,.12); color:var(--amber); border:1px solid rgba(226,168,60,.3)}
+  .badge.survey{background:rgba(185,140,255,.12); color:#b98cff; border:1px solid rgba(185,140,255,.3)}
+  .badge.quoted{background:rgba(90,208,230,.12); color:#5ad0e6; border:1px solid rgba(90,208,230,.3)}
+  .badge.won{background:rgba(63,191,106,.12); color:var(--green); border:1px solid rgba(63,191,106,.3)}
+  .badge.lost{background:rgba(136,136,144,.12); color:var(--steel-dim); border:1px solid rgba(136,136,144,.3)}
+
+  .empty{padding:60px 20px; text-align:center; color:var(--steel-dim); font-family:'IBM Plex Mono',monospace; font-size:13px}
+
+  /* ══ DETAIL DRAWER ══ */
+  .drawer-bg{
+    position:fixed; inset:0; background:rgba(0,0,0,.6); backdrop-filter:blur(3px);
+    opacity:0; pointer-events:none; transition:opacity .25s; z-index:100;
+  }
+  .drawer-bg.open{opacity:1; pointer-events:auto}
+  .drawer{
+    position:fixed; top:0; right:0; bottom:0; width:min(480px,100%);
+    background:var(--bg-2); border-left:1px solid rgba(255,255,255,.1);
+    transform:translateX(100%); transition:transform .3s var(--ease);
+    z-index:101; overflow-y:auto; padding:28px;
+  }
+  .drawer.open{transform:none}
+  .drawer-close{
+    position:absolute; top:20px; right:20px; width:34px; height:34px;
+    background:var(--card); border:1px solid rgba(255,255,255,.12); border-radius:6px;
+    color:var(--steel); font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
+  .drawer-close:hover{border-color:var(--blue); color:var(--blue)}
+  .d-ref{font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--blue); letter-spacing:.06em}
+  .d-name{font-family:'Archivo',sans-serif; font-weight:900; font-size:24px; margin:6px 0 4px}
+  .d-company{font-size:14px; color:var(--steel); margin-bottom:24px}
+  .d-section{margin-bottom:22px}
+  .d-section h4{
+    font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--steel-dim); margin-bottom:10px;
+  }
+  .d-row{display:flex; gap:12px; padding:8px 0; border-bottom:1px solid rgba(255,255,255,.05); font-size:14px}
+  .d-row .k{width:90px; color:var(--steel-dim); flex:none; font-size:13px}
+  .d-row .v{color:var(--white); word-break:break-word}
+  .d-row .v a{color:var(--blue); text-decoration:none}
+  .d-msg{
+    background:var(--card); border:1px solid rgba(255,255,255,.07); border-radius:6px;
+    padding:14px; font-size:14px; line-height:1.6; color:var(--steel); white-space:pre-wrap;
+  }
+  .status-picker{display:flex; gap:8px; flex-wrap:wrap}
+  .status-opt{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.04em;
+    text-transform:uppercase; padding:8px 12px; border-radius:5px; cursor:pointer;
+    background:var(--card); border:1px solid rgba(255,255,255,.12); color:var(--steel);
+    transition:all .18s;
+  }
+  .status-opt:hover{border-color:var(--blue)}
+  .status-opt.active{background:var(--blue); color:#04263f; border-color:var(--blue); font-weight:500}
+  select.assign, input.followup, textarea.notes{
+    width:100%; background:var(--card); border:1px solid rgba(255,255,255,.12);
+    border-radius:6px; color:var(--white); font-family:'Inter',sans-serif; font-size:14px;
+    padding:11px 13px; outline:none; transition:border-color .2s;
+  }
+  select.assign:focus, input.followup:focus, textarea.notes:focus{border-color:var(--blue)}
+  textarea.notes{min-height:90px; resize:vertical; line-height:1.5}
+  .save-note{
+    margin-top:10px; font-family:'Archivo',sans-serif; font-weight:900; font-size:11px;
+    letter-spacing:.06em; text-transform:uppercase; background:var(--blue); color:#04263f;
+    border:none; border-radius:5px; padding:10px 18px; cursor:pointer;
+  }
+  .d-actions{display:flex; gap:10px; margin-top:8px}
+  .wa-btn{
+    flex:1; text-align:center; text-decoration:none; font-family:'IBM Plex Mono',monospace;
+    font-size:11px; letter-spacing:.05em; text-transform:uppercase; padding:11px;
+    border-radius:6px; background:rgba(63,191,106,.12); color:var(--green);
+    border:1px solid rgba(63,191,106,.3);
+  }
+  .call-btn{
+    flex:1; text-align:center; text-decoration:none; font-family:'IBM Plex Mono',monospace;
+    font-size:11px; letter-spacing:.05em; text-transform:uppercase; padding:11px;
+    border-radius:6px; background:rgba(52,170,251,.12); color:var(--blue);
+    border:1px solid rgba(52,170,251,.3);
+  }
+  .del-btn{
+    font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.05em;
+    text-transform:uppercase; color:var(--red); background:transparent; border:none;
+    cursor:pointer; margin-top:24px; opacity:.7;
+  }
+  .del-btn:hover{opacity:1}
+  .saved-flash{
+    position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px);
+    background:var(--green); color:#04240f; font-family:'IBM Plex Mono',monospace;
+    font-size:12px; letter-spacing:.05em; padding:12px 22px; border-radius:6px;
+    opacity:0; transition:all .3s; z-index:200;
+  }
+  .saved-flash.show{opacity:1; transform:translateX(-50%) translateY(0)}
+
+  @media(max-width:760px){
+    .lt-head{display:none}
+    .lt-row{grid-template-columns:1fr auto; gap:8px; padding:14px 16px}
+    .lt-row .lt-contact,.lt-row .lt-service,.lt-row .lt-date-cell{display:none}
+    .wrap{padding:16px}
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════ LOGIN ══════════ -->
+<div id="login">
+  <div class="login-box">
+    <div class="login-logo">ISE<span>·PK</span></div>
+    <div class="login-sub">Lead CRM — Staff Access</div>
+    <form id="loginForm">
+      <div class="field">
+        <label>Username</label>
+        <input type="text" id="lUser" autocomplete="username" required>
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="lPass" autocomplete="current-password" required>
+      </div>
+      <button type="submit" class="btn-primary" id="lBtn">Sign In</button>
+      <div class="login-err" id="lErr">Invalid credentials. Try again.</div>
+    </form>
+  </div>
+</div>
+
+<!-- ══════════ APP ══════════ -->
+<div id="app">
+  <div class="topbar">
+    <div class="logo">ISE<span>·PK</span></div>
+    <div class="tag">Lead CRM</div>
+    <div class="spacer"></div>
+    <button class="btn-ghost" id="logoutBtn">Log out</button>
+  </div>
+
+  <div class="wrap">
+    <!-- Pipeline stat bar -->
+    <div class="pipeline" id="pipeline"></div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <input class="search" id="search" placeholder="Search name, company, phone, email, ref…">
+      <button class="refresh-btn" id="refreshBtn">↻ Refresh</button>
+    </div>
+
+    <!-- Lead table -->
+    <div class="lead-table">
+      <div class="lt-head">
+        <div>Ref</div><div>Lead</div><div>Contact</div><div>Service</div><div>Status</div><div></div>
+      </div>
+      <div id="leadRows"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Detail drawer -->
+<div class="drawer-bg" id="drawerBg"></div>
+<div class="drawer" id="drawer"></div>
+<div class="saved-flash" id="flash">Saved</div>
+
+<script>
+const STATUSES = [
+  { key:'new',       label:'New' },
+  { key:'contacted', label:'Contacted' },
+  { key:'survey',    label:'Survey Booked' },
+  { key:'quoted',    label:'Quoted' },
+  { key:'won',       label:'Won' },
+  { key:'lost',      label:'Lost' },
+];
+const TEAM = ['Unassigned','Khurram Naeem','Naeem Ahmad','Rehan Ali','Syed Zeeshan Ahmed'];
+
+let state = { leads:[], summary:{}, filter:'all', q:'' };
+
+// ══ LOGIN ══
+const loginForm = document.getElementById('loginForm');
+loginForm.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const btn = document.getElementById('lBtn');
+  const err = document.getElementById('lErr');
+  btn.disabled = true; btn.textContent = 'Signing in…'; err.style.display='none';
+  try {
+    const r = await fetch('/api/login', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        username: document.getElementById('lUser').value,
+        password: document.getElementById('lPass').value,
+      })
+    });
+    if (r.ok) { showApp(); }
+    else { err.style.display='block'; }
+  } catch { err.style.display='block'; }
+  btn.disabled=false; btn.textContent='Sign In';
+});
+
+document.getElementById('logoutBtn').addEventListener('click', async ()=>{
+  await fetch('/api/login', { method:'DELETE' });
+  location.reload();
+});
+
+function showApp(){
+  document.getElementById('login').style.display='none';
+  document.getElementById('app').style.display='block';
+  loadLeads();
+}
+
+// ══ LOAD ══
+async function loadLeads(){
+  const params = new URLSearchParams();
+  if (state.filter !== 'all') params.set('status', state.filter);
+  if (state.q) params.set('q', state.q);
+  const r = await fetch('/api/leads?' + params.toString());
+  if (r.status === 401) { location.reload(); return; }
+  const data = await r.json();
+  state.leads = data.leads || [];
+  state.summary = data.summary || {};
+  renderPipeline();
+  renderRows();
+}
+
+// ══ PIPELINE ══
+function renderPipeline(){
+  const total = Object.values(state.summary).reduce((a,b)=>a+b,0);
+  const el = document.getElementById('pipeline');
+  let html = `<div class="stat ${state.filter==='all'?'active':''}" data-f="all">
+      <div class="n">${total}</div><div class="l">All Leads</div></div>`;
+  STATUSES.forEach(s=>{
+    html += `<div class="stat s-${s.key} ${state.filter===s.key?'active':''}" data-f="${s.key}">
+      <div class="n">${state.summary[s.key]||0}</div><div class="l">${s.label}</div></div>`;
+  });
+  el.innerHTML = html;
+  el.querySelectorAll('.stat').forEach(s=>{
+    s.addEventListener('click', ()=>{ state.filter = s.dataset.f; loadLeads(); });
+  });
+}
+
+// ══ ROWS ══
+function fmtDate(s){
+  if(!s) return '';
+  const d = new Date(s + 'Z');
+  return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short'}) + ' ' +
+         d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+}
+function badge(status){
+  const lbl = (STATUSES.find(s=>s.key===status)||{label:status}).label;
+  return `<span class="badge ${status}">${lbl}</span>`;
+}
+function renderRows(){
+  const el = document.getElementById('leadRows');
+  if (!state.leads.length){
+    el.innerHTML = `<div class="empty">No leads ${state.filter!=='all'?'in this stage':'yet'}.</div>`;
+    return;
+  }
+  el.innerHTML = state.leads.map(l=>`
+    <div class="lt-row" data-id="${l.id}">
+      <div class="lt-ref">${l.ref||'—'}</div>
+      <div>
+        <div class="lt-name">${esc(l.name)}</div>
+        ${l.company?`<div class="lt-company">${esc(l.company)}</div>`:''}
+      </div>
+      <div class="lt-contact">${esc(l.phone||'')}${l.city?`<div class="lt-service">${esc(l.city)}</div>`:''}</div>
+      <div class="lt-service">${esc(l.service_type||'—')}</div>
+      <div>${badge(l.status)}</div>
+      <div style="color:var(--steel-dim)">›</div>
+    </div>
+  `).join('');
+  el.querySelectorAll('.lt-row').forEach(row=>{
+    row.addEventListener('click', ()=> openDrawer(parseInt(row.dataset.id,10)));
+  });
+}
+
+// ══ DRAWER ══
+function openDrawer(id){
+  const l = state.leads.find(x=>x.id===id);
+  if(!l) return;
+  const waNum = (l.phone||'').replace(/[^0-9]/g,'');
+  const drawer = document.getElementById('drawer');
+  drawer.innerHTML = `
+    <button class="drawer-close" onclick="closeDrawer()">×</button>
+    <div class="d-ref">${l.ref||''}</div>
+    <div class="d-name">${esc(l.name)}</div>
+    <div class="d-company">${esc(l.company||'—')} ${l.source?`· via ${esc(l.source)} form`:''}</div>
+
+    <div class="d-section">
+      <h4>Status</h4>
+      <div class="status-picker" id="statusPicker">
+        ${STATUSES.map(s=>`<div class="status-opt ${l.status===s.key?'active':''}" data-s="${s.key}">${s.label}</div>`).join('')}
+      </div>
+    </div>
+
+    <div class="d-section">
+      <h4>Contact</h4>
+      <div class="d-row"><span class="k">Phone</span><span class="v"><a href="tel:${esc(l.phone||'')}">${esc(l.phone||'—')}</a></span></div>
+      <div class="d-row"><span class="k">Email</span><span class="v">${l.email?`<a href="mailto:${esc(l.email)}">${esc(l.email)}</a>`:'—'}</span></div>
+      <div class="d-row"><span class="k">City</span><span class="v">${esc(l.city||'—')}</span></div>
+      <div class="d-row"><span class="k">Service</span><span class="v">${esc(l.service_type||'—')}</span></div>
+      <div class="d-row"><span class="k">Received</span><span class="v">${fmtDate(l.created_at)}</span></div>
+    </div>
+
+    <div class="d-actions">
+      ${waNum?`<a class="wa-btn" href="https://wa.me/${waNum}" target="_blank">WhatsApp</a>`:''}
+      ${l.phone?`<a class="call-btn" href="tel:${esc(l.phone)}">Call</a>`:''}
+    </div>
+
+    ${l.message?`<div class="d-section" style="margin-top:22px"><h4>Message</h4><div class="d-msg">${esc(l.message)}</div></div>`:''}
+
+    <div class="d-section">
+      <h4>Assigned To</h4>
+      <select class="assign" id="assignSel">
+        ${TEAM.map(t=>`<option ${((l.assigned_to||'Unassigned')===t)?'selected':''}>${t}</option>`).join('')}
+      </select>
+    </div>
+
+    <div class="d-section">
+      <h4>Follow-up Date</h4>
+      <input type="date" class="followup" id="followupInput" value="${l.follow_up_date||''}">
+    </div>
+
+    <div class="d-section">
+      <h4>Notes</h4>
+      <textarea class="notes" id="notesInput" placeholder="Internal notes…">${esc(l.notes||'')}</textarea>
+      <button class="save-note" id="saveNoteBtn">Save Notes & Details</button>
+    </div>
+
+    <button class="del-btn" id="delBtn">Delete this lead</button>
+  `;
+
+  // status click
+  drawer.querySelectorAll('.status-opt').forEach(opt=>{
+    opt.addEventListener('click', async ()=>{
+      const newStatus = opt.dataset.s;
+      await patchLead(id, { status:newStatus });
+      drawer.querySelectorAll('.status-opt').forEach(o=>o.classList.remove('active'));
+      opt.classList.add('active');
+      flash();
+      loadLeads();
+    });
+  });
+
+  // save notes/assign/followup
+  drawer.querySelector('#saveNoteBtn').addEventListener('click', async ()=>{
+    await patchLead(id, {
+      notes: document.getElementById('notesInput').value,
+      assigned_to: document.getElementById('assignSel').value,
+      follow_up_date: document.getElementById('followupInput').value || null,
+    });
+    flash(); loadLeads();
+  });
+
+  // delete
+  drawer.querySelector('#delBtn').addEventListener('click', async ()=>{
+    if(!confirm('Delete this lead permanently?')) return;
+    await fetch('/api/leads', { method:'DELETE', headers:{'Content-Type':'application/json'}, body:JSON.stringify({id}) });
+    closeDrawer(); loadLeads();
+  });
+
+  document.getElementById('drawerBg').classList.add('open');
+  drawer.classList.add('open');
+}
+function closeDrawer(){
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('drawerBg').classList.remove('open');
+}
+document.getElementById('drawerBg').addEventListener('click', closeDrawer);
+
+async function patchLead(id, fields){
+  await fetch('/api/leads', {
+    method:'PATCH', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ id, ...fields })
+  });
+}
+
+// ══ SEARCH + REFRESH ══
+let searchTimer;
+document.getElementById('search').addEventListener('input', (e)=>{
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(()=>{ state.q = e.target.value.trim(); loadLeads(); }, 300);
+});
+document.getElementById('refreshBtn').addEventListener('click', loadLeads);
+
+// ══ UTIL ══
+function esc(s){ return (s==null?'':String(s)).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function flash(){
+  const f = document.getElementById('flash');
+  f.classList.add('show'); setTimeout(()=>f.classList.remove('show'), 1600);
+}
+
+// ══ BOOT — check if already logged in ══
+(async function boot(){
+  try {
+    const r = await fetch('/api/leads?status=all');
+    if (r.ok) { showApp(); }
+  } catch {}
+})();
+</script>
+</body>
+</html>
