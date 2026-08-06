@@ -4,6 +4,7 @@
   "private": true,
   "description": "ISE PK — website + lead CRM",
   "dependencies": {
-    "@libsql/client": "^0.14.0"
+    "@libsql/client": "^0.14.0",
+    "resend": "^4.0.0"
   }
 }

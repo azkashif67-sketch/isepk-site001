@@ -1,4 +1,5 @@
 import { db } from './_lib.js';
+import { sendLeadEmails } from './_email.js';
 
 // Generates a reference like ISE-2026-0042 (sequential-ish via count)
 async function makeRef(database) {
@@ -45,7 +46,16 @@ export default async function handler(req, res) {
       ],
     });
 
-    // (Optional future: fire Resend email + Telegram alert here)
+    // Send confirmation + team alert (non-blocking — never fails the save)
+    await sendLeadEmails({
+      ref, name, phone,
+      email: b.email || null,
+      company: b.company || null,
+      service_type: b.service_type || null,
+      message: b.message || null,
+      city: b.city || null,
+      source: b.source || 'contact',
+    });
 
     return res.status(200).json({ success: true, ref });
   } catch (err) {
