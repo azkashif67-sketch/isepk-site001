@@ -2884,8 +2884,6 @@
   }
 
   /* ---- Web3Forms submission handler ---- */
-  var W3F_KEY = '4a0caaac-bba5-4b06-9e7c-41c642ce6b15';
-
   function submitToFormSubmit(formEl, msgEl, extraFields) {
     var btn = formEl.querySelector('.form-submit-btn');
     var originalLabel = btn.getAttribute('data-label') || btn.textContent;
@@ -2911,29 +2909,17 @@
       msgEl.innerHTML = 'Could not send — please call <b>+92 300 7017786</b> or email <b>ise@isepk.com.pk</b> directly.';
       msgEl.style.display = 'block';
     }
-    // Fallback to Web3Forms if own API is unavailable
-    function fallbackWeb3(){
-      var payload = Object.assign({ access_key: W3F_KEY }, data);
-      fetch('https://api.web3forms.com/submit', {
-        method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'},
-        body: JSON.stringify(payload)
-      })
-      .then(function(r){ return r.json(); })
-      .then(function(d){ d.success ? showOk() : showErr(); })
-      .catch(showErr);
-    }
 
-    // Primary: our own /api/submit → Turso
+    // Submit to our own API → Turso (+ confirmation email)
     fetch('/api/submit', {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify(data)
     })
     .then(function(r){
       if(r.ok) return r.json().then(function(){ showOk(); });
-      // 4xx/5xx from our API → try Web3Forms
-      fallbackWeb3();
+      showErr();
     })
-    .catch(fallbackWeb3);   // network/404 (e.g. local file) → Web3Forms
+    .catch(showErr);
   }
 
   /* ---- estimator form — full validation + complete payload ---- */
