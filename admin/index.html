@@ -246,6 +246,80 @@
     border-radius:6px; background:rgba(52,170,251,.12); color:var(--blue);
     border:1px solid rgba(52,170,251,.3);
   }
+  .email-btn{
+    flex:1; text-align:center; font-family:'IBM Plex Mono',monospace;
+    font-size:11px; letter-spacing:.05em; text-transform:uppercase; padding:11px;
+    border-radius:6px; background:rgba(185,140,255,.12); color:#b98cff;
+    border:1px solid rgba(185,140,255,.3); cursor:pointer;
+  }
+  .email-btn:hover{ background:rgba(185,140,255,.2); }
+
+  /* ══ COMPOSE MODAL (Gmail-style) ══ */
+  .compose-bg{
+    position:fixed; inset:0; background:rgba(0,0,0,.55); backdrop-filter:blur(3px);
+    opacity:0; pointer-events:none; transition:opacity .2s; z-index:150;
+  }
+  .compose-bg.open{ opacity:1; pointer-events:auto; }
+  .compose{
+    position:fixed; bottom:0; right:24px; width:min(540px,calc(100% - 32px));
+    background:var(--bg-2); border:1px solid rgba(255,255,255,.14);
+    border-radius:10px 10px 0 0; box-shadow:0 -8px 40px rgba(0,0,0,.5);
+    transform:translateY(100%); transition:transform .28s var(--ease);
+    z-index:151; display:flex; flex-direction:column; max-height:82vh;
+  }
+  .compose.open{ transform:none; }
+  .compose-head{
+    display:flex; align-items:center; padding:14px 18px; background:var(--card);
+    border-radius:10px 10px 0 0; border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .compose-head .t{
+    font-family:'Archivo',sans-serif; font-weight:900; font-size:13px;
+    letter-spacing:.04em; text-transform:uppercase; color:var(--white); flex:1;
+  }
+  .compose-x{
+    width:28px; height:28px; background:transparent; border:none; color:var(--steel);
+    font-size:20px; cursor:pointer; border-radius:5px;
+  }
+  .compose-x:hover{ color:var(--white); background:rgba(255,255,255,.08); }
+  .compose-body{ padding:16px 18px; overflow-y:auto; }
+  .compose-field{
+    display:flex; align-items:center; gap:10px; padding:9px 0;
+    border-bottom:1px solid rgba(255,255,255,.07);
+  }
+  .compose-field .lab{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--steel-dim);
+    width:52px; flex:none; text-transform:uppercase; letter-spacing:.05em;
+  }
+  .compose-field input{
+    flex:1; background:transparent; border:none; color:var(--white);
+    font-family:'Inter',sans-serif; font-size:14px; outline:none;
+  }
+  .compose-field input:disabled{ color:var(--steel); }
+  .compose textarea{
+    width:100%; min-height:200px; margin-top:12px; resize:vertical;
+    background:var(--card); border:1px solid rgba(255,255,255,.1); border-radius:6px;
+    color:var(--white); font-family:'Inter',sans-serif; font-size:14px; line-height:1.6;
+    padding:14px; outline:none;
+  }
+  .compose textarea:focus{ border-color:var(--blue); }
+  .compose-foot{
+    display:flex; align-items:center; gap:12px; padding:14px 18px;
+    border-top:1px solid rgba(255,255,255,.08);
+  }
+  .compose-send{
+    font-family:'Archivo',sans-serif; font-weight:900; font-size:12px; letter-spacing:.05em;
+    text-transform:uppercase; background:var(--blue); color:#04263f; border:none;
+    border-radius:6px; padding:11px 26px; cursor:pointer; transition:transform .15s;
+  }
+  .compose-send:hover{ transform:translateY(-2px); }
+  .compose-send:disabled{ opacity:.55; cursor:not-allowed; transform:none; }
+  .compose-msg{ font-family:'IBM Plex Mono',monospace; font-size:12px; flex:1; }
+  .compose-msg.ok{ color:var(--green); }
+  .compose-msg.err{ color:var(--red); }
+  .compose-hint{
+    font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--steel-dim);
+    margin-top:8px; letter-spacing:.03em;
+  }
   .del-btn{
     font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.05em;
     text-transform:uppercase; color:var(--red); background:transparent; border:none;
@@ -322,6 +396,32 @@
 <!-- Detail drawer -->
 <div class="drawer-bg" id="drawerBg"></div>
 <div class="drawer" id="drawer"></div>
+
+<!-- Email compose modal -->
+<div class="compose-bg" id="composeBg"></div>
+<div class="compose" id="compose">
+  <div class="compose-head">
+    <div class="t">New Message</div>
+    <button class="compose-x" id="composeX">×</button>
+  </div>
+  <div class="compose-body">
+    <div class="compose-field">
+      <span class="lab">To</span>
+      <input type="email" id="cTo" disabled>
+    </div>
+    <div class="compose-field">
+      <span class="lab">Subject</span>
+      <input type="text" id="cSubject" placeholder="Subject">
+    </div>
+    <textarea id="cBody" placeholder="Write your message…"></textarea>
+    <div class="compose-hint">Sends from noreply@isepk.com.pk · replies go to ise@isepk.com.pk · ISE branding added automatically</div>
+  </div>
+  <div class="compose-foot">
+    <button class="compose-send" id="cSend">Send</button>
+    <span class="compose-msg" id="cMsg"></span>
+  </div>
+</div>
+
 <div class="saved-flash" id="flash">Saved</div>
 
 <script>
@@ -481,6 +581,7 @@ function openDrawer(id){
     <div class="d-actions">
       ${waNum?`<a class="wa-btn" href="https://wa.me/${waNum}" target="_blank">WhatsApp</a>`:''}
       ${l.phone?`<a class="call-btn" href="tel:${esc(l.phone)}">Call</a>`:''}
+      ${l.email?`<button class="email-btn" id="emailBtn">Email</button>`:''}
     </div>
 
     ${l.message?`<div class="d-section" style="margin-top:22px"><h4>Message</h4><div class="d-msg">${esc(l.message)}</div></div>`:''}
@@ -535,6 +636,12 @@ function openDrawer(id){
     closeDrawer(); loadLeads();
   });
 
+  // email compose
+  const emailBtn = drawer.querySelector('#emailBtn');
+  if (emailBtn) {
+    emailBtn.addEventListener('click', ()=> openCompose(l));
+  }
+
   document.getElementById('drawerBg').classList.add('open');
   drawer.classList.add('open');
 }
@@ -550,6 +657,64 @@ async function patchLead(id, fields){
     body: JSON.stringify({ id, ...fields })
   });
 }
+
+// ══ EMAIL COMPOSE ══
+let composeLeadId = null;
+function openCompose(lead){
+  composeLeadId = lead.id;
+  document.getElementById('cTo').value = lead.email || '';
+  document.getElementById('cSubject').value = `ISE PK — Your enquiry ${lead.ref||''}`.trim();
+  const first = (lead.name||'').split(' ')[0] || 'there';
+  document.getElementById('cBody').value =
+    `Dear ${first},\n\nThank you for reaching out to ISE PK regarding your security requirements.\n\n\n\nBest regards,\nISE PK Team`;
+  document.getElementById('cMsg').textContent = '';
+  document.getElementById('cMsg').className = 'compose-msg';
+  document.getElementById('composeBg').classList.add('open');
+  document.getElementById('compose').classList.add('open');
+  setTimeout(()=>document.getElementById('cBody').focus(), 300);
+}
+function closeCompose(){
+  document.getElementById('compose').classList.remove('open');
+  document.getElementById('composeBg').classList.remove('open');
+  composeLeadId = null;
+}
+document.getElementById('composeX').addEventListener('click', closeCompose);
+document.getElementById('composeBg').addEventListener('click', closeCompose);
+
+document.getElementById('cSend').addEventListener('click', async ()=>{
+  const to = document.getElementById('cTo').value;
+  const subject = document.getElementById('cSubject').value.trim();
+  const body = document.getElementById('cBody').value.trim();
+  const msg = document.getElementById('cMsg');
+  const btn = document.getElementById('cSend');
+
+  if(!subject || !body){
+    msg.className = 'compose-msg err'; msg.textContent = 'Subject and message required.';
+    return;
+  }
+  btn.disabled = true; btn.textContent = 'Sending…';
+  msg.className = 'compose-msg'; msg.textContent = '';
+
+  try {
+    const r = await fetch('/api/send-email', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ id: composeLeadId, to, subject, body })
+    });
+    const data = await r.json().catch(()=>({}));
+    if (r.ok) {
+      msg.className = 'compose-msg ok'; msg.textContent = '✓ Sent';
+      btn.textContent = 'Send';
+      setTimeout(()=>{ closeCompose(); btn.disabled=false; loadLeads(); }, 900);
+    } else {
+      msg.className = 'compose-msg err';
+      msg.textContent = data.error || 'Send failed';
+      btn.disabled = false; btn.textContent = 'Send';
+    }
+  } catch {
+    msg.className = 'compose-msg err'; msg.textContent = 'Network error';
+    btn.disabled = false; btn.textContent = 'Send';
+  }
+});
 
 // ══ SEARCH + REFRESH ══
 let searchTimer;
