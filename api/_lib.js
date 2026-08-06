@@ -18,7 +18,8 @@ export function db() {
 
 // ── Session token: HMAC-signed, contains username + expiry ──
 const COOKIE = 'ise_session';
-const MAX_AGE = 60 * 60 * 8; // 8 hours
+const IDLE_MINUTES = 10;
+const MAX_AGE = 60 * IDLE_MINUTES; // 10 min idle window (seconds)
 
 function secret() {
   return process.env.SESSION_SECRET || 'change-me-in-env';
@@ -63,11 +64,15 @@ export function getSession(req) {
 }
 
 // ── Guard: returns true if authed, else sends 401 ──
+// Also REFRESHES the cookie on every authed request → sliding 10-min idle window.
 export function requireAuth(req, res) {
   const session = getSession(req);
   if (!session) {
     res.status(401).json({ error: 'Unauthorized' });
     return null;
   }
+  // Re-issue the cookie so the 10-min idle timer resets on each activity
+  const fresh = signToken(session.username);
+  setSessionCookie(res, fresh);
   return session;
 }

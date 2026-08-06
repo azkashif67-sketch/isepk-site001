@@ -366,6 +366,7 @@ document.getElementById('logoutBtn').addEventListener('click', async ()=>{
 function showApp(){
   document.getElementById('login').style.display='none';
   document.getElementById('app').style.display='block';
+  resetIdle();          // start the 10-min idle countdown
   loadLeads();
 }
 
@@ -374,13 +375,28 @@ async function loadLeads(){
   const params = new URLSearchParams();
   if (state.filter !== 'all') params.set('status', state.filter);
   if (state.q) params.set('q', state.q);
-  const r = await fetch('/api/leads?' + params.toString());
-  if (r.status === 401) { location.reload(); return; }
+  let r;
+  try {
+    r = await fetch('/api/leads?' + params.toString());
+  } catch {
+    showTableError('Network error — check your connection.');
+    return;
+  }
+  if (r.status === 401) { location.reload(); return; }   // genuinely logged out
+  if (!r.status || r.status >= 500) {
+    // Server/DB error (e.g. Turso not connected) — DO NOT log out
+    showTableError('Could not load leads — database connection issue. Check Turso settings.');
+    return;
+  }
   const data = await r.json();
   state.leads = data.leads || [];
   state.summary = data.summary || {};
   renderPipeline();
   renderRows();
+}
+function showTableError(msg){
+  document.getElementById('leadRows').innerHTML =
+    `<div class="empty" style="color:var(--red)">${msg}</div>`;
 }
 
 // ══ PIPELINE ══
@@ -550,13 +566,41 @@ function flash(){
   f.classList.add('show'); setTimeout(()=>f.classList.remove('show'), 1600);
 }
 
-// ══ BOOT — check if already logged in ══
+// ══ BOOT — check if already logged in (does NOT hit Turso) ══
 (async function boot(){
   try {
-    const r = await fetch('/api/leads?status=all');
+    const r = await fetch('/api/me');
     if (r.ok) { showApp(); }
   } catch {}
 })();
+
+// ══ 10-MINUTE IDLE SESSION ══
+// Server cookie is a sliding 10-min window, refreshed on every /api call.
+// Client mirrors this: pings /api/me on real activity (throttled), and
+// auto-logs-out after 10 min of no activity at all.
+let idleTimer = null;
+let lastPing = 0;
+
+function resetIdle(){
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(async ()=>{
+    // 10 min of no activity → log out
+    await fetch('/api/login', { method:'DELETE' }).catch(()=>{});
+    alert('Session timed out after 10 minutes of inactivity. Please sign in again.');
+    location.reload();
+  }, 10 * 60 * 1000);
+
+  // Throttle keep-alive pings to at most once per 2 min
+  const now = Date.now();
+  if (now - lastPing > 2 * 60 * 1000) {
+    lastPing = now;
+    fetch('/api/me').catch(()=>{});   // refreshes the server cookie
+  }
+}
+
+['click','keydown','mousemove','scroll','touchstart'].forEach(evt=>{
+  document.addEventListener(evt, resetIdle, { passive:true });
+});
 </script>
 </body>
 </html>
