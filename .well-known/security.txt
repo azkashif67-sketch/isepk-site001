@@ -1,0 +1,11 @@
+# Security Policy for isepk.com.pk
+# ISE PK — Integrated Security Engineering
+
+Contact: mailto:ise@isepk.com.pk
+Expires: 2027-08-12T00:00:00.000Z
+Preferred-Languages: en, ur
+Canonical: https://isepk.com.pk/.well-known/security.txt
+
+# If you have discovered a security vulnerability affecting isepk.com.pk,
+# please report it responsibly to the contact above. We appreciate
+# coordinated disclosure and will respond as promptly as we can.
