@@ -16,29 +16,50 @@ body{background:var(--bg);font-family:'Inter',sans-serif;color:var(--ink);overfl
 .hero{position:relative;min-height:100vh;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;padding:120px 6vw 60px;max-width:1500px;margin:0 auto}
 @media(max-width:900px){.hero{grid-template-columns:1fr;padding-top:90px}}
 
-/* ===== INTRO "POWER-ON" SEQUENCE ===== */
+/* ===== INTRO "POWER-ON" SEQUENCE — full-screen takeover then settle ===== */
+/* Dark backdrop that dims the whole page during the intro */
+#introBackdrop{position:fixed;inset:0;background:#0a0a0c;z-index:40;opacity:1;pointer-events:none;transition:opacity 1s ease .55s}
+.hero.intro-done ~ #introBackdrop,body.intro-settled #introBackdrop{opacity:0}
+
 /* Left copy starts hidden, fades/slides in after the globe settles */
 .hero-copy > *{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
 .hero.intro-done .hero-copy > *{opacity:1;transform:none}
-.hero.intro-done .hero-copy > *:nth-child(1){transition-delay:.05s}
-.hero.intro-done .hero-copy > *:nth-child(2){transition-delay:.13s}
-.hero.intro-done .hero-copy > *:nth-child(3){transition-delay:.21s}
-.hero.intro-done .hero-copy > *:nth-child(4){transition-delay:.29s}
+.hero.intro-done .hero-copy > *:nth-child(1){transition-delay:.55s}
+.hero.intro-done .hero-copy > *:nth-child(2){transition-delay:.65s}
+.hero.intro-done .hero-copy > *:nth-child(3){transition-delay:.75s}
+.hero.intro-done .hero-copy > *:nth-child(4){transition-delay:.85s}
 
-/* Globe panel: starts large, centered across the whole section, then settles into grid cell */
-.hero-visual{transition:transform 1.5s cubic-bezier(.16,1,.3,1),box-shadow 1.2s ease}
+/* Globe panel: starts as a FIXED full-viewport layer, then settles into its grid cell.
+   We animate transform (GPU-friendly). The panel is given a fixed overlay position
+   during intro via .intro-start, then released to its natural position on .intro-done. */
+.hero-visual{will-change:transform}
 .hero.intro-start .hero-visual{
-  transform:scale(1.35) translateX(-24%);
-  box-shadow:0 40px 120px -30px rgba(52,170,251,.35),0 30px 80px -30px rgba(0,0,0,.6),inset 0 0 60px rgba(0,0,0,.4);
+  position:fixed;
+  top:50%;left:50%;
+  width:min(96vw,96vh);height:min(96vw,96vh);
+  max-height:none;
+  transform:translate(-50%,-50%) scale(1);
+  z-index:45;
+  border-radius:18px;
+  box-shadow:0 0 0 100vmax rgba(10,10,12,.0),0 40px 160px -20px rgba(52,170,251,.4);
+  transition:none;
 }
-.hero.intro-done .hero-visual{transform:none}
-@media(max-width:900px){
-  .hero.intro-start .hero-visual{transform:scale(1.12)}
+/* When settling, we switch from fixed-overlay to a transition into place.
+   The .settling state animates the fixed panel to the target rect (set by JS). */
+.hero.settling .hero-visual{
+  transition:top 1.4s cubic-bezier(.16,1,.3,1),left 1.4s cubic-bezier(.16,1,.3,1),
+             width 1.4s cubic-bezier(.16,1,.3,1),height 1.4s cubic-bezier(.16,1,.3,1),
+             transform 1.4s cubic-bezier(.16,1,.3,1),box-shadow 1.2s ease,border-radius 1.2s ease;
 }
-/* Reduced motion: no intro transforms, everything visible immediately */
+.hero.intro-done .hero-visual{
+  box-shadow:0 30px 80px -30px rgba(0,0,0,.55),inset 0 0 60px rgba(0,0,0,.4);
+}
+
+/* Reduced motion: no takeover, everything in final position instantly */
 @media(prefers-reduced-motion:reduce){
+  #introBackdrop{display:none}
   .hero-copy > *{opacity:1!important;transform:none!important;transition:none!important}
-  .hero-visual{transition:none!important;transform:none!important}
+  .hero-visual{position:relative!important;transition:none!important;transform:none!important;top:auto!important;left:auto!important;width:auto!important;height:auto!important}
 }
 
 /* Left copy */
@@ -84,13 +105,7 @@ body{background:var(--bg);font-family:'Inter',sans-serif;color:var(--ink);overfl
 </style>
 </head>
 <body>
-<div style="min-height:70vh;display:flex;align-items:center;justify-content:center;padding:40px;text-align:center">
-  <div>
-    <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#1268a8;margin-bottom:16px">Scroll down to trigger the section</div>
-    <div style="font-family:'Archivo',sans-serif;font-weight:900;font-size:clamp(20px,3vw,32px);color:#151412;max-width:600px">This blank space simulates the content above the globe section on the homepage. Scroll down — the power-on effect fires when the section enters view.</div>
-    <div style="margin-top:30px;font-size:24px;color:#1268a8">↓</div>
-  </div>
-</div>
+<div id="introBackdrop"></div>
 
 <div class="hero intro-start" id="heroEl">
   <div class="hero-copy">
@@ -315,54 +330,84 @@ body{background:var(--bg);font-family:'Inter',sans-serif;color:var(--ink);overfl
   window.addEventListener('resize', resize); resize();
 
   let t=0;
-  // ---- Intro "power-on" orchestration (triggered on scroll-into-view) ----
+  // ---- Intro "power-on": full-screen takeover, then FLIP-settle into place ----
   const heroEl = document.getElementById('heroEl');
-  let introT = 0;              // 0..1 progress of the settle
-  let introActive = false;     // becomes true once triggered
-  let introTriggered = false;
-  const INTRO_DUR = 1.5;       // seconds, matches CSS transition
-  let introStart = null;
+  const visual = heroEl.querySelector('.hero-visual');
+  const backdrop = document.getElementById('introBackdrop');
+  let introActive = false, introTriggered = false, introStart = null;
+  const INTRO_DUR = 1.4;
+
+  function measureRest(){
+    // Temporarily neutralize intro styles to read the natural grid position
+    const hadStart = heroEl.classList.contains('intro-start');
+    heroEl.classList.remove('intro-start');
+    visual.style.position=''; visual.style.top=''; visual.style.left='';
+    visual.style.width=''; visual.style.height='';
+    const r = visual.getBoundingClientRect();
+    if(hadStart) heroEl.classList.add('intro-start');
+    return r;
+  }
 
   function triggerIntro(){
     if(introTriggered) return;
     introTriggered = true;
-    if(reduced){
-      heroEl.classList.remove('intro-start');
-      heroEl.classList.add('intro-done');
-      return;
-    }
-    introActive = true;
-    // kick the CSS transition on next frame, then flip to settled
-    requestAnimationFrame(()=>requestAnimationFrame(()=>{
-      heroEl.classList.remove('intro-start');
-      heroEl.classList.add('intro-done');
-      introStart = performance.now();
-    }));
+    if(reduced){ heroEl.classList.add('intro-done'); document.body.classList.add('intro-settled'); return; }
+
+    // 1) measure where the panel should end up (natural two-column cell)
+    const rest = measureRest();
+
+    // 2) ensure it's currently fullscreen-fixed (intro-start already sets this via CSS)
+    //    force a reflow so the fixed fullscreen state is committed
+    visual.getBoundingClientRect();
+
+    // 3) enable transitions and animate the fixed panel to the resting rect
+    requestAnimationFrame(()=>{
+      heroEl.classList.add('settling');
+      // pin explicit fixed coords equal to the resting rect
+      visual.style.top = rest.top + 'px';
+      visual.style.left = rest.left + 'px';
+      visual.style.width = rest.width + 'px';
+      visual.style.height = rest.height + 'px';
+      visual.style.transform = 'translate(0,0) scale(1)';
+      introActive = true; introStart = performance.now();
+      backdrop.style.opacity = '0';
+
+      // 4) after the settle completes, release fixed positioning back to normal flow
+      setTimeout(()=>{
+        heroEl.classList.remove('intro-start');
+        heroEl.classList.remove('settling');
+        heroEl.classList.add('intro-done');
+        visual.style.position=''; visual.style.top=''; visual.style.left='';
+        visual.style.width=''; visual.style.height=''; visual.style.transform='';
+        visual.style.zIndex='';
+        introActive=false; camera.position.z=6.4; camera.updateProjectionMatrix();
+      }, INTRO_DUR*1000 + 60);
+    });
   }
+
+  // On resize during the brief intro, recompute (rare, but safe): just finish instantly
+  window.addEventListener('resize', ()=>{ if(introActive){ /* let CSS handle */ } });
 
   if(reduced){
     triggerIntro();
-  } else if('IntersectionObserver' in window){
-    const io = new IntersectionObserver((entries)=>{
-      entries.forEach(e=>{ if(e.isIntersecting){ triggerIntro(); io.disconnect(); } });
-    }, {threshold: 0.35});
-    io.observe(heroEl);
   } else {
-    triggerIntro(); // fallback: no observer support
+    // Full-screen takeover fires on load
+    if(document.readyState==='complete') requestAnimationFrame(triggerIntro);
+    else window.addEventListener('load', ()=>requestAnimationFrame(triggerIntro));
   }
 
   function animate(){
     requestAnimationFrame(animate);
     t += 0.006;
 
-    // intro: globe spins faster + camera pulls in slightly while settling
+    // during settle: globe spins faster + camera pulls in slightly, easing out
     if(introActive && introStart!==null){
-      introT = Math.min(1, (performance.now()-introStart)/(INTRO_DUR*1000));
-      const ease = 1-Math.pow(1-introT, 3);
-      group.rotation.y += (1-ease)*0.03;
-      camera.position.z = 5.6 + ease*0.8;
+      resize(); // panel is animating size; keep canvas/camera in sync
+      const p = Math.min(1,(performance.now()-introStart)/(INTRO_DUR*1000));
+      const ease = 1-Math.pow(1-p,3);
+      group.rotation.y += (1-ease)*0.028;
+      camera.position.z = 5.4 + ease*1.0;
       camera.updateProjectionMatrix();
-      if(introT>=1){ introActive=false; camera.position.z=6.4; }
     }
 
     if(!reduced){
