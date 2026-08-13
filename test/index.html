@@ -84,6 +84,14 @@ body{background:var(--bg);font-family:'Inter',sans-serif;color:var(--ink);overfl
 </style>
 </head>
 <body>
+<div style="min-height:70vh;display:flex;align-items:center;justify-content:center;padding:40px;text-align:center">
+  <div>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#1268a8;margin-bottom:16px">Scroll down to trigger the section</div>
+    <div style="font-family:'Archivo',sans-serif;font-weight:900;font-size:clamp(20px,3vw,32px);color:#151412;max-width:600px">This blank space simulates the content above the globe section on the homepage. Scroll down — the power-on effect fires when the section enters view.</div>
+    <div style="margin-top:30px;font-size:24px;color:#1268a8">↓</div>
+  </div>
+</div>
+
 <div class="hero intro-start" id="heroEl">
   <div class="hero-copy">
     <div class="hero-eyebrow">ISE — Pakistan</div>
@@ -307,22 +315,40 @@ body{background:var(--bg);font-family:'Inter',sans-serif;color:var(--ink);overfl
   window.addEventListener('resize', resize); resize();
 
   let t=0;
-  // ---- Intro "power-on" orchestration ----
+  // ---- Intro "power-on" orchestration (triggered on scroll-into-view) ----
   const heroEl = document.getElementById('heroEl');
   let introT = 0;              // 0..1 progress of the settle
-  let introActive = !reduced;  // skip on reduced motion
+  let introActive = false;     // becomes true once triggered
+  let introTriggered = false;
   const INTRO_DUR = 1.5;       // seconds, matches CSS transition
   let introStart = null;
-  if(reduced){
-    heroEl.classList.remove('intro-start');
-    heroEl.classList.add('intro-done');
-  } else {
+
+  function triggerIntro(){
+    if(introTriggered) return;
+    introTriggered = true;
+    if(reduced){
+      heroEl.classList.remove('intro-start');
+      heroEl.classList.add('intro-done');
+      return;
+    }
+    introActive = true;
     // kick the CSS transition on next frame, then flip to settled
     requestAnimationFrame(()=>requestAnimationFrame(()=>{
       heroEl.classList.remove('intro-start');
       heroEl.classList.add('intro-done');
       introStart = performance.now();
     }));
+  }
+
+  if(reduced){
+    triggerIntro();
+  } else if('IntersectionObserver' in window){
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ triggerIntro(); io.disconnect(); } });
+    }, {threshold: 0.35});
+    io.observe(heroEl);
+  } else {
+    triggerIntro(); // fallback: no observer support
   }
 
   function animate(){
@@ -333,9 +359,7 @@ body{background:var(--bg);font-family:'Inter',sans-serif;color:var(--ink);overfl
     if(introActive && introStart!==null){
       introT = Math.min(1, (performance.now()-introStart)/(INTRO_DUR*1000));
       const ease = 1-Math.pow(1-introT, 3);
-      // extra spin during intro that eases out
       group.rotation.y += (1-ease)*0.03;
-      // camera eases from a touch closer to resting distance
       camera.position.z = 5.6 + ease*0.8;
       camera.updateProjectionMatrix();
       if(introT>=1){ introActive=false; camera.position.z=6.4; }
