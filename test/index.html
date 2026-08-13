@@ -16,6 +16,15 @@ body{background:var(--bg);font-family:'Inter',sans-serif;color:var(--ink);overfl
 .hero{position:relative;min-height:100vh;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;padding:120px 6vw 60px;max-width:1500px;margin:0 auto}
 @media(max-width:900px){.hero{grid-template-columns:1fr;padding-top:90px}}
 
+/* Repeat-visit / reduced-motion: force settled state pre-JS, no fullscreen flash */
+html.intro-skip .hero.intro-start .hero-visual{
+  position:relative!important;top:auto!important;left:auto!important;
+  width:auto!important;height:auto!important;transform:none!important;z-index:auto!important;
+  box-shadow:0 30px 80px -30px rgba(0,0,0,.55),inset 0 0 60px rgba(0,0,0,.4)!important;
+}
+html.intro-skip .hero-copy > *{opacity:1!important;transform:none!important}
+html.intro-skip #introBackdrop{display:none!important}
+
 /* ===== INTRO "POWER-ON" SEQUENCE — full-screen takeover then settle ===== */
 /* Dark backdrop that dims the whole page during the intro */
 #introBackdrop{position:fixed;inset:0;background:#0a0a0c;z-index:40;opacity:1;pointer-events:none;transition:opacity 1s ease .55s}
@@ -47,9 +56,9 @@ body{background:var(--bg);font-family:'Inter',sans-serif;color:var(--ink);overfl
 /* When settling, we switch from fixed-overlay to a transition into place.
    The .settling state animates the fixed panel to the target rect (set by JS). */
 .hero.settling .hero-visual{
-  transition:top 1.4s cubic-bezier(.16,1,.3,1),left 1.4s cubic-bezier(.16,1,.3,1),
-             width 1.4s cubic-bezier(.16,1,.3,1),height 1.4s cubic-bezier(.16,1,.3,1),
-             transform 1.4s cubic-bezier(.16,1,.3,1),box-shadow 1.2s ease,border-radius 1.2s ease;
+  transition:top 2s cubic-bezier(.16,1,.3,1),left 2s cubic-bezier(.16,1,.3,1),
+             width 2s cubic-bezier(.16,1,.3,1),height 2s cubic-bezier(.16,1,.3,1),
+             transform 2s cubic-bezier(.16,1,.3,1),box-shadow 1.4s ease,border-radius 1.4s ease;
 }
 .hero.intro-done .hero-visual{
   box-shadow:0 30px 80px -30px rgba(0,0,0,.55),inset 0 0 60px rgba(0,0,0,.4);
@@ -103,6 +112,17 @@ body{background:var(--bg);font-family:'Inter',sans-serif;color:var(--ink);overfl
 
 .note{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);background:#17171a;color:#cfe4f5;font-family:'IBM Plex Mono',monospace;font-size:12px;padding:10px 20px;border-radius:6px;border:1px solid rgba(52,170,251,.3);z-index:50}
 </style>
+<script>
+/* Pre-render: if the hero intro already played this session (or reduced-motion),
+   mark <html> so the hero starts in its settled state with NO fullscreen flash. */
+(function(){
+  try{
+    var played = sessionStorage.getItem('iseHeroIntroPlayed')==='1';
+    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+    if(played || reduced){ document.documentElement.classList.add('intro-skip'); }
+  }catch(e){}
+})();
+</script>
 </head>
 <body>
 <div id="introBackdrop"></div>
@@ -335,7 +355,7 @@ body{background:var(--bg);font-family:'Inter',sans-serif;color:var(--ink);overfl
   const visual = heroEl.querySelector('.hero-visual');
   const backdrop = document.getElementById('introBackdrop');
   let introActive = false, introTriggered = false, introStart = null;
-  const INTRO_DUR = 1.4;
+  const INTRO_DUR = 2.0;
 
   function measureRest(){
     // Temporarily neutralize intro styles to read the natural grid position
@@ -388,12 +408,26 @@ body{background:var(--bg);font-family:'Inter',sans-serif;color:var(--ink);overfl
   // On resize during the brief intro, recompute (rare, but safe): just finish instantly
   window.addEventListener('resize', ()=>{ if(introActive){ /* let CSS handle */ } });
 
-  if(reduced){
-    triggerIntro();
+  function skipToSettled(){
+    // Land directly in the final two-column state, no takeover
+    heroEl.classList.remove('intro-start','settling');
+    heroEl.classList.add('intro-done');
+    document.body.classList.add('intro-settled');
+    const bd=document.getElementById('introBackdrop'); if(bd) bd.style.display='none';
+    introTriggered = true;
+  }
+
+  // Once-per-session: if the intro already played this browser session, skip it
+  let alreadyPlayed = false;
+  try { alreadyPlayed = sessionStorage.getItem('iseHeroIntroPlayed') === '1'; } catch(e){}
+
+  if(reduced || alreadyPlayed){
+    skipToSettled();
   } else {
-    // Full-screen takeover fires on load
-    if(document.readyState==='complete') requestAnimationFrame(triggerIntro);
-    else window.addEventListener('load', ()=>requestAnimationFrame(triggerIntro));
+    // Full-screen takeover fires on load, then mark as played for the session
+    const startIntro = ()=>{ try{ sessionStorage.setItem('iseHeroIntroPlayed','1'); }catch(e){} triggerIntro(); };
+    if(document.readyState==='complete') requestAnimationFrame(startIntro);
+    else window.addEventListener('load', ()=>requestAnimationFrame(startIntro));
   }
 
   function animate(){
