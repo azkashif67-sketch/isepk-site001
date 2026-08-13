@@ -1,6 +1,107 @@
+# robots.txt for isepk.com.pk
+# ISE PK — Integrated Security Engineering
+
+# ----- Default: allow all standard crawlers -----
 User-agent: *
 Allow: /
 Disallow: /admin
 Disallow: /api/
+
+# ----- Search engine crawlers (SEO) -----
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+# ----- AI answer-engine & assistant crawlers -----
+# Explicitly welcomed to improve visibility in AI-generated answers.
+
+# OpenAI (ChatGPT / SearchGPT)
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# Anthropic (Claude)
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+# Google AI (Gemini / AI Overviews training)
+User-agent: Google-Extended
+Allow: /
+
+# Perplexity
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+# Apple Intelligence
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Common Crawl (feeds many AI training datasets)
+User-agent: CCBot
+Allow: /
+
+# Meta AI
+User-agent: FacebookBot
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+# Amazon
+User-agent: Amazonbot
+Allow: /
+
+# Cohere
+User-agent: cohere-ai
+Allow: /
+
+# Mistral
+User-agent: MistralAI-User
+Allow: /
+
+# ByteDance (TikTok AI)
+User-agent: Bytespider
+Allow: /
+
+# Diffbot / You.com / others
+User-agent: DiffbotBot
+Allow: /
+
+User-agent: YouBot
+Allow: /
 
 Sitemap: https://isepk.com.pk/sitemap.xml
