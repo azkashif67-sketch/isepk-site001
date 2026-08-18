@@ -400,7 +400,7 @@ html.gh-intro-skip #introBackdrop{display:none!important}
 .ts-plus,.ts-suffix{font-family:'Archivo',sans-serif;font-weight:900;font-size:clamp(20px,2.4vw,30px);color:#34AAFB;vertical-align:top;margin-left:1px}
 .ts-label{display:block;margin-top:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.05em;line-height:1.4;color:#eef5fc;text-transform:uppercase}
 .ts-brands{border-top:1px solid rgba(255,255,255,.1);padding-top:28px;text-align:center}
-.ts-brands-label{display:block;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6d7d8a;margin-bottom:18px}
+.ts-brands-label{display:block;font-family:'IBM Plex Mono',monospace;font-size:16.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#eef5fc;margin-bottom:22px}
 .ts-brand-row{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:12px 30px}
 .ts-brand{font-family:'Archivo',sans-serif;font-weight:700;font-size:clamp(15px,1.6vw,19px);color:#cfe4f5;letter-spacing:.01em;opacity:.85;transition:opacity .2s,color .2s}
 .ts-brand:hover{opacity:1;color:#fff}
@@ -414,6 +414,40 @@ html.gh-intro-skip #introBackdrop{display:none!important}
   .trust-strip{padding:40px 0 34px}
   .ts-stat::after{display:none!important}
   .ts-brand-row{gap:10px 20px}
+}
+
+/* ===== CONTACT HERO SPLIT (form beside headline) ===== */
+.contact-hero-split{position:relative;padding:120px 0 60px;background:var(--bg);overflow:hidden}
+.contact-hero-split .wrap{max-width:1240px;margin:0 auto;padding:0 28px;position:relative;z-index:2}
+.chs-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:start;margin-top:22px}
+.chs-left{padding-top:6px}
+.chs-left .eyebrow{margin-bottom:14px}
+.chs-left h1{font-family:'Archivo',sans-serif;font-weight:900;font-size:clamp(32px,4.4vw,54px);line-height:1.04;letter-spacing:-0.02em;text-transform:uppercase;color:var(--ink);margin-bottom:18px}
+.chs-left .lead{font-size:clamp(15px,1.5vw,17px);line-height:1.62;color:#4a4842;max-width:440px;margin-bottom:26px}
+.chs-trust{list-style:none;padding:0;margin:0 0 28px}
+.chs-trust li{display:flex;align-items:baseline;gap:10px;font-size:14.5px;line-height:1.5;color:#33322f;margin-bottom:11px}
+.chs-check{color:#097235;font-weight:900;flex:none;font-size:14px}
+.chs-muted{color:#8a8880;font-size:13px}
+.chs-quick{display:flex;gap:12px;flex-wrap:wrap}
+.chs-quick-btn{display:flex;flex-direction:column;gap:2px;padding:12px 20px;border:1.5px solid var(--paper-line);border-radius:10px;text-decoration:none;background:#fff;transition:transform .2s,box-shadow .2s,border-color .2s}
+.chs-quick-btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px -12px rgba(0,0,0,.2);border-color:var(--red-dim)}
+.chs-quick-btn.chs-wa:hover{border-color:#25d366}
+.chs-q-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#8a8880}
+.chs-q-val{font-family:'Archivo',sans-serif;font-weight:700;font-size:15px;color:var(--ink)}
+/* form sits in right column; reuse existing .cta-form-box styling */
+.chs-right{position:sticky;top:100px}
+.chs-right .cta-form-box{margin:0}
+.contact-below{padding-top:20px}
+@media(max-width:900px){
+  .chs-grid{grid-template-columns:1fr;gap:32px}
+  .chs-right{position:static}
+  .chs-left h1 br{display:none}
+  .chs-left .lead{max-width:none}
+}
+@media(max-width:560px){
+  .contact-hero-split{padding:100px 0 44px}
+  .chs-quick{flex-direction:column}
+  .chs-quick-btn{width:100%}
 }
 </style>
 </head>
