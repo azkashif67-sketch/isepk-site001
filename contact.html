@@ -475,6 +475,30 @@ html.gh-intro-skip #introBackdrop{display:none!important}
   /* Lift the page bottom so the bar doesn't cover footer content */
   footer{padding-bottom:80px}
 }
+
+/* ===== WHAT HAPPENS NEXT (3-step) ===== */
+.what-next{background:linear-gradient(165deg,#17171a 0%,#0d0d10 100%);padding:56px 0 60px;position:relative;overflow:hidden}
+.what-next::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#34AAFB,transparent)}
+.what-next .wrap{max-width:1000px;margin:0 auto;padding:0 28px}
+.wn-head{text-align:center;margin-bottom:38px}
+.wn-head .eyebrow{color:#34AAFB;margin-bottom:12px}
+.wn-head h2{font-family:'Archivo',sans-serif;font-weight:900;font-size:clamp(24px,3.2vw,38px);text-transform:uppercase;letter-spacing:-0.01em;color:#fff;line-height:1.06}
+.wn-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;position:relative}
+.wn-step{text-align:center;position:relative;padding:0 10px}
+.wn-num{width:52px;height:52px;margin:0 auto 18px;border-radius:50%;background:rgba(52,170,251,.12);border:1.5px solid #34AAFB;
+  display:flex;align-items:center;justify-content:center;font-family:'Archivo',sans-serif;font-weight:900;font-size:22px;color:#34AAFB}
+.wn-step h3{font-family:'Archivo',sans-serif;font-weight:800;font-size:17px;color:#fff;margin-bottom:8px;letter-spacing:-0.01em}
+.wn-step p{font-size:14px;line-height:1.55;color:#9db4c7;max-width:260px;margin:0 auto}
+.wn-step:not(:last-child)::after{content:'';position:absolute;top:26px;right:-12px;width:24px;height:2px;background:rgba(52,170,251,.3)}
+.wn-cta{text-align:center;margin-top:40px}
+.wn-cta a{display:inline-block;background:var(--accent-deep);color:#fff;font-family:'Archivo',sans-serif;font-weight:700;
+  font-size:15px;padding:14px 32px;border-radius:10px;text-decoration:none;transition:transform .2s,box-shadow .2s}
+.wn-cta a:hover{transform:translateY(-2px);box-shadow:0 12px 28px -12px rgba(52,170,251,.5)}
+@media(max-width:720px){
+  .wn-steps{grid-template-columns:1fr;gap:30px}
+  .wn-step:not(:last-child)::after{display:none}
+  .wn-step p{max-width:none}
+}
 </style>
 </head>
 <body class="js-motion">
@@ -572,6 +596,33 @@ html.gh-intro-skip #introBackdrop{display:none!important}
         </form>
       </div>
       </div>
+    </div>
+  </div>
+</section><section class="what-next">
+  <div class="wrap">
+    <div class="wn-head">
+      <div class="eyebrow">Simple &amp; no-obligation</div>
+      <h2>What happens next</h2>
+    </div>
+    <div class="wn-steps">
+      <div class="wn-step">
+        <div class="wn-num">1</div>
+        <h3>You send details</h3>
+        <p>Share your site and requirements through the form, WhatsApp, or a quick call. Takes two minutes.</p>
+      </div>
+      <div class="wn-step">
+        <div class="wn-num">2</div>
+        <h3>We survey your site</h3>
+        <p>An engineer visits and assesses your site&rsquo;s risks and needs &mdash; free within Karachi, no obligation.</p>
+      </div>
+      <div class="wn-step">
+        <div class="wn-num">3</div>
+        <h3>You get a proposal</h3>
+        <p>We deliver a written scope and tailored proposal with clear engineering reasoning &mdash; yours to keep.</p>
+      </div>
+    </div>
+    <div class="wn-cta">
+      <a href="#contact">Start now &mdash; request your free survey</a>
     </div>
   </div>
 </section><section class="content-section contact-below">
