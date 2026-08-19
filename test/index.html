@@ -51,21 +51,45 @@
 .sys-reveal-sub{font-size:15.5px;line-height:1.6;color:#5a5852}
 .sys-stage{width:100%;max-width:760px}
 .sys-svg{width:100%;height:auto;display:block}
-/* Each layer starts hidden + offset; JS reveals by progress */
-.sys-layer{opacity:0;will-change:transform,opacity}
+
+/* VISIBLE BY DEFAULT — the diagram always shows. JS only adds a staggered
+   entrance when it can. This makes a "stuck invisible" state impossible. */
+.sys-layer{opacity:1;transition:opacity .6s ease, transform .6s ease}
+
+/* When JS confirms it can animate, it adds .sys-anim to the section,
+   which resets layers to hidden so they can animate in on reveal. */
+.sys-reveal.sys-anim .sys-layer{opacity:0;transform:translateY(18px)}
+.sys-reveal.sys-anim.sys-in .sys-layer{opacity:1;transform:translateY(0)}
+/* stagger each layer */
+.sys-reveal.sys-anim.sys-in .sys-layer:nth-child(1){transition-delay:0s}
+.sys-reveal.sys-anim.sys-in .sys-layer:nth-child(2){transition-delay:.12s}
+.sys-reveal.sys-anim.sys-in .sys-layer:nth-child(3){transition-delay:.24s}
+.sys-reveal.sys-anim.sys-in .sys-layer:nth-child(4){transition-delay:.36s}
+.sys-reveal.sys-anim.sys-in .sys-layer:nth-child(5){transition-delay:.48s}
+.sys-reveal.sys-anim.sys-in .sys-layer:nth-child(6){transition-delay:.60s}
+.sys-reveal.sys-anim.sys-in .sys-wire{animation:sysWire 1s ease forwards .5s}
+@keyframes sysWire{to{stroke-dashoffset:0}}
+
 .sys-node{transform-box:fill-box;transform-origin:center}
 .sys-wire{stroke-dashoffset:120}
+.sys-reveal:not(.sys-anim) .sys-wire{stroke-dashoffset:0} /* visible if no JS */
 .sys-legend{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#8a8880;letter-spacing:.04em}
-.sys-leg-item{display:flex;align-items:center;gap:7px;opacity:.3;transition:opacity .4s}
-.sys-leg-item.on{opacity:1;color:var(--ink)}
+.sys-leg-item{display:flex;align-items:center;gap:7px;opacity:1;transition:opacity .4s}
+.sys-reveal.sys-anim .sys-leg-item{opacity:.3}
+.sys-reveal.sys-anim.sys-in .sys-leg-item{opacity:1;color:var(--ink)}
 .sys-leg-item i{width:10px;height:10px;border-radius:2px;display:inline-block}
+
 @media(max-width:640px){
   .sys-reveal{padding:56px 0}
   .sys-reveal-sticky{padding:20px}
-  /* On mobile: show all layers static (no scroll-scrub) for performance */
-  .sys-layer{opacity:1!important;transform:none!important}
+  /* mobile: always static, never animate */
+  .sys-reveal .sys-layer{opacity:1!important;transform:none!important}
   .sys-wire{stroke-dashoffset:0!important}
-  .sys-leg-item{opacity:1;color:var(--ink)}
+  .sys-leg-item{opacity:1!important;color:var(--ink)}
+}
+@media(prefers-reduced-motion:reduce){
+  .sys-reveal .sys-layer{opacity:1!important;transform:none!important}
+  .sys-wire{stroke-dashoffset:0!important}
 }
 
 /* ===== LINE-ART PRODUCTS behind service sections ===== */
@@ -76,20 +100,22 @@
 .svc-art-1{top:8%;right:-40px;width:280px;height:280px}
 .svc-art-2{bottom:6%;left:-30px;width:240px;height:240px}
 .svc-parallax-wrap>*:not(.svc-art){position:relative;z-index:1}
-@media(max-width:640px){.svc-art{display:none}} /* mobile: no bg art */
+@media(max-width:640px){.svc-art{display:none}}
 
 /* ===== BRAND PRODUCT CONVEYOR ===== */
-.conveyor{background:var(--panel-b);padding:44px 0;overflow:hidden;position:relative}
+.conveyor{background:#0d0d10;padding:44px 0;overflow:hidden;position:relative}
 .conveyor::before,.conveyor::after{content:'';position:absolute;top:0;bottom:0;width:120px;z-index:2;pointer-events:none}
-.conveyor::before{left:0;background:linear-gradient(90deg,var(--panel-b),transparent)}
-.conveyor::after{right:0;background:linear-gradient(270deg,var(--panel-b),transparent)}
+.conveyor::before{left:0;background:linear-gradient(90deg,#0d0d10,transparent)}
+.conveyor::after{right:0;background:linear-gradient(270deg,#0d0d10,transparent)}
 .conveyor-label{text-align:center;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#6d7d8a;margin-bottom:26px}
-.conveyor-track{display:flex;gap:56px;align-items:center;width:max-content;will-change:transform}
+.conveyor-track{display:flex;gap:56px;align-items:center;width:max-content;will-change:transform;animation:convScroll 40s linear infinite}
+@keyframes convScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.conveyor:hover .conveyor-track{animation-play-state:paused}
 .conv-item{display:flex;flex-direction:column;align-items:center;gap:10px;flex:none}
 .conv-item svg{width:56px;height:56px}
 .conv-item svg path,.conv-item svg rect,.conv-item svg circle,.conv-item svg line{stroke:#34AAFB;stroke-width:1.5;fill:none;vector-effect:non-scaling-stroke}
 .conv-item span{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#9db4c7}
-@media(prefers-reduced-motion:reduce){.conveyor-track{transform:none!important}}
+@media(prefers-reduced-motion:reduce){.conveyor-track{animation:none}}
 </style>
 <script>
 /* Pre-render: if the hero intro already played this session (or reduced-motion),
@@ -1510,41 +1536,39 @@ var origActivateSlide=window.activateSlide;var ctaSec=document.getElementById('c
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var isMobile = window.innerWidth < 641;
 
-  // ---- SYSTEM-LAYERS REVEAL: scrub layers by scroll progress through the section ----
+  // ---- SYSTEM-LAYERS REVEAL ----
+  // Bulletproof approach: layers are VISIBLE by default (see CSS). We only add
+  // the animated entrance when JS + IntersectionObserver are available and we're
+  // on desktop with motion allowed. If anything fails, the diagram just shows.
   var sysSection = document.getElementById('sys-reveal');
-  if(sysSection && !reduce && !isMobile){
-    var layers = [].slice.call(sysSection.querySelectorAll('.sys-layer'));
-    var legend = [].slice.call(sysSection.querySelectorAll('.sys-leg-item'));
-    var ticking = false;
-    function update(){
-      var r = sysSection.getBoundingClientRect();
-      var vh = window.innerHeight;
-      // Only compute when section is anywhere near the viewport (cheap early-out)
-      if(r.bottom < -50 || r.top > vh + 50) return;
-      // progress 0..1: starts when section top reaches 78% down viewport, completes at 25%
-      var p = (vh*0.78 - r.top) / (vh*0.53);
-      p = Math.max(0, Math.min(1, p));
-      layers.forEach(function(L, i){
-        var depth = parseFloat(L.getAttribute('data-depth')) || 0.5;
-        var start = i / (layers.length + 1);
-        var lp = Math.max(0, Math.min(1, (p - start) * (layers.length + 1)));
-        L.style.opacity = lp;
-        L.style.transform = 'translate3d(0,' + ((1 - lp) * 26 * depth) + 'px,0)';
-        var wires = L.querySelectorAll('.sys-wire');
-        for(var w=0; w<wires.length; w++){ wires[w].style.strokeDashoffset = (1-lp)*120; }
+  if(sysSection && !reduce && !isMobile && 'IntersectionObserver' in window){
+    // Switch to animated mode (CSS hides layers, ready to animate in)
+    sysSection.classList.add('sys-anim');
+    var fired = false;
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting && !fired){
+          fired = true;
+          sysSection.classList.add('sys-in');   // CSS transitions layers in, staggered
+          io.disconnect();
+        }
       });
-      legend.forEach(function(el, i){
-        var start = (i+1) / (layers.length + 1);
-        el.classList.toggle('on', p >= start - 0.02);
-      });
-    }
-    function onScroll(){ if(!ticking){ ticking = true; requestAnimationFrame(function(){ update(); ticking = false; }); } }
-    window.addEventListener('scroll', onScroll, {passive:true});
-    window.addEventListener('resize', function(){ isMobile = window.innerWidth<641; update(); }, {passive:true});
-    update();
+    }, {threshold: 0.15});
+    io.observe(sysSection);
+    // Safety net: if for any reason the observer hasn't fired within 3s but the
+    // section is on/near screen, reveal anyway so it can never sit blank.
+    setTimeout(function(){
+      if(!fired){
+        var r = sysSection.getBoundingClientRect();
+        if(r.top < window.innerHeight && r.bottom > 0){
+          fired = true; sysSection.classList.add('sys-in');
+        }
+      }
+    }, 3000);
   }
+  // (No else needed — without JS the layers are already visible via CSS.)
 
-  // ---- LINE-ART PRODUCT PARALLAX behind service sections ----
+  // ---- LINE-ART PRODUCT PARALLAX behind service sections (subtle drift) ----
   if(!reduce && !isMobile){
     var arts = [].slice.call(document.querySelectorAll('.svc-art'));
     if(arts.length){
@@ -1553,37 +1577,21 @@ var origActivateSlide=window.activateSlide;var ctaSec=document.getElementById('c
         var vh = window.innerHeight;
         arts.forEach(function(a){
           var r = a.parentElement.getBoundingClientRect();
-          var center = r.top + r.height/2;
-          var off = (center - vh/2) / vh; // -1..1
+          if(r.bottom < 0 || r.top > vh) return;
+          var off = ((r.top + r.height/2) - vh/2) / vh;
           var speed = parseFloat(a.getAttribute('data-speed')) || 40;
           a.style.transform = 'translate3d(0,' + (off * speed) + 'px,0)';
         });
       }
-      window.addEventListener('scroll', function(){ if(!artTick){ artTick=true; requestAnimationFrame(function(){ moveArt(); artTick=false; }); } }, {passive:true});
+      window.addEventListener('scroll', function(){
+        if(!artTick){ artTick = true; requestAnimationFrame(function(){ moveArt(); artTick = false; }); }
+      }, {passive:true});
       moveArt();
     }
   }
 
-  // ---- BRAND CONVEYOR: horizontal scrub tied to vertical scroll ----
-  var conv = document.querySelector('.conveyor-track');
-  if(conv && !reduce){
-    var convActive = false;
-    var cio = new IntersectionObserver(function(es){ es.forEach(function(e){ convActive = e.isIntersecting; }); }, {threshold:0});
-    cio.observe(conv.closest('.conveyor'));
-    var convTick = false;
-    function moveConv(){
-      if(!convActive) return;
-      var sec = conv.closest('.conveyor');
-      var r = sec.getBoundingClientRect();
-      var vh = window.innerHeight;
-      var p = 1 - (r.bottom) / (r.height + vh); // 0..1
-      p = Math.max(0, Math.min(1, p));
-      var max = conv.scrollWidth - window.innerWidth;
-      if(max > 0) conv.style.transform = 'translate3d(' + (-p * max * 0.5) + 'px,0,0)';
-    }
-    window.addEventListener('scroll', function(){ if(!convTick){ convTick=true; requestAnimationFrame(function(){ moveConv(); convTick=false; }); } }, {passive:true});
-    moveConv();
-  }
+  // Conveyor now runs as a pure CSS animation (see .conveyor-track) — no JS needed,
+  // so it can never get stuck on a scroll calculation.
 })();
 </script>
 </body>
