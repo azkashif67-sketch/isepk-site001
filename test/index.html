@@ -42,57 +42,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;900&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <meta name="robots" content="noindex,nofollow">
-<style>/* ===== SYSTEM-LAYERS REVEAL (centerpiece) ===== */
-.sys-reveal{position:relative;background:linear-gradient(180deg,#f4f2ec 0%,#efece4 100%);padding:70px 0}
-.sys-reveal-sticky{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 28px;gap:28px}
-.sys-reveal-head{text-align:center;max-width:640px}
-.sys-reveal-head .eyebrow{justify-content:center;margin-bottom:14px}
-.sys-reveal-head h2{font-family:'Archivo',sans-serif;font-weight:900;font-size:clamp(26px,3.4vw,40px);text-transform:uppercase;letter-spacing:-0.01em;color:var(--ink);line-height:1.08;margin-bottom:12px}
-.sys-reveal-sub{font-size:15.5px;line-height:1.6;color:#5a5852}
-.sys-stage{width:100%;max-width:760px}
-.sys-svg{width:100%;height:auto;display:block}
-
-/* VISIBLE BY DEFAULT — the diagram always shows. JS only adds a staggered
-   entrance when it can. This makes a "stuck invisible" state impossible. */
-.sys-layer{opacity:1;transition:opacity .6s ease, transform .6s ease}
-
-/* When JS confirms it can animate, it adds .sys-anim to the section,
-   which resets layers to hidden so they can animate in on reveal. */
-.sys-reveal.sys-anim .sys-layer{opacity:0;transform:translateY(18px)}
-.sys-reveal.sys-anim.sys-in .sys-layer{opacity:1;transform:translateY(0)}
-/* stagger each layer */
-.sys-reveal.sys-anim.sys-in .sys-layer:nth-child(1){transition-delay:0s}
-.sys-reveal.sys-anim.sys-in .sys-layer:nth-child(2){transition-delay:.12s}
-.sys-reveal.sys-anim.sys-in .sys-layer:nth-child(3){transition-delay:.24s}
-.sys-reveal.sys-anim.sys-in .sys-layer:nth-child(4){transition-delay:.36s}
-.sys-reveal.sys-anim.sys-in .sys-layer:nth-child(5){transition-delay:.48s}
-.sys-reveal.sys-anim.sys-in .sys-layer:nth-child(6){transition-delay:.60s}
-.sys-reveal.sys-anim.sys-in .sys-wire{animation:sysWire 1s ease forwards .5s}
-@keyframes sysWire{to{stroke-dashoffset:0}}
-
-.sys-node{transform-box:fill-box;transform-origin:center}
-.sys-wire{stroke-dashoffset:120}
-.sys-reveal:not(.sys-anim) .sys-wire{stroke-dashoffset:0} /* visible if no JS */
-.sys-legend{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#8a8880;letter-spacing:.04em}
-.sys-leg-item{display:flex;align-items:center;gap:7px;opacity:1;transition:opacity .4s}
-.sys-reveal.sys-anim .sys-leg-item{opacity:.3}
-.sys-reveal.sys-anim.sys-in .sys-leg-item{opacity:1;color:var(--ink)}
-.sys-leg-item i{width:10px;height:10px;border-radius:2px;display:inline-block}
-
-@media(max-width:640px){
-  .sys-reveal{padding:56px 0}
-  .sys-reveal-sticky{padding:20px}
-  /* mobile: always static, never animate */
-  .sys-reveal .sys-layer{opacity:1!important;transform:none!important}
-  .sys-wire{stroke-dashoffset:0!important}
-  .sys-leg-item{opacity:1!important;color:var(--ink)}
-}
-@media(prefers-reduced-motion:reduce){
-  .sys-reveal .sys-layer{opacity:1!important;transform:none!important}
-  .sys-wire{stroke-dashoffset:0!important}
-}
-
-/* ===== LINE-ART PRODUCTS behind service sections ===== */
+<style>/* ===== LINE-ART PRODUCTS behind service sections ===== */
 .svc-parallax-wrap{position:relative;overflow:hidden}
 .svc-art{position:absolute;pointer-events:none;opacity:0.06;will-change:transform;z-index:0}
 .svc-art svg{width:100%;height:100%}
@@ -893,71 +843,6 @@ html.gh-intro-skip #introBackdrop{display:none!important}
     </div>
     <div style="text-align:center;margin-top:40px" data-reveal><a href="/services" class="btn-primary">Explore All Services</a></div>
   </div>
-</section><section class="sys-reveal" id="sys-reveal" aria-label="How ISE systems work together">
-  <div class="sys-reveal-sticky">
-    <div class="sys-reveal-head">
-      <div class="eyebrow" data-reveal>One integrated system</div>
-      <h2 data-reveal>Every layer, engineered together.</h2>
-      <p class="sys-reveal-sub" data-reveal>Scroll to see how surveillance, access, detection and monitoring assemble into a single platform.</p>
-    </div>
-    <div class="sys-stage" aria-hidden="true">
-      <svg viewBox="0 0 900 520" class="sys-svg" preserveAspectRatio="xMidYMid meet">
-        <!-- L0: grid backdrop (slowest) -->
-        <g class="sys-layer" data-depth="0.15">
-          <defs>
-            <pattern id="sysGrid" width="45" height="45" patternUnits="userSpaceOnUse">
-              <path d="M45 0H0V45" fill="none" stroke="#c8c4b8" stroke-width="0.6"/>
-            </pattern>
-          </defs>
-          <rect x="60" y="40" width="780" height="440" fill="url(#sysGrid)" opacity="0.5"/>
-        </g>
-        <!-- L1: building outline -->
-        <g class="sys-layer sys-building" data-depth="0.3">
-          <rect x="230" y="150" width="440" height="280" fill="none" stroke="#151412" stroke-width="2"/>
-          <line x1="230" y1="220" x2="670" y2="220" stroke="#151412" stroke-width="1" opacity="0.4"/>
-          <line x1="230" y1="290" x2="670" y2="290" stroke="#151412" stroke-width="1" opacity="0.4"/>
-          <line x1="230" y1="360" x2="670" y2="360" stroke="#151412" stroke-width="1" opacity="0.4"/>
-          <line x1="380" y1="150" x2="380" y2="430" stroke="#151412" stroke-width="1" opacity="0.4"/>
-          <line x1="520" y1="150" x2="520" y2="430" stroke="#151412" stroke-width="1" opacity="0.4"/>
-          <rect x="428" y="390" width="44" height="40" fill="none" stroke="#151412" stroke-width="1.5"/>
-        </g>
-        <!-- L2: cameras (appear) -->
-        <g class="sys-layer sys-cams" data-depth="0.55">
-          <g class="sys-node" transform="translate(230,150)"><circle r="9" fill="#0c66b0"/><path d="M-4 0 L10 -5 L10 5 Z" fill="#fff"/></g>
-          <g class="sys-node" transform="translate(670,150)"><circle r="9" fill="#0c66b0"/><path d="M4 0 L-10 -5 L-10 5 Z" fill="#fff"/></g>
-          <g class="sys-node" transform="translate(450,430)"><circle r="9" fill="#0c66b0"/><path d="M0 -4 L-5 8 L5 8 Z" fill="#fff"/></g>
-        </g>
-        <!-- L3: access points -->
-        <g class="sys-layer sys-access" data-depth="0.7">
-          <g transform="translate(450,390)"><rect x="-7" y="-7" width="14" height="14" rx="2" fill="#3fbf6a"/></g>
-          <g transform="translate(230,290)"><rect x="-6" y="-6" width="12" height="12" rx="2" fill="#3fbf6a"/></g>
-          <g transform="translate(670,290)"><rect x="-6" y="-6" width="12" height="12" rx="2" fill="#3fbf6a"/></g>
-        </g>
-        <!-- L4: network lines connecting everything -->
-        <g class="sys-layer sys-net" data-depth="0.85">
-          <path class="sys-wire" d="M230 150 L450 90 L670 150" fill="none" stroke="#34AAFB" stroke-width="1.5" stroke-dasharray="4 4"/>
-          <path class="sys-wire" d="M450 90 L450 430" fill="none" stroke="#34AAFB" stroke-width="1.5" stroke-dasharray="4 4"/>
-          <path class="sys-wire" d="M230 290 L450 90 L670 290" fill="none" stroke="#34AAFB" stroke-width="1.5" stroke-dasharray="4 4"/>
-          <circle cx="450" cy="90" r="6" fill="#34AAFB"/>
-        </g>
-        <!-- L5: monitoring hub (fastest, on top) -->
-        <g class="sys-layer sys-monitor" data-depth="1.0">
-          <g transform="translate(450,90)">
-            <circle r="22" fill="none" stroke="#34AAFB" stroke-width="1.5" opacity="0.5"/>
-            <circle r="32" fill="none" stroke="#34AAFB" stroke-width="1" opacity="0.3"/>
-          </g>
-          <text x="450" y="55" text-anchor="middle" fill="#1268a8" font-family="'IBM Plex Mono',monospace" font-size="12" letter-spacing="2">24/7 MONITORING</text>
-        </g>
-      </svg>
-    </div>
-    <div class="sys-legend" aria-hidden="true">
-      <span class="sys-leg-item" data-layer="1"><i style="background:#151412"></i> Structure</span>
-      <span class="sys-leg-item" data-layer="2"><i style="background:#0c66b0"></i> Surveillance</span>
-      <span class="sys-leg-item" data-layer="3"><i style="background:#3fbf6a"></i> Access</span>
-      <span class="sys-leg-item" data-layer="4"><i style="background:#34AAFB"></i> Network</span>
-      <span class="sys-leg-item" data-layer="5"><i style="background:#34AAFB"></i> Monitoring</span>
-    </div>
-  </div>
 </section>
 <section class="content-section alt" id="industries-home">
   <div class="wrap">
@@ -1535,38 +1420,6 @@ var origActivateSlide=window.activateSlide;var ctaSec=document.getElementById('c
 <script>(function(){
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var isMobile = window.innerWidth < 641;
-
-  // ---- SYSTEM-LAYERS REVEAL ----
-  // Bulletproof approach: layers are VISIBLE by default (see CSS). We only add
-  // the animated entrance when JS + IntersectionObserver are available and we're
-  // on desktop with motion allowed. If anything fails, the diagram just shows.
-  var sysSection = document.getElementById('sys-reveal');
-  if(sysSection && !reduce && !isMobile && 'IntersectionObserver' in window){
-    // Switch to animated mode (CSS hides layers, ready to animate in)
-    sysSection.classList.add('sys-anim');
-    var fired = false;
-    var io = new IntersectionObserver(function(entries){
-      entries.forEach(function(e){
-        if(e.isIntersecting && !fired){
-          fired = true;
-          sysSection.classList.add('sys-in');   // CSS transitions layers in, staggered
-          io.disconnect();
-        }
-      });
-    }, {threshold: 0.15});
-    io.observe(sysSection);
-    // Safety net: if for any reason the observer hasn't fired within 3s but the
-    // section is on/near screen, reveal anyway so it can never sit blank.
-    setTimeout(function(){
-      if(!fired){
-        var r = sysSection.getBoundingClientRect();
-        if(r.top < window.innerHeight && r.bottom > 0){
-          fired = true; sysSection.classList.add('sys-in');
-        }
-      }
-    }, 3000);
-  }
-  // (No else needed — without JS the layers are already visible via CSS.)
 
   // ---- LINE-ART PRODUCT PARALLAX behind service sections (subtle drift) ----
   if(!reduce && !isMobile){
