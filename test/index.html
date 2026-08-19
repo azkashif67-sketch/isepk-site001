@@ -43,13 +43,13 @@
 
 <meta name="robots" content="noindex,nofollow">
 <style>/* ===== SYSTEM-LAYERS REVEAL (centerpiece) ===== */
-.sys-reveal{position:relative;background:linear-gradient(180deg,#f4f2ec 0%,#efece4 100%);padding:0}
-.sys-reveal-sticky{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 28px;gap:28px}
+.sys-reveal{position:relative;background:linear-gradient(180deg,#f4f2ec 0%,#efece4 100%);padding:70px 0}
+.sys-reveal-sticky{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 28px;gap:28px}
 .sys-reveal-head{text-align:center;max-width:640px}
 .sys-reveal-head .eyebrow{justify-content:center;margin-bottom:14px}
 .sys-reveal-head h2{font-family:'Archivo',sans-serif;font-weight:900;font-size:clamp(26px,3.4vw,40px);text-transform:uppercase;letter-spacing:-0.01em;color:var(--ink);line-height:1.08;margin-bottom:12px}
 .sys-reveal-sub{font-size:15.5px;line-height:1.6;color:#5a5852}
-.sys-stage{width:100%;max-width:820px}
+.sys-stage{width:100%;max-width:760px}
 .sys-svg{width:100%;height:auto;display:block}
 /* Each layer starts hidden + offset; JS reveals by progress */
 .sys-layer{opacity:0;will-change:transform,opacity}
@@ -60,9 +60,10 @@
 .sys-leg-item.on{opacity:1;color:var(--ink)}
 .sys-leg-item i{width:10px;height:10px;border-radius:2px;display:inline-block}
 @media(max-width:640px){
-  .sys-reveal-sticky{min-height:auto;padding:56px 20px}
+  .sys-reveal{padding:56px 0}
+  .sys-reveal-sticky{padding:20px}
   /* On mobile: show all layers static (no scroll-scrub) for performance */
-  .sys-layer{opacity:1!important}
+  .sys-layer{opacity:1!important;transform:none!important}
   .sys-wire{stroke-dashoffset:0!important}
   .sys-leg-item{opacity:1;color:var(--ink)}
 }
@@ -1514,23 +1515,21 @@ var origActivateSlide=window.activateSlide;var ctaSec=document.getElementById('c
   if(sysSection && !reduce && !isMobile){
     var layers = [].slice.call(sysSection.querySelectorAll('.sys-layer'));
     var legend = [].slice.call(sysSection.querySelectorAll('.sys-leg-item'));
-    var ticking = false, active = false;
-    var io = new IntersectionObserver(function(es){ es.forEach(function(e){ active = e.isIntersecting; if(active) update(); }); }, {threshold:0});
-    io.observe(sysSection);
+    var ticking = false;
     function update(){
       var r = sysSection.getBoundingClientRect();
       var vh = window.innerHeight;
-      // progress 0..1: starts when section top reaches 80% down viewport, completes when top reaches 20%
-      var p = (vh*0.85 - r.top) / (vh*0.65);
+      // Only compute when section is anywhere near the viewport (cheap early-out)
+      if(r.bottom < -50 || r.top > vh + 50) return;
+      // progress 0..1: starts when section top reaches 78% down viewport, completes at 25%
+      var p = (vh*0.78 - r.top) / (vh*0.53);
       p = Math.max(0, Math.min(1, p));
       layers.forEach(function(L, i){
         var depth = parseFloat(L.getAttribute('data-depth')) || 0.5;
-        // each layer reveals in sequence
         var start = i / (layers.length + 1);
         var lp = Math.max(0, Math.min(1, (p - start) * (layers.length + 1)));
         L.style.opacity = lp;
-        var ty = (1 - lp) * 26 * depth;
-        L.style.transform = 'translate3d(0,' + ty + 'px,0)';
+        L.style.transform = 'translate3d(0,' + ((1 - lp) * 26 * depth) + 'px,0)';
         var wires = L.querySelectorAll('.sys-wire');
         for(var w=0; w<wires.length; w++){ wires[w].style.strokeDashoffset = (1-lp)*120; }
       });
@@ -1539,7 +1538,7 @@ var origActivateSlide=window.activateSlide;var ctaSec=document.getElementById('c
         el.classList.toggle('on', p >= start - 0.02);
       });
     }
-    function onScroll(){ if(!ticking && active){ ticking = true; requestAnimationFrame(function(){ update(); ticking = false; }); } }
+    function onScroll(){ if(!ticking){ ticking = true; requestAnimationFrame(function(){ update(); ticking = false; }); } }
     window.addEventListener('scroll', onScroll, {passive:true});
     window.addEventListener('resize', function(){ isMobile = window.innerWidth<641; update(); }, {passive:true});
     update();
