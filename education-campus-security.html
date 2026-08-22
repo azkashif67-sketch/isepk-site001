@@ -558,6 +558,12 @@ html.gh-intro-skip #introBackdrop{display:none!important}
   .lp-hero .lp-cta{flex-direction:column}
   .lp-btn{width:100%;justify-content:center}
 }
+
+.cp-tiles{display:flex;flex-wrap:wrap;gap:14px;margin:6px 0 20px}
+.cp-tile{width:170px;height:92px;background:#fff;border:1px solid var(--paper-line,#c8c4b8);border-radius:12px;display:flex;align-items:center;justify-content:center;padding:16px;transition:border-color .25s,transform .25s,box-shadow .25s}
+.cp-tile:hover{border-color:var(--red,#34AAFB);transform:translateY(-3px);box-shadow:0 12px 26px -14px rgba(0,0,0,.28)}
+.cp-tile img{max-width:100%;max-height:100%;object-fit:contain}
+@media(max-width:560px){.cp-tile{width:calc(50% - 7px);height:80px}}
 </style>
 </head>
 <body class="js-motion">
@@ -662,7 +668,7 @@ html.gh-intro-skip #introBackdrop{display:none!important}
 <section class="lp-section">
   <div class="wrap"><h2>Trusted in your sector</h2>
     <p>ISE has delivered campus security &mdash; environments where wide coverage, controlled access to sensitive areas, and a safe, welcoming feel all have to coexist.</p>
-    <div class="lp-clients"><span class="lp-client-chip">Bahria University</span></div>
+    <div class="cp-tiles"><div class="cp-tile"><img src="/logos/Bahria_University.webp" alt="Bahria University — ISE PK client" loading="lazy"></div></div>
   </div>
 </section>
 <section class="lp-section alt">
