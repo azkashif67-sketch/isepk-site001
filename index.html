@@ -105,6 +105,11 @@
   .cc-num-lg{margin-bottom:12px}
 }
 @media(prefers-reduced-motion:reduce){.cc-panel{transition:none}.cc-collapsed,.cc-expanded{transition:none}}
+
+.ih-inline{display:flex;flex-wrap:wrap;gap:6px;padding-top:12px;border-top:1px solid var(--paper-line,#c8c4b8)}
+.ih-chip{display:inline-flex;align-items:center;gap:6px;background:#f4f2ec;border:1px solid var(--paper-line,#c8c4b8);border-radius:20px;padding:4px 10px 4px 5px}
+.ih-chip img{width:26px;height:18px;object-fit:contain}
+.ih-chip b{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:11px;color:#4a4842;letter-spacing:.01em}
 </style>
 <script>
 /* Pre-render: if the hero intro already played this session (or reduced-motion),
@@ -955,37 +960,37 @@ html.gh-intro-skip #introBackdrop{display:none!important}
         <span class="ind-home-num">01</span>
         <h3>Banking &amp; Finance</h3>
         <p>Branch networks, cash areas, compliance-grade surveillance.</p>
-        <span class="ind-home-clients">Summit Bank · Bank Islami · Jubilee</span>
+        <div class="ind-home-clients ih-inline"><span class="ih-chip"><img src="/logos/Summit_Bank.webp" alt="" loading="lazy"><b>Summit Bank</b></span><span class="ih-chip"><img src="/logos/BankIslami.webp" alt="" loading="lazy"><b>Bank Islami</b></span><span class="ih-chip"><img src="/logos/Jubilee_Insurance.webp" alt="" loading="lazy"><b>Jubilee</b></span></div>
       </a>
       <a href="/pharmaceutical-healthcare-security" class="ind-home-card" data-reveal>
         <span class="ind-home-num">02</span>
         <h3>Pharma &amp; Healthcare</h3>
         <p>Controlled access, facility security for regulated sites.</p>
-        <span class="ind-home-clients">GSK · Abbott · AGP</span>
+        <div class="ind-home-clients ih-inline"><span class="ih-chip"><img src="/logos/GSK.webp" alt="" loading="lazy"><b>GSK</b></span><span class="ih-chip"><img src="/logos/Abbott.webp" alt="" loading="lazy"><b>Abbott</b></span><span class="ih-chip"><img src="/logos/AGP.webp" alt="" loading="lazy"><b>AGP</b></span></div>
       </a>
       <a href="/manufacturing-industrial-security" class="ind-home-card" data-reveal>
         <span class="ind-home-num">03</span>
         <h3>Manufacturing</h3>
         <p>Perimeter, process-area and safety-system integration.</p>
-        <span class="ind-home-clients">Lucky Cement · Lotte · Dalda</span>
+        <div class="ind-home-clients ih-inline"><span class="ih-chip"><img src="/logos/Lucky_Cement.webp" alt="" loading="lazy"><b>Lucky Cement</b></span><span class="ih-chip"><img src="/logos/Lotte_Chemical.webp" alt="" loading="lazy"><b>Lotte</b></span><span class="ih-chip"><img src="/logos/Dalda.webp" alt="" loading="lazy"><b>Dalda</b></span></div>
       </a>
       <a href="/education-campus-security" class="ind-home-card" data-reveal>
         <span class="ind-home-num">04</span>
         <h3>Education &amp; Campus</h3>
         <p>Campus-wide surveillance and zoned access control.</p>
-        <span class="ind-home-clients">Bahria University</span>
+        <div class="ind-home-clients ih-inline"><span class="ih-chip"><img src="/logos/Bahria_University.webp" alt="" loading="lazy"><b>Bahria University</b></span></div>
       </a>
       <a href="/corporate-technology-security" class="ind-home-card" data-reveal>
         <span class="ind-home-num">05</span>
         <h3>Corporate &amp; Tech</h3>
         <p>Discreet workplace security and out-of-hours monitoring.</p>
-        <span class="ind-home-clients">Contour Software</span>
+        <div class="ind-home-clients ih-inline"><span class="ih-chip"><img src="/logos/Contour_Software.webp" alt="" loading="lazy"><b>Contour Software</b></span></div>
       </a>
       <a href="/retail-entertainment-security" class="ind-home-card" data-reveal>
         <span class="ind-home-num">06</span>
         <h3>Retail &amp; Entertainment</h3>
         <p>Crowd-aware surveillance and loss prevention.</p>
-        <span class="ind-home-clients">Cinepax</span>
+        <div class="ind-home-clients ih-inline"><span class="ih-chip"><img src="/logos/Cinepax.webp" alt="" loading="lazy"><b>Cinepax</b></span></div>
       </a>
     </div>
     <div style="text-align:center;margin-top:32px" data-reveal>
