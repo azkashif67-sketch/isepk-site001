@@ -66,6 +66,29 @@
 .conv-item svg path,.conv-item svg rect,.conv-item svg circle,.conv-item svg line{stroke:#34AAFB;stroke-width:1.5;fill:none;vector-effect:non-scaling-stroke}
 .conv-item span{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#9db4c7}
 @media(prefers-reduced-motion:reduce){.conveyor-track{animation:none}}
+
+.demo-sec{padding:60px 0;background:#efece4}
+.demo-sec.alt{background:#f4f2ec}
+.demo-head{max-width:1000px;margin:0 auto 32px;padding:0 28px;text-align:center}
+.demo-head .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#1268a8;margin-bottom:8px}
+.demo-head h2{font-family:'Archivo',sans-serif;font-weight:900;font-size:30px;text-transform:uppercase;margin:0 0 8px}
+.demo-head p{color:#5a5852;font-size:15px;margin:0}
+.demo-block{max-width:1000px;margin:0 auto 26px;padding:0 28px}
+.demo-label{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#8a8880;margin-bottom:12px}
+/* Approach A tiles */
+.cp-tiles{display:flex;flex-wrap:wrap;gap:14px}
+.cp-tile{width:160px;height:90px;background:#fff;border:1px solid #c8c4b8;border-radius:12px;display:flex;align-items:center;justify-content:center;padding:16px;transition:border-color .25s,transform .25s}
+.cp-tile:hover{border-color:#34AAFB;transform:translateY(-3px)}
+.cp-tile img{max-width:100%;max-height:100%;object-fit:contain}
+.cp-tile-text span{font-family:'Archivo',sans-serif;font-weight:800;font-size:16px;color:#151412;text-align:center}
+/* Approach B inline chips */
+.ci-chips{display:flex;flex-wrap:wrap;gap:12px}
+.ci-chip{display:inline-flex;align-items:center;gap:10px;background:#fff;border:1px solid #c8c4b8;border-radius:30px;padding:8px 18px 8px 10px;transition:border-color .25s}
+.ci-chip:hover{border-color:#34AAFB}
+.ci-chip img{width:34px;height:24px;object-fit:contain}
+.ci-chip b{font-family:'Archivo',sans-serif;font-weight:700;font-size:14px;color:#151412}
+.ci-chip-text{padding-left:18px}
+@media(max-width:560px){.cp-tile{width:calc(50% - 7px)}}
 </style>
 <script>
 /* Pre-render: if the hero intro already played this session (or reduced-motion),
@@ -732,6 +755,39 @@ html.gh-intro-skip #introBackdrop{display:none!important}
     <div class="gh-hud gh-hud-br">SECTORS SECURED<br><span id="secCount">—</span> / 180</div>
   </div>
 </div>
+<section class="demo-sec" id="approach-a">
+  <div class="demo-head"><div class="eyebrow">Approach A</div><h2>Logo proof-tiles</h2><p>Uniform framed tiles. Real logos where we have them; clean text-tile for any we don't (Summit Bank shown as the fallback).</p></div>
+
+  <div class="demo-block">
+    <div class="demo-label">Pharmaceutical &amp; Healthcare</div>
+    <div class="cp-tiles">
+      <div class="cp-tile"><img src="/logos/GSK.webp" alt="GSK" loading="lazy"></div><div class="cp-tile"><img src="/logos/Abbott.webp" alt="Abbott" loading="lazy"></div><div class="cp-tile"><img src="/logos/AGP.webp" alt="AGP" loading="lazy"></div>
+    </div>
+  </div>
+
+  <div class="demo-block">
+    <div class="demo-label">Banking &amp; Finance</div>
+    <div class="cp-tiles">
+      <div class="cp-tile cp-tile-text"><span>Summit Bank</span></div><div class="cp-tile"><img src="/logos/BankIslami.webp" alt="Bank Islami" loading="lazy"></div><div class="cp-tile"><img src="/logos/Jubilee_Insurance.webp" alt="Jubilee Insurance" loading="lazy"></div>
+    </div>
+  </div>
+</section><section class="demo-sec alt" id="approach-b">
+  <div class="demo-head"><div class="eyebrow">Approach B</div><h2>Inline logos beside names</h2><p>A small logo sits next to each client name in a chip. More compact; logos are smaller.</p></div>
+
+  <div class="demo-block">
+    <div class="demo-label">Pharmaceutical &amp; Healthcare</div>
+    <div class="ci-chips">
+      <span class="ci-chip"><img src="/logos/GSK.webp" alt=""><b>GSK</b></span><span class="ci-chip"><img src="/logos/Abbott.webp" alt=""><b>Abbott</b></span><span class="ci-chip"><img src="/logos/AGP.webp" alt=""><b>AGP</b></span>
+    </div>
+  </div>
+
+  <div class="demo-block">
+    <div class="demo-label">Banking &amp; Finance</div>
+    <div class="ci-chips">
+      <span class="ci-chip ci-chip-text"><b>Summit Bank</b></span><span class="ci-chip"><img src="/logos/BankIslami.webp" alt=""><b>Bank Islami</b></span><span class="ci-chip"><img src="/logos/Jubilee_Insurance.webp" alt=""><b>Jubilee Insurance</b></span>
+    </div>
+  </div>
+</section>
 <section class="trust-strip" aria-label="Why organisations trust ISE">
   <div class="wrap">
     <div class="ts-stats">
