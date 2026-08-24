@@ -674,6 +674,7 @@ document.getElementById('logoutBtn').addEventListener('click', async ()=>{
 });
 
 function showApp(){
+  try{ localStorage.setItem('ise_notrack','1'); }catch(e){}  // exclude owner from analytics
   document.getElementById('login').style.display='none';
   document.getElementById('app').style.display='block';
   resetIdle();          // start the 10-min idle countdown

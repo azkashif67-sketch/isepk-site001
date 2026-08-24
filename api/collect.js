@@ -69,6 +69,8 @@ export default async function handler(req, res) {
     const type = b.type || 'pageview';
     const path = (b.path || '/').slice(0, 300);
     if (path.startsWith('/admin') || path.startsWith('/api')) return res.status(200).json({ ok: true, skipped: true });
+    // Also skip if the visitor came directly from the admin area (owner testing)
+    if (b.referrer && b.referrer.indexOf('/admin') >= 0) return res.status(200).json({ ok: true, skipped: true });
 
     const ua = req.headers['user-agent'] || '';
     if (/bot|crawler|spider|slurp|bingpreview|monitor|lighthouse|headless/i.test(ua)) return res.status(200).json({ ok: true, bot: true });

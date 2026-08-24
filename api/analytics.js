@@ -24,6 +24,19 @@ export default async function handler(req, res) {
   const session = requireAuth(req, res);
   if (!session) return;
 
+  // ── One-time cleanup: purge any admin/api rows (owner can POST ?action=clean) ──
+  if (req.method === 'POST' && req.query.action === 'clean') {
+    try {
+      const database0 = db();
+      const r1 = await database0.execute(`DELETE FROM pageviews WHERE path LIKE '/admin%' OR path LIKE '/api%'`);
+      let r2 = { rowsAffected: 0 };
+      try { r2 = await database0.execute(`DELETE FROM events WHERE path LIKE '/admin%' OR path LIKE '/api%'`); } catch(e){}
+      return res.status(200).json({ cleaned: true, pageviews_removed: r1.rowsAffected || 0, events_removed: r2.rowsAffected || 0 });
+    } catch (e) {
+      return res.status(500).json({ error: 'clean_failed', detail: String(e).slice(0,150) });
+    }
+  }
+
   const database = db();
   const range = (req.query.range || '7d');
   const now = Date.now();
@@ -43,7 +56,7 @@ export default async function handler(req, res) {
 
     // Live visitors: distinct visitors in last 5 minutes
     const liveRes = await database.execute({
-      sql: `SELECT COUNT(DISTINCT visitor) AS n FROM pageviews WHERE ts > ?`,
+      sql: `SELECT COUNT(DISTINCT visitor) AS n FROM pageviews WHERE ts > ? AND path NOT LIKE '/admin%' AND path NOT LIKE '/api%'`,
       args: [now - RANGES.live],
     });
     const liveVisitors = liveRes.rows[0].n || 0;
@@ -57,7 +70,7 @@ export default async function handler(req, res) {
 
     // Totals for the range
     const totalsRes = await database.execute({
-      sql: `SELECT COUNT(*) AS views, COUNT(DISTINCT visitor) AS visitors FROM pageviews WHERE ts > ?`,
+      sql: `SELECT COUNT(*) AS views, COUNT(DISTINCT visitor) AS visitors FROM pageviews WHERE ts > ? AND path NOT LIKE '/admin%' AND path NOT LIKE '/api%'`,
       args: [start],
     });
     const totals = totalsRes.rows[0];
@@ -68,7 +81,7 @@ export default async function handler(req, res) {
       : 24 * 60 * 60 * 1000;                                     // daily
     const seriesRes = await database.execute({
       sql: `SELECT (ts / ?) AS bucket, COUNT(*) AS views, COUNT(DISTINCT visitor) AS visitors
-            FROM pageviews WHERE ts > ? GROUP BY bucket ORDER BY bucket ASC`,
+            FROM pageviews WHERE ts > ? AND path NOT LIKE '/admin%' AND path NOT LIKE '/api%' GROUP BY bucket ORDER BY bucket ASC`,
       args: [bucketMs, start],
     });
     const series = seriesRes.rows.map(r => ({
@@ -78,27 +91,27 @@ export default async function handler(req, res) {
     // Top pages
     const pagesRes = await database.execute({
       sql: `SELECT path, COUNT(*) AS views, COUNT(DISTINCT visitor) AS visitors
-            FROM pageviews WHERE ts > ? GROUP BY path ORDER BY views DESC LIMIT 12`,
+            FROM pageviews WHERE ts > ? AND path NOT LIKE '/admin%' AND path NOT LIKE '/api%' GROUP BY path ORDER BY views DESC LIMIT 12`,
       args: [start],
     });
 
     // Top referrers (exclude direct/null)
     const refRes = await database.execute({
       sql: `SELECT ref_domain, COUNT(*) AS views FROM pageviews
-            WHERE ts > ? AND ref_domain IS NOT NULL AND ref_domain != ''
+            WHERE ts > ? AND path NOT LIKE '/admin%' AND ref_domain IS NOT NULL AND ref_domain != ''
             GROUP BY ref_domain ORDER BY views DESC LIMIT 10`,
       args: [start],
     });
     // Direct count
     const directRes = await database.execute({
-      sql: `SELECT COUNT(*) AS n FROM pageviews WHERE ts > ? AND (ref_domain IS NULL OR ref_domain = '')`,
+      sql: `SELECT COUNT(*) AS n FROM pageviews WHERE ts > ? AND path NOT LIKE '/admin%' AND path NOT LIKE '/api%' AND (ref_domain IS NULL OR ref_domain = '')`,
       args: [start],
     });
 
     // Countries
     const countryRes = await database.execute({
       sql: `SELECT country, COUNT(DISTINCT visitor) AS visitors FROM pageviews
-            WHERE ts > ? AND country IS NOT NULL GROUP BY country ORDER BY visitors DESC LIMIT 10`,
+            WHERE ts > ? AND path NOT LIKE '/admin%' AND country IS NOT NULL GROUP BY country ORDER BY visitors DESC LIMIT 10`,
       args: [start],
     });
 
@@ -115,7 +128,7 @@ export default async function handler(req, res) {
       sql: `SELECT CAST(strftime('%w', ts/1000, 'unixepoch') AS INTEGER) AS dow,
                    CAST(strftime('%H', ts/1000, 'unixepoch') AS INTEGER) AS hour,
                    COUNT(*) AS n
-            FROM pageviews WHERE ts > ? GROUP BY dow, hour`,
+            FROM pageviews WHERE ts > ? AND path NOT LIKE '/admin%' AND path NOT LIKE '/api%' GROUP BY dow, hour`,
       args: [start],
     });
     const heat = Array.from({length:7}, ()=>new Array(24).fill(0));
