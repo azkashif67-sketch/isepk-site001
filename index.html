@@ -1554,5 +1554,6 @@ window.addEventListener('load',function(){
   // so it can never get stuck on a scroll calculation.
 })();
 </script>
+<script>(function(){try{if(location.pathname.indexOf('/admin')===0)return;var d={path:location.pathname,referrer:document.referrer&&document.referrer.indexOf(location.host)===-1?document.referrer:''};navigator.sendBeacon?navigator.sendBeacon('/api/collect',new Blob([JSON.stringify(d)],{type:'application/json'})):fetch('/api/collect',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d),keepalive:true}).catch(function(){})}catch(e){}})();</script>
 </body>
 </html>
