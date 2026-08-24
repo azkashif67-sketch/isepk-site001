@@ -30,7 +30,66 @@ export default async function handler(req, res) {
 
   try {
     if (!(await tableExists(database))) {
-      return res.status(200).json({ empty: true, range });
+  
+    // ── Time-of-day heatmap: day-of-week (0=Sun) × hour (0-23), view counts ──
+    // SQLite: strftime on ts/1000 as unixepoch. Build 7×24 grid.
+    const heatRes = await database.execute({
+      sql: `SELECT CAST(strftime('%w', ts/1000, 'unixepoch') AS INTEGER) AS dow,
+                   CAST(strftime('%H', ts/1000, 'unixepoch') AS INTEGER) AS hour,
+                   COUNT(*) AS n
+            FROM pageviews WHERE ts > ? GROUP BY dow, hour`,
+      args: [start],
+    });
+    const heat = Array.from({length:7}, ()=>new Array(24).fill(0));
+    heatRes.rows.forEach(r=>{ heat[r.dow][r.hour] = r.n; });
+
+    // ── Click tracking (events table may not exist yet) ──
+    let clicks = [];
+    try {
+      const clickRes = await database.execute({
+        sql: `SELECT label, COUNT(*) AS n FROM events
+              WHERE type='click' AND ts > ? GROUP BY label ORDER BY n DESC LIMIT 12`,
+        args: [start],
+      });
+      clicks = clickRes.rows;
+    } catch (e) { clicks = []; }
+
+    // ── Session engagement (sessions table may not exist yet) ──
+    let engagement = { avgDuration: 0, avgPages: 0, sessions: 0, bounceRate: 0 };
+    try {
+      const engRes = await database.execute({
+        sql: `SELECT COUNT(*) AS sessions,
+                     AVG(duration) AS avgDur,
+                     AVG(pages) AS avgPages,
+                     SUM(CASE WHEN pages <= 1 THEN 1 ELSE 0 END) AS bounces
+              FROM sessions WHERE last_ts > ?`,
+        args: [start],
+      });
+      const e = engRes.rows[0];
+      engagement = {
+        sessions: e.sessions || 0,
+        avgDuration: Math.round(e.avgDur || 0),
+        avgPages: e.avgPages ? Number(e.avgPages).toFixed(1) : '0',
+        bounceRate: e.sessions ? Math.round((e.bounces / e.sessions) * 100) : 0,
+      };
+    } catch (e) {}
+
+    // ── Lead funnel: pageviews → sessions → leads (by status) ──
+    let funnel = { visitors: totals.visitors || 0, sessions: 0, leads: 0, stages: {} };
+    try {
+      const leadRes = await database.execute({
+        sql: `SELECT status, COUNT(*) AS n FROM leads
+              WHERE created_at > datetime(?, 'unixepoch') GROUP BY status`,
+        args: [Math.floor(start/1000)],
+      });
+      const stages = {};
+      let totalLeads = 0;
+      leadRes.rows.forEach(r=>{ stages[r.status] = r.n; totalLeads += r.n; });
+      let sess = engagement.sessions;
+      funnel = { visitors: totals.visitors || 0, sessions: sess, leads: totalLeads, stages };
+    } catch (e) {}
+
+    return res.status(200).json({ empty: true, range });
     }
 
     // Window start
@@ -119,6 +178,10 @@ export default async function handler(req, res) {
       direct: directRes.rows[0].n || 0,
       countries: countryRes.rows,
       devices: deviceRes.rows,
+      heat,
+      clicks,
+      engagement,
+      funnel,
     });
   } catch (e) {
     return res.status(500).json({ error: 'analytics_failed', detail: String(e).slice(0, 200) });
