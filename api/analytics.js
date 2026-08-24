@@ -1,0 +1,126 @@
+// ───────────────────────────────────────────────────────────
+//  /api/analytics — authenticated dashboard data (Wix-style)
+//  ?range=live|today|24h|7d|30d   → aggregated stats + time series
+// ───────────────────────────────────────────────────────────
+import { db, requireAuth } from './_lib.js';
+
+const RANGES = {
+  live:  5 * 60 * 1000,          // last 5 minutes (for the "right now" number)
+  today: null,                    // since local midnight (computed)
+  '24h': 24 * 60 * 60 * 1000,
+  '7d':  7 * 24 * 60 * 60 * 1000,
+  '30d': 30 * 24 * 60 * 60 * 1000,
+};
+
+async function tableExists(database) {
+  try {
+    const r = await database.execute(
+      `SELECT name FROM sqlite_master WHERE type='table' AND name='pageviews'`);
+    return r.rows.length > 0;
+  } catch { return false; }
+}
+
+export default async function handler(req, res) {
+  const session = requireAuth(req, res);
+  if (!session) return;
+
+  const database = db();
+  const range = (req.query.range || '7d');
+  const now = Date.now();
+
+  try {
+    if (!(await tableExists(database))) {
+      return res.status(200).json({ empty: true, range });
+    }
+
+    // Window start
+    let start;
+    if (range === 'today') {
+      const d = new Date(); d.setHours(0, 0, 0, 0); start = d.getTime();
+    } else {
+      start = now - (RANGES[range] || RANGES['7d']);
+    }
+
+    // Live visitors: distinct visitors in last 5 minutes
+    const liveRes = await database.execute({
+      sql: `SELECT COUNT(DISTINCT visitor) AS n FROM pageviews WHERE ts > ?`,
+      args: [now - RANGES.live],
+    });
+    const liveVisitors = liveRes.rows[0].n || 0;
+
+    // Live pages: what those people are viewing right now
+    const livePagesRes = await database.execute({
+      sql: `SELECT path, COUNT(*) AS n FROM pageviews
+            WHERE ts > ? GROUP BY path ORDER BY n DESC LIMIT 8`,
+      args: [now - RANGES.live],
+    });
+
+    // Totals for the range
+    const totalsRes = await database.execute({
+      sql: `SELECT COUNT(*) AS views, COUNT(DISTINCT visitor) AS visitors FROM pageviews WHERE ts > ?`,
+      args: [start],
+    });
+    const totals = totalsRes.rows[0];
+
+    // Time series — bucket size depends on range
+    const bucketMs = range === 'live' ? 30 * 1000
+      : range === 'today' || range === '24h' ? 60 * 60 * 1000   // hourly
+      : 24 * 60 * 60 * 1000;                                     // daily
+    const seriesRes = await database.execute({
+      sql: `SELECT (ts / ?) AS bucket, COUNT(*) AS views, COUNT(DISTINCT visitor) AS visitors
+            FROM pageviews WHERE ts > ? GROUP BY bucket ORDER BY bucket ASC`,
+      args: [bucketMs, start],
+    });
+    const series = seriesRes.rows.map(r => ({
+      t: Number(r.bucket) * bucketMs, views: r.views, visitors: r.visitors,
+    }));
+
+    // Top pages
+    const pagesRes = await database.execute({
+      sql: `SELECT path, COUNT(*) AS views, COUNT(DISTINCT visitor) AS visitors
+            FROM pageviews WHERE ts > ? GROUP BY path ORDER BY views DESC LIMIT 12`,
+      args: [start],
+    });
+
+    // Top referrers (exclude direct/null)
+    const refRes = await database.execute({
+      sql: `SELECT ref_domain, COUNT(*) AS views FROM pageviews
+            WHERE ts > ? AND ref_domain IS NOT NULL AND ref_domain != ''
+            GROUP BY ref_domain ORDER BY views DESC LIMIT 10`,
+      args: [start],
+    });
+    // Direct count
+    const directRes = await database.execute({
+      sql: `SELECT COUNT(*) AS n FROM pageviews WHERE ts > ? AND (ref_domain IS NULL OR ref_domain = '')`,
+      args: [start],
+    });
+
+    // Countries
+    const countryRes = await database.execute({
+      sql: `SELECT country, COUNT(DISTINCT visitor) AS visitors FROM pageviews
+            WHERE ts > ? AND country IS NOT NULL GROUP BY country ORDER BY visitors DESC LIMIT 10`,
+      args: [start],
+    });
+
+    // Devices
+    const deviceRes = await database.execute({
+      sql: `SELECT device, COUNT(DISTINCT visitor) AS visitors FROM pageviews
+            WHERE ts > ? GROUP BY device`,
+      args: [start],
+    });
+
+    return res.status(200).json({
+      range, start, now,
+      live: { visitors: liveVisitors, pages: livePagesRes.rows },
+      totals: { views: totals.views || 0, visitors: totals.visitors || 0 },
+      series,
+      topPages: pagesRes.rows,
+      referrers: refRes.rows,
+      direct: directRes.rows[0].n || 0,
+      countries: countryRes.rows,
+      devices: deviceRes.rows,
+    });
+  } catch (e) {
+    return res.status(500).json({ error: 'analytics_failed', detail: String(e).slice(0, 200) });
+  }
+}
