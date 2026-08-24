@@ -779,6 +779,23 @@ var statSection=document.getElementById('stats');if(statSection){var statObs=new
 var faqGrid=document.getElementById('faqGrid');if(faqGrid){var faqObs=new IntersectionObserver(function(entries){if(entries&&entries[0]&&entries[0].isIntersecting){faqGrid.querySelectorAll('.faq-item').forEach(function(item,i){item.style.opacity='0';item.style.transform='translateY(14px)';item.style.transition='opacity 0.4s ease '+(i*0.04)+'s,transform 0.4s ease '+(i*0.04)+'s';setTimeout(function(){item.style.opacity='1';item.style.transform='none';},60+i*40);});faqObs.disconnect();}},{threshold:0.1});faqObs.observe(faqGrid);}
 var origActivateSlide=window.activateSlide;var ctaSec=document.getElementById('contact');if(ctaSec){var ctaObs=new IntersectionObserver(function(entries){if(entries&&entries[0]&&entries[0].isIntersecting){ctaSec.querySelectorAll('.contact-pill,.cta-left-info,.cta-form-box').forEach(function(el,i){el.style.opacity='0';el.style.transform='translateY(16px)';el.style.transition='opacity 0.5s ease '+(i*0.08)+'s,transform 0.5s ease '+(i*0.08)+'s';setTimeout(function(){el.style.opacity='1';el.style.transform='none';},60+i*80);});ctaObs.disconnect();}},{threshold:0.15});ctaObs.observe(ctaSec);}}catch(e){console.warn('ISE v1.4 motion system:',e.message);}})();</script>
 
-<script>(function(){try{if(location.pathname.indexOf('/admin')===0)return;var d={path:location.pathname,referrer:document.referrer&&document.referrer.indexOf(location.host)===-1?document.referrer:''};navigator.sendBeacon?navigator.sendBeacon('/api/collect',new Blob([JSON.stringify(d)],{type:'application/json'})):fetch('/api/collect',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d),keepalive:true}).catch(function(){})}catch(e){}})();</script>
+
+<script>(function(){try{if(location.pathname.indexOf('/admin')===0)return;
+var SS='ise_sid',sid=sessionStorage.getItem(SS);if(!sid){sid=Date.now().toString(36)+Math.random().toString(36).slice(2,8);sessionStorage.setItem(SS,sid);}
+var start=Date.now(),PK='ise_pages',pages=(+sessionStorage.getItem(PK)||0)+1;sessionStorage.setItem(PK,pages);
+function send(d){d.sid=sid;d.path=location.pathname;try{navigator.sendBeacon('/api/collect',new Blob([JSON.stringify(d)],{type:'application/json'}))}catch(e){fetch('/api/collect',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d),keepalive:true}).catch(function(){})}}
+send({type:'pageview',referrer:document.referrer&&document.referrer.indexOf(location.host)===-1?document.referrer:''});
+function dur(){send({type:'session',duration:Date.now()-start,pages:pages});}
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')dur();});
+window.addEventListener('pagehide',dur);
+// Click tracking on key CTAs
+document.addEventListener('click',function(e){var a=e.target.closest('a,button');if(!a)return;var lbl='';var href=(a.getAttribute('href')||'');var txt=(a.textContent||'').replace(/\s+/g,' ').trim().slice(0,40);
+if(href.indexOf('wa.me')>=0||href.indexOf('whatsapp')>=0)lbl='WhatsApp';
+else if(href.indexOf('tel:')>=0)lbl='Call';
+else if(/quote|survey|audit/i.test(txt)||href.indexOf('#contact')>=0)lbl='Get a Quote / Audit';
+else if(href.indexOf('/contact')>=0)lbl='Contact page';
+else if(a.tagName==='BUTTON'&&txt)lbl='Button: '+txt;
+if(lbl)send({type:'click',label:lbl});},true);
+}catch(e){}})();</script>
 </body>
 </html>
