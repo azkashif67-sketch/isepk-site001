@@ -461,31 +461,6 @@ html.gh-intro-skip #introBackdrop{display:none!important}
   .chs-quick-btn{width:100%}
 }
 
-/* ===== STICKY MOBILE CTA BAR ===== */
-.mobile-cta-bar{display:none}
-@media(max-width:768px){
-  .mobile-cta-bar{
-    display:flex;position:fixed;left:0;right:0;bottom:0;z-index:320;
-    background:#fff;border-top:1px solid var(--paper-line);
-    box-shadow:0 -6px 24px -8px rgba(0,0,0,.18);
-    padding:8px 10px calc(8px + env(safe-area-inset-bottom,0)); gap:8px;
-  }
-  .mcb-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
-    padding:9px 6px;border-radius:10px;text-decoration:none;font-family:'Archivo',sans-serif;font-weight:700;
-    font-size:12.5px;letter-spacing:.01em;transition:transform .15s,filter .15s}
-  .mcb-btn:active{transform:scale(.96)}
-  .mcb-ico{font-size:14px;line-height:1}
-  .mcb-call{background:#eef1f4;color:var(--ink)}
-  .mcb-wa{background:#25d366;color:#fff}
-  .mcb-wa .mcb-ico{color:#fff}
-  .mcb-quote{background:var(--accent-deep);color:#fff;flex:1.3}
-  .mcb-txt{white-space:nowrap}
-  /* Hide the floating WhatsApp + back-to-top on mobile so they don't collide with the bar */
-  .wa-float{display:none!important}
-  #backTop{bottom:78px!important}
-  /* Lift the page bottom so the bar doesn't cover footer content */
-  footer{padding-bottom:80px}
-}
 
 /* ===== WHAT HAPPENS NEXT (3-step) ===== */
 .what-next{background:linear-gradient(165deg,#17171a 0%,#0d0d10 100%);padding:56px 0 60px;position:relative;overflow:hidden}
@@ -1077,11 +1052,7 @@ html.gh-intro-skip #introBackdrop{display:none!important}
   </div>
 </footer>
 <a href="https://wa.me/923007017786" class="wa-float" id="waFloat" target="_blank" rel="noopener"><span class="dot"></span> Chat on WhatsApp</a>
-<div class="mobile-cta-bar" id="mobileCTABar">
-<a href="tel:+923007017786" class="mcb-btn mcb-call"><span class="mcb-ico">☎</span><span class="mcb-txt">Call</span></a>
-<a href="https://wa.me/923007017786?text=Hi%20ISE%2C%20I%27d%20like%20to%20request%20a%20free%20site%20survey." target="_blank" rel="noopener" class="mcb-btn mcb-wa"><span class="mcb-ico">●</span><span class="mcb-txt">WhatsApp</span></a>
-<a href="/contact#contact" class="mcb-btn mcb-quote"><span class="mcb-txt">Get a Quote</span></a>
-</div>
+
 <button id="backTop" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 <div id="progress"></div>
 <script>(function(){'use strict';function _byId(id){return document.getElementById(id);}function _on(el,ev,fn,op){if(el)el.addEventListener(ev,fn,op);}function scrollToSection(targetId,e){if(e)e.preventDefault();var el=document.getElementById(targetId);if(!el)return;var navHeight=document.getElementById('siteNav').offsetHeight;var top=el.getBoundingClientRect().top+window.scrollY-navHeight-8;window.scrollTo({top:Math.max(0,top),behavior:'smooth'});}
