@@ -1,0 +1,51 @@
+name: Rebuild search index
+
+# Regenerates search-index.json whenever page content changes, so the
+# on-site search always reflects the current set of pages. Runs on GitHub,
+# commits the updated index back — no effect on Vercel's build/serving.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '**.html'          # any page added, edited, or removed
+      - 'scripts/build-search-index.mjs'
+    # Ignore pushes that only change the index itself (prevents loops)
+  workflow_dispatch:        # allows manual "Run workflow" from the Actions tab
+
+# Let the action commit back to the repo
+permissions:
+  contents: write
+
+# If several pushes land quickly, only the latest run matters
+concurrency:
+  group: search-index
+  cancel-in-progress: true
+
+jobs:
+  rebuild-index:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Regenerate search index
+        run: node scripts/build-search-index.mjs
+
+      - name: Commit updated index if it changed
+        run: |
+          if git diff --quiet -- search-index.json; then
+            echo "search-index.json is already up to date — nothing to commit."
+          else
+            git config user.name  "search-index-bot"
+            git config user.email "actions@github.com"
+            git add search-index.json
+            git commit -m "chore: rebuild search index [skip ci]"
+            git push
+            echo "search-index.json updated and pushed."
+          fi
