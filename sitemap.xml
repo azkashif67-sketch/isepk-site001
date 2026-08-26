@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://isepk.com.pk/</loc>
-    <lastmod>2026-08-12</lastmod>
+    <lastmod>2026-08-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -55,23 +55,28 @@
     <priority>0.7</priority>
   </url>
   <url><loc>https://isepk.com.pk/blog</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://isepk.com.pk/blog/cctv-surveillance-guide-commercial-pakistan</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://isepk.com.pk/blog/fire-alarm-systems-compliance-commercial-buildings</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://isepk.com.pk/blog/access-control-systems-business-guide</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://isepk.com.pk/blog/24-7-alarm-monitoring-explained</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://isepk.com.pk/blog/structured-cabling-network-infrastructure-foundation</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://isepk.com.pk/blog/cctv-surveillance-guide-commercial-pakistan</loc>
+    <lastmod>2026-08-26</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://isepk.com.pk/blog/fire-alarm-systems-compliance-commercial-buildings</loc>
+    <lastmod>2026-08-26</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://isepk.com.pk/blog/access-control-systems-business-guide</loc>
+    <lastmod>2026-08-26</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://isepk.com.pk/blog/24-7-alarm-monitoring-explained</loc>
+    <lastmod>2026-08-26</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://isepk.com.pk/blog/structured-cabling-network-infrastructure-foundation</loc>
+    <lastmod>2026-08-26</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://isepk.com.pk/security-systems-karachi</loc><lastmod>2026-08-18</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://isepk.com.pk/banking-financial-security</loc><lastmod>2026-08-18</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://isepk.com.pk/services/cctv-video-surveillance</loc><lastmod>2026-08-18</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://isepk.com.pk/banking-financial-security</loc><lastmod>2026-08-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://isepk.com.pk/services/cctv-video-surveillance</loc><lastmod>2026-08-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://isepk.com.pk/industries</loc><lastmod>2026-08-18</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://isepk.com.pk/services/fire-alarm-systems</loc><lastmod>2026-08-18</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://isepk.com.pk/services/access-control</loc><lastmod>2026-08-18</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://isepk.com.pk/services/alarm-monitoring</loc><lastmod>2026-08-18</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://isepk.com.pk/services/structured-cabling</loc><lastmod>2026-08-18</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://isepk.com.pk/pharmaceutical-healthcare-security</loc><lastmod>2026-08-18</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://isepk.com.pk/manufacturing-industrial-security</loc><lastmod>2026-08-18</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://isepk.com.pk/services/fire-alarm-systems</loc><lastmod>2026-08-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://isepk.com.pk/services/access-control</loc><lastmod>2026-08-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://isepk.com.pk/services/alarm-monitoring</loc><lastmod>2026-08-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://isepk.com.pk/services/structured-cabling</loc><lastmod>2026-08-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://isepk.com.pk/pharmaceutical-healthcare-security</loc><lastmod>2026-08-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://isepk.com.pk/manufacturing-industrial-security</loc><lastmod>2026-08-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://isepk.com.pk/education-campus-security</loc><lastmod>2026-08-18</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://isepk.com.pk/corporate-technology-security</loc><lastmod>2026-08-18</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://isepk.com.pk/corporate-technology-security</loc><lastmod>2026-08-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://isepk.com.pk/security-systems-lahore</loc><lastmod>2026-08-18</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://isepk.com.pk/security-systems-islamabad</loc><lastmod>2026-08-18</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://isepk.com.pk/security-systems-faisalabad</loc><lastmod>2026-08-18</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
@@ -91,136 +96,136 @@
   <url><loc>https://isepk.com.pk/security-systems-gujrat</loc><lastmod>2026-08-18</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://isepk.com.pk/security-systems-rahim-yar-khan</loc><lastmod>2026-08-18</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://isepk.com.pk/security-systems-jhang</loc><lastmod>2026-08-18</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://isepk.com.pk/security-systems-mardan</loc><lastmod>2026-08-18</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://isepk.com.pk/security-systems-mardan</loc><lastmod>2026-08-26</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://isepk.com.pk/security-systems-kasur</loc><lastmod>2026-08-18</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://isepk.com.pk/security-systems-dera-ghazi-khan</loc><lastmod>2026-08-18</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://isepk.com.pk/security-systems-dera-ghazi-khan</loc><lastmod>2026-08-26</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://isepk.com.pk/security-systems-nawabshah</loc><lastmod>2026-08-18</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://isepk.com.pk/security-systems-mirpur-khas</loc><lastmod>2026-08-18</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://isepk.com.pk/security-systems-okara</loc><lastmod>2026-08-18</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://isepk.com.pk/security-systems-wah-cantt</loc><lastmod>2026-08-18</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url>
     <loc>https://isepk.com.pk/blog/ip-cctv-cameras-commercial-karachi</loc>
-    <lastmod>2026-02-18</lastmod>
+    <lastmod>2026-08-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://isepk.com.pk/blog/ai-cctv-analytics-industrial-theft-pakistan</loc>
-    <lastmod>2026-02-18</lastmod>
+    <lastmod>2026-08-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://isepk.com.pk/blog/load-shedding-backup-cctv-power-continuity-pakistan</loc>
-    <lastmod>2026-02-18</lastmod>
+    <lastmod>2026-08-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://isepk.com.pk/blog/psqca-nfpa72-fire-alarm-standards-pakistan</loc>
-    <lastmod>2026-02-25</lastmod>
+    <lastmod>2026-08-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://isepk.com.pk/blog/addressable-vs-conventional-fire-alarm-karachi</loc>
-    <lastmod>2026-02-25</lastmod>
+    <lastmod>2026-08-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://isepk.com.pk/blog/fm200-novec-1230-gas-suppression-data-centers-pakistan</loc>
-    <lastmod>2026-03-04</lastmod>
+    <lastmod>2026-08-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://isepk.com.pk/blog/vesda-aspirating-smoke-detection-warehouses-pakistan</loc>
-    <lastmod>2026-03-04</lastmod>
+    <lastmod>2026-08-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://isepk.com.pk/blog/fire-safety-audit-checklist-high-rise-karachi</loc>
-    <lastmod>2026-03-11</lastmod>
+    <lastmod>2026-08-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://isepk.com.pk/blog/biometric-vs-face-recognition-access-control-pakistan</loc>
-    <lastmod>2026-03-18</lastmod>
+    <lastmod>2026-08-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://isepk.com.pk/blog/access-control-time-attendance-integration-karachi</loc>
-    <lastmod>2026-03-18</lastmod>
+    <lastmod>2026-08-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://isepk.com.pk/blog/perimeter-access-control-industrial-sites-pakistan</loc>
-    <lastmod>2026-03-25</lastmod>
+    <lastmod>2026-08-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://isepk.com.pk/blog/unified-access-control-it-software-houses-karachi</loc>
-    <lastmod>2026-03-25</lastmod>
+    <lastmod>2026-08-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://isepk.com.pk/blog/visitor-management-systems-corporate-gated-karachi</loc>
-    <lastmod>2026-04-01</lastmod>
+    <lastmod>2026-08-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://isepk.com.pk/blog/unified-security-architecture-vs-isolated-vendors-pakistan</loc>
-    <lastmod>2026-04-08</lastmod>
+    <lastmod>2026-08-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://isepk.com.pk/blog/building-management-systems-bms-integration-karachi</loc>
-    <lastmod>2026-04-08</lastmod>
+    <lastmod>2026-08-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://isepk.com.pk/blog/amc-annual-maintenance-fire-security-karachi</loc>
-    <lastmod>2026-04-15</lastmod>
+    <lastmod>2026-08-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://isepk.com.pk/blog/pharmaceutical-healthcare-security-systems-pakistan</loc>
-    <lastmod>2026-04-15</lastmod>
+    <lastmod>2026-08-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://isepk.com.pk/blog/factory-security-textile-manufacturing-perimeter-pakistan</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-08-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://isepk.com.pk/blog/remote-video-monitoring-services-pakistan</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-08-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://isepk.com.pk/blog/are-fire-alarms-required-commercial-buildings-pakistan</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-08-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://isepk.com.pk/blog/cctv-monitoring-system-24-7-surveillance-pakistan</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-08-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
