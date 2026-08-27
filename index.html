@@ -663,6 +663,10 @@ html.gh-intro-skip #introBackdrop{display:none!important}
 mark{background:#fdf3c2;color:inherit;padding:0 1px;border-radius:2px}
 @media(max-width:560px){.site-search-overlay{padding:8vh 10px 10px}.ss-panel{max-width:100%}#siteSearchInput{font-size:16px}}
 </style>
+<style>
+.globe-fallback{background:radial-gradient(circle at 50% 45%, rgba(52,170,251,.08), transparent 60%), #0d0d10}
+.globe-fallback #three-canvas{opacity:0}
+</style>
 </head>
 <body class="js-motion">
 <header class="nav" id="siteNav">
@@ -1172,14 +1176,34 @@ var faqGrid=document.getElementById('faqGrid');if(faqGrid){var faqObs=new Inters
 var origActivateSlide=window.activateSlide;var ctaSec=document.getElementById('contact');if(ctaSec){var ctaObs=new IntersectionObserver(function(entries){if(entries&&entries[0]&&entries[0].isIntersecting){ctaSec.querySelectorAll('.contact-pill,.cta-left-info,.cta-form-box').forEach(function(el,i){el.style.opacity='0';el.style.transform='translateY(16px)';el.style.transition='opacity 0.5s ease '+(i*0.08)+'s,transform 0.5s ease '+(i*0.08)+'s';setTimeout(function(){el.style.opacity='1';el.style.transform='none';},60+i*80);});ctaObs.disconnect();}},{threshold:0.15});ctaObs.observe(ctaSec);}}catch(e){console.warn('ISE v1.4 motion system:',e.message);}})();</script>
 <script src="/three.min.js" defer></script>
 <script>
-window.addEventListener('load',function(){
-  if(typeof THREE==='undefined')return;
-  (function(){
-  const canvas = document.getElementById('three-canvas');
-  const wrap = canvas.parentElement;
-  const reduced = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+(function(){
+  // Populate the HUD counters immediately — these are plain text and must NOT
+  // depend on WebGL/three.js succeeding (previously they were set deep inside the
+  // WebGL block, so any GL failure left them stuck showing "—").
+  function setHud(){
+    try{
+      var m={cCam:18,cFire:12,cAcc:12,secCount:168};
+      for(var id in m){var el=document.getElementById(id); if(el&&el.textContent.trim()==='\u2014') el.textContent=m[id];}
+    }catch(e){}
+  }
+  if(document.readyState!=='loading') setHud(); else document.addEventListener('DOMContentLoaded',setHud);
 
-  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+  function initGlobe(){
+    if(typeof THREE==='undefined'){ setHud(); return; }
+    const canvas = document.getElementById('three-canvas');
+    if(!canvas) return;
+    const wrap = canvas.parentElement;
+    const reduced = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+    let renderer;
+    try{
+      renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+    }catch(err){
+      // WebGL unavailable/blocked — leave a clean panel, counters already set.
+      console.warn('ISE globe: WebGL unavailable, showing static panel.', err&&err.message);
+      wrap.classList.add('globe-fallback');
+      setHud();
+      return;
+    }
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
   const scene = new THREE.Scene();
@@ -1514,8 +1538,12 @@ window.addEventListener('load',function(){
     renderer.render(scene, camera);
   }
   animate();
+  } // end initGlobe
+
+  // Invoke: run now if page already loaded, else on load. Never leaves the panel stuck.
+  if(document.readyState==='complete') initGlobe();
+  else window.addEventListener('load', initGlobe);
 })();
-});
 </script>
 <script>(function(){
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
