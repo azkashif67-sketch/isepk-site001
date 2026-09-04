@@ -1,47 +1,48 @@
-// TEMPORARY DIAGNOSTIC — safe, no secrets leaked. Delete after fixing.
-// Reproduces exactly what /api/submit does with the DB, and returns the real error.
+// TEMPORARY DIAGNOSTIC v2 — tests makeRef + the REAL sendLeadEmails path.
 import { db } from './_lib.js';
+import { sendLeadEmails } from './_email.js';
 
 export default async function handler(req, res) {
-  const out = { steps: [] };
+  const out = { steps: [], env: {} };
+  // env presence (no secrets)
+  out.env.RESEND_API_KEY_present = !!process.env.RESEND_API_KEY;
+  out.env.RESEND_FROM = process.env.RESEND_FROM || '(default noreply@)';
+  out.env.TEAM_EMAIL = process.env.TEAM_EMAIL || '(default info@)';
+
   try {
-    out.steps.push('db() init');
     const database = db();
 
-    // 1. Can we connect + read the table schema?
-    out.steps.push('read schema');
-    const info = await database.execute("PRAGMA table_info(leads)");
-    out.columns = info.rows.map(r => ({ name: r.name, type: r.type, notnull: r.notnull, dflt: r.dflt_value }));
+    // 1. makeRef (the SELECT COUNT the real handler runs)
+    out.steps.push('makeRef');
+    const year = new Date().getFullYear();
+    const r = await database.execute('SELECT COUNT(*) AS n FROM leads');
+    const ref = `DIAG-${year}-${(r.rows[0].n||0)+1}`;
+    out.ref = ref;
 
-    // 2. Try the migrations (same as submit)
-    out.steps.push('migrate designation');
-    try { await database.execute(`ALTER TABLE leads ADD COLUMN designation TEXT`); out.mig_designation = 'added'; }
-    catch (e) { out.mig_designation = 'skip: ' + (e.message || '').slice(0, 80); }
-    out.steps.push('migrate site_address');
-    try { await database.execute(`ALTER TABLE leads ADD COLUMN site_address TEXT`); out.mig_site_address = 'added'; }
-    catch (e) { out.mig_site_address = 'skip: ' + (e.message || '').slice(0, 80); }
+    // 2. The REAL sendLeadEmails — this is the untested piece
+    out.steps.push('sendLeadEmails');
+    let emailThrew = false;
+    try {
+      await sendLeadEmails({
+        ref, name: 'DIAG Test', phone: '0000',
+        email: null,               // no confirmation email, only team alert
+        company: null, designation: null, service_type: null,
+        site_address: null, message: 'diagnostic', city: null, source: 'diagnostic',
+      });
+      out.sendLeadEmails = 'returned without throwing';
+    } catch (e) {
+      emailThrew = true;
+      out.sendLeadEmails = 'THREW: ' + (e.message || String(e));
+    }
+    out.emailThrew = emailThrew;
 
-    // 3. Try the EXACT insert submit uses (then roll it back by deleting)
-    out.steps.push('test insert');
-    const testRef = 'DIAG-' + Date.now();
-    await database.execute({
-      sql: `INSERT INTO leads
-            (ref, source, name, company, designation, phone, email, service_type, site_address, message, city, status)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'new')`,
-      args: [testRef, 'diagnostic', 'DIAG', null, null, '0000', null, null, null, null, null],
-    });
-    out.insert = 'ok';
-
-    // 4. Clean up the test row
-    await database.execute({ sql: `DELETE FROM leads WHERE ref = ?`, args: [testRef] });
-    out.cleanup = 'ok';
-
-    out.result = 'ALL DB OPERATIONS SUCCEEDED — problem is likely NOT the database';
+    out.result = emailThrew
+      ? 'sendLeadEmails THREW — this is the bug'
+      : 'Everything ran clean. If the form still fails, the error is elsewhere (body parsing?).';
     return res.status(200).json(out);
   } catch (err) {
-    out.result = 'FAILED';
+    out.result = 'FAILED at: ' + (out.steps[out.steps.length-1] || 'start');
     out.error = err.message || String(err);
-    out.error_code = err.code || null;
-    return res.status(200).json(out); // 200 so we can read it easily
+    return res.status(200).json(out);
   }
 }
