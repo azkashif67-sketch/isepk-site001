@@ -34,7 +34,7 @@ function brandedHtml(bodyText) {
       <div style="padding:18px 32px;border-top:1px solid #26262a;background:${INK}">
         <p style="color:#a3a3a6;font-size:13px;line-height:1.7;margin:0">
           📞 <a href="tel:+923007017786" style="color:${BLUE};text-decoration:none">+92 300 7017786</a> &nbsp;·&nbsp;
-          ✉️ <a href="mailto:ise@isepk.com.pk" style="color:${BLUE};text-decoration:none">ise@isepk.com.pk</a><br>
+          ✉️ <a href="mailto:info@isepk.com.pk" style="color:${BLUE};text-decoration:none">info@isepk.com.pk</a><br>
           <span style="color:#6c6c70;font-size:12px">Fire · CCTV · Access · Intrusion · Gas · Automation — Karachi, Pakistan</span>
         </p>
       </div>
@@ -62,7 +62,7 @@ export default async function handler(req, res) {
     }
 
     const from = process.env.RESEND_FROM || 'ISE PK <noreply@isepk.com.pk>';
-    const team = process.env.TEAM_EMAIL || 'ise@isepk.com.pk';
+    const team = process.env.TEAM_EMAIL || 'info@isepk.com.pk';
 
     const result = await resend.emails.send({
       from,

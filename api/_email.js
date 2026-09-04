@@ -44,7 +44,7 @@ function confirmationHtml(name, ref) {
         </p>
         <p style="color:#f6f5f2;font-size:14px;line-height:1.7;margin:0">
           📞 <a href="tel:+923007017786" style="color:${BLUE};text-decoration:none">+92 300 7017786</a><br>
-          ✉️ <a href="mailto:ise@isepk.com.pk" style="color:${BLUE};text-decoration:none">ise@isepk.com.pk</a>
+          ✉️ <a href="mailto:info@isepk.com.pk" style="color:${BLUE};text-decoration:none">info@isepk.com.pk</a>
         </p>
       </div>
       <div style="padding:18px 32px;border-top:1px solid #26262a;background:${INK}">
@@ -88,7 +88,7 @@ export async function sendLeadEmails(lead) {
   if (!resend) return; // Resend not configured — skip silently
 
   const from = process.env.RESEND_FROM || 'ISE PK <noreply@isepk.com.pk>';
-  const team = process.env.TEAM_EMAIL || 'ise@isepk.com.pk';
+  const team = process.env.TEAM_EMAIL || 'info@isepk.com.pk';
 
   const tasks = [];
 
