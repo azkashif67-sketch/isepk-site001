@@ -70,6 +70,7 @@ export default async function handler(req, res) {
     return res.status(200).json({ success: true, ref });
   } catch (err) {
     console.error('submit error:', err);
-    return res.status(500).json({ error: 'Could not save. Please call or email us directly.' });
+    // TEMP DEBUG: expose real error to pinpoint the 500. Revert after fixing.
+    return res.status(500).json({ error: 'Could not save.', _debug: (err && err.message) || String(err), _stack: ((err && err.stack) || '').split('\n').slice(0,5).join(' | ') });
   }
 }
