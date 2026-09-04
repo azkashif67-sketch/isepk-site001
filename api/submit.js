@@ -1,13 +1,31 @@
-// rebuild: 2026-09-04 11:44
 import { db } from './_lib.js';
 import { sendLeadEmails } from './_email.js';
 
-// Generates a reference like ISE-2026-0042 (sequential-ish via count)
+// Generates a reference like ISE-2026-0042.
+// Derives the next number from the highest existing ref for the year (not COUNT,
+// which collides when rows are deleted), then verifies uniqueness with a fallback.
 async function makeRef(database) {
   const year = new Date().getFullYear();
-  const r = await database.execute('SELECT COUNT(*) AS n FROM leads');
-  const n = (r.rows[0].n || 0) + 1;
-  return `ISE-${year}-${String(n).padStart(4, '0')}`;
+  const prefix = `ISE-${year}-`;
+  // Highest existing suffix for this year
+  const r = await database.execute({
+    sql: `SELECT ref FROM leads WHERE ref LIKE ? ORDER BY ref DESC LIMIT 1`,
+    args: [prefix + '%'],
+  });
+  let next = 1;
+  if (r.rows.length && r.rows[0].ref) {
+    const m = String(r.rows[0].ref).match(/(\d+)$/);
+    if (m) next = parseInt(m[1], 10) + 1;
+  }
+  let ref = `${prefix}${String(next).padStart(4, '0')}`;
+  // Safety: if that ref somehow exists, bump until free (handles any drift/gaps)
+  for (let i = 0; i < 50; i++) {
+    const exists = await database.execute({ sql: `SELECT 1 FROM leads WHERE ref = ? LIMIT 1`, args: [ref] });
+    if (!exists.rows.length) break;
+    next += 1;
+    ref = `${prefix}${String(next).padStart(4, '0')}`;
+  }
+  return ref;
 }
 
 export default async function handler(req, res) {
@@ -70,7 +88,6 @@ export default async function handler(req, res) {
     return res.status(200).json({ success: true, ref });
   } catch (err) {
     console.error('submit error:', err);
-    // TEMP DEBUG: expose real error to pinpoint the 500. Revert after fixing.
-    return res.status(500).json({ error: 'Could not save.', _debug: (err && err.message) || String(err), _stack: ((err && err.stack) || '').split('\n').slice(0,5).join(' | ') });
+    return res.status(500).json({ error: 'Could not save. Please call or email us directly.' });
   }
 }
