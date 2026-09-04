@@ -784,8 +784,10 @@ function openDrawer(id){
       <h4>Contact</h4>
       <div class="d-row"><span class="k">Phone</span><span class="v"><a href="tel:${esc(l.phone||'')}">${esc(l.phone||'—')}</a></span></div>
       <div class="d-row"><span class="k">Email</span><span class="v">${l.email?`<a href="mailto:${esc(l.email)}">${esc(l.email)}</a>`:'—'}</span></div>
+      <div class="d-row"><span class="k">Designation</span><span class="v">${esc(l.designation||'—')}</span></div>
       <div class="d-row"><span class="k">City</span><span class="v">${esc(l.city||'—')}</span></div>
       <div class="d-row"><span class="k">Service</span><span class="v">${esc(l.service_type||'—')}</span></div>
+      <div class="d-row"><span class="k">Site address</span><span class="v">${esc(l.site_address||'—')}</span></div>
       <div class="d-row"><span class="k">Received</span><span class="v">${fmtDate(l.created_at)}</span></div>
     </div>
 

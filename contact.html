@@ -674,12 +674,13 @@ mark{background:#fdf3c2;color:inherit;padding:0 1px;border-radius:2px}
           <div class="hp-field" aria-hidden="true"><label>Leave this field empty<input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label></div>
           <div class="ise-field-row">
             <div class="ise-field"><label for="fName">Full Name</label><input type="text" name="name" id="fName" aria-label="Full Name" placeholder="Your name" required></div>
-            <div class="ise-field"><label for="fCompany">Company</label><input type="text" name="company" id="fCompany" aria-label="Company" placeholder="Company name"></div>
+            <div class="ise-field"><label for="fDesignation">Designation</label><input type="text" name="designation" id="fDesignation" aria-label="Designation" placeholder="e.g. Facilities Manager"></div>
           </div>
           <div class="ise-field-row">
+            <div class="ise-field"><label for="fCompany">Company</label><input type="text" name="company" id="fCompany" aria-label="Company" placeholder="Company name"></div>
             <div class="ise-field"><label for="fPhone">Phone</label><input type="tel" name="phone" id="fPhone" aria-label="Phone" placeholder="+92 3XX XXXXXXX" required></div>
-            <div class="ise-field"><label for="fEmail">Email</label><input type="email" name="email" id="fEmail" aria-label="Email" placeholder="you@company.com" required></div>
           </div>
+          <div class="ise-field"><label for="fEmail">Email</label><input type="email" name="email" id="fEmail" aria-label="Email" placeholder="you@company.com" required></div>
           <div class="ise-field">
             <label for="siteTypeSelect">Site Type</label>
             <select name="site_type" id="siteTypeSelect" aria-label="Site Type">
@@ -694,6 +695,7 @@ mark{background:#fdf3c2;color:inherit;padding:0 1px;border-radius:2px}
               <option>Other</option>
             </select>
           </div>
+          <div class="ise-field"><label for="fSiteAddress">Site Address</label><input type="text" name="site_address" id="fSiteAddress" aria-label="Site Address" placeholder="Address of the site to be secured"></div>
           <div class="ise-field"><label for="fMessage">Message / Requirements</label><textarea name="message" id="fMessage" aria-label="Message / Requirements" rows="3" placeholder="Describe your site, current situation, and what you're looking for..."></textarea></div>
           <button type="submit" class="form-submit-btn" data-label="Send Inquiry →">Send Inquiry →</button>
           <div class="form-msg" id="ctaFormMsg"></div>

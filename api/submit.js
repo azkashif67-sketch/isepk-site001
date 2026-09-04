@@ -27,20 +27,27 @@ export default async function handler(req, res) {
     }
 
     const database = db();
+
+    // Auto-migrate: add new columns if they don't exist yet (safe to run repeatedly)
+    try { await database.execute(`ALTER TABLE leads ADD COLUMN designation TEXT`); } catch (e) {}
+    try { await database.execute(`ALTER TABLE leads ADD COLUMN site_address TEXT`); } catch (e) {}
+
     const ref = await makeRef(database);
 
     await database.execute({
       sql: `INSERT INTO leads
-            (ref, source, name, company, phone, email, service_type, message, city, status)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'new')`,
+            (ref, source, name, company, designation, phone, email, service_type, site_address, message, city, status)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'new')`,
       args: [
         ref,
         b.source || 'contact',
         name,
         b.company || null,
+        b.designation || null,
         phone,
         b.email || null,
-        b.service_type || null,
+        b.service_type || b.site_type || null,
+        b.site_address || null,
         b.message || null,
         b.city || null,
       ],
@@ -51,7 +58,9 @@ export default async function handler(req, res) {
       ref, name, phone,
       email: b.email || null,
       company: b.company || null,
-      service_type: b.service_type || null,
+      designation: b.designation || null,
+      service_type: b.service_type || b.site_type || null,
+      site_address: b.site_address || null,
       message: b.message || null,
       city: b.city || null,
       source: b.source || 'contact',

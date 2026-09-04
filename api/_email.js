@@ -67,10 +67,12 @@ function teamAlertHtml(lead) {
     <h2 style="color:#0b0b0c;font-size:18px">New lead — ${lead.ref}</h2>
     <table style="border-collapse:collapse;width:100%;background:#f7f7f5;border-radius:6px">
       ${row('Name', lead.name)}
+      ${row('Designation', lead.designation)}
       ${row('Company', lead.company)}
       ${row('Phone', lead.phone)}
       ${row('Email', lead.email)}
       ${row('Service', lead.service_type)}
+      ${row('Site address', lead.site_address)}
       ${row('City', lead.city)}
       ${row('Message', lead.message)}
       ${row('Source', lead.source)}
