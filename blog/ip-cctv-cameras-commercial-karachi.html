@@ -570,6 +570,17 @@ html.gh-intro-skip #introBackdrop{display:none!important}
 mark{background:#fdf3c2;color:inherit;padding:0 1px;border-radius:2px}
 @media(max-width:560px){.site-search-overlay{padding:8vh 10px 10px}.ss-panel{max-width:100%}#siteSearchInput{font-size:16px}}
 </style>
+<style>
+.post-faq{margin:48px 0 8px;padding-top:32px;border-top:1px solid var(--paper-line,#c8c4b8)}
+.post-faq h2{font-size:24px;margin:0 0 20px;color:var(--ink,#151412)}
+.faq-q-item{border-bottom:1px solid #ece9e1;padding:0}
+.faq-q-item summary{cursor:pointer;list-style:none;padding:18px 0;font-weight:700;font-size:17px;color:var(--ink,#151412);display:flex;justify-content:space-between;align-items:center;gap:16px}
+.faq-q-item summary::-webkit-details-marker{display:none}
+.faq-q-item summary::after{content:"+";color:var(--red,#34AAFB);font-size:24px;font-weight:400;flex-shrink:0}
+.faq-q-item[open] summary::after{content:"\2212"}
+.faq-q-item .faq-a-body{padding:0 0 20px;color:#4a4842;line-height:1.65;font-size:15.5px}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Why do commercial sites use IP cameras instead of analogue?","acceptedAnswer":{"@type":"Answer","text":"IP cameras deliver higher resolution, run over structured cabling with a single cable for data and power, scale more easily, and support analytics. Commercial sites standardise on IP because it's more flexible and future-proof than analogue, and integrates cleanly with the rest of the security infrastructure."}},{"@type":"Question","name":"How do I choose the right IP camera for each area?","acceptedAnswer":{"@type":"Answer","text":"Specify each camera for its task, not by megapixel count. Entrances need identify-grade cameras, open areas need general coverage, and car parks may need PTZ or long-range units. Match the camera type, lens, and resolution to what each zone must achieve — decided during a site survey."}}]}</script>
 </head>
 <body class="js-motion">
 <header class="nav" id="siteNav">
@@ -717,6 +728,17 @@ mark{background:#fdf3c2;color:inherit;padding:0 1px;border-radius:2px}
 <p class="post-cta-line">ISE designs, installs and maintains commercial IP CCTV systems across Karachi and Pakistan — engineered around your site's real coverage needs, storage requirements and load-shedding pattern. <a href="/contact#contact">Request a free on-site security audit</a> or <a href="/contact#contact">get in touch</a> to start with a proper coverage plan.</p>
 
   </div>
+  <section class="post-faq">
+  <h2>Frequently asked questions</h2>
+  <details class="faq-q-item">
+    <summary>Why do commercial sites use IP cameras instead of analogue?</summary>
+    <div class="faq-a-body">IP cameras deliver higher resolution, run over structured cabling with a single cable for data and power, scale more easily, and support analytics. Commercial sites standardise on IP because it's more flexible and future-proof than analogue, and integrates cleanly with the rest of the security infrastructure.</div>
+  </details>
+  <details class="faq-q-item">
+    <summary>How do I choose the right IP camera for each area?</summary>
+    <div class="faq-a-body">Specify each camera for its task, not by megapixel count. Entrances need identify-grade cameras, open areas need general coverage, and car parks may need PTZ or long-range units. Match the camera type, lens, and resolution to what each zone must achieve — decided during a site survey.</div>
+  </details>
+</section>
   <section class="related-posts">
   <h2>Related articles</h2>
   <div class="related-grid">

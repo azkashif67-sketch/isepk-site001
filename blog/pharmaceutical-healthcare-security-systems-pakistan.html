@@ -570,6 +570,17 @@ html.gh-intro-skip #introBackdrop{display:none!important}
 mark{background:#fdf3c2;color:inherit;padding:0 1px;border-radius:2px}
 @media(max-width:560px){.site-search-overlay{padding:8vh 10px 10px}.ss-panel{max-width:100%}#siteSearchInput{font-size:16px}}
 </style>
+<style>
+.post-faq{margin:48px 0 8px;padding-top:32px;border-top:1px solid var(--paper-line,#c8c4b8)}
+.post-faq h2{font-size:24px;margin:0 0 20px;color:var(--ink,#151412)}
+.faq-q-item{border-bottom:1px solid #ece9e1;padding:0}
+.faq-q-item summary{cursor:pointer;list-style:none;padding:18px 0;font-weight:700;font-size:17px;color:var(--ink,#151412);display:flex;justify-content:space-between;align-items:center;gap:16px}
+.faq-q-item summary::-webkit-details-marker{display:none}
+.faq-q-item summary::after{content:"+";color:var(--red,#34AAFB);font-size:24px;font-weight:400;flex-shrink:0}
+.faq-q-item[open] summary::after{content:"\2212"}
+.faq-q-item .faq-a-body{padding:0 0 20px;color:#4a4842;line-height:1.65;font-size:15.5px}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What security do pharmaceutical and healthcare facilities need?","acceptedAnswer":{"@type":"Answer","text":"They need cleanroom and controlled-area access control, secure storage for controlled substances, and regulated-site surveillance — all designed to meet compliance requirements. These environments are a special case because they combine strict regulation, sensitive areas, and high-value or controlled materials."}},{"@type":"Question","name":"How is access controlled in pharmaceutical cleanrooms?","acceptedAnswer":{"@type":"Answer","text":"Cleanroom access uses credentialed entry that restricts who can enter controlled zones, logs every entry for compliance, and can integrate with gowning and contamination-control protocols. The goal is to enforce and document controlled access without disrupting regulated workflows."}}]}</script>
 </head>
 <body class="js-motion">
 <header class="nav" id="siteNav">
@@ -701,6 +712,17 @@ mark{background:#fdf3c2;color:inherit;padding:0 1px;border-radius:2px}
 <p class="post-cta-line">ISE designs regulated-grade security for pharmaceutical and healthcare facilities across Pakistan — cleanroom access, controlled-substance protection, and life-safety, engineered as one platform. <a href="/contact#contact">Request a free on-site compliance audit</a> or <a href="/contact#contact">get in touch</a>.</p>
 
   </div>
+  <section class="post-faq">
+  <h2>Frequently asked questions</h2>
+  <details class="faq-q-item">
+    <summary>What security do pharmaceutical and healthcare facilities need?</summary>
+    <div class="faq-a-body">They need cleanroom and controlled-area access control, secure storage for controlled substances, and regulated-site surveillance — all designed to meet compliance requirements. These environments are a special case because they combine strict regulation, sensitive areas, and high-value or controlled materials.</div>
+  </details>
+  <details class="faq-q-item">
+    <summary>How is access controlled in pharmaceutical cleanrooms?</summary>
+    <div class="faq-a-body">Cleanroom access uses credentialed entry that restricts who can enter controlled zones, logs every entry for compliance, and can integrate with gowning and contamination-control protocols. The goal is to enforce and document controlled access without disrupting regulated workflows.</div>
+  </details>
+</section>
   <section class="related-posts">
   <h2>Related articles</h2>
   <div class="related-grid">

@@ -570,6 +570,17 @@ html.gh-intro-skip #introBackdrop{display:none!important}
 mark{background:#fdf3c2;color:inherit;padding:0 1px;border-radius:2px}
 @media(max-width:560px){.site-search-overlay{padding:8vh 10px 10px}.ss-panel{max-width:100%}#siteSearchInput{font-size:16px}}
 </style>
+<style>
+.post-faq{margin:48px 0 8px;padding-top:32px;border-top:1px solid var(--paper-line,#c8c4b8)}
+.post-faq h2{font-size:24px;margin:0 0 20px;color:var(--ink,#151412)}
+.faq-q-item{border-bottom:1px solid #ece9e1;padding:0}
+.faq-q-item summary{cursor:pointer;list-style:none;padding:18px 0;font-weight:700;font-size:17px;color:var(--ink,#151412);display:flex;justify-content:space-between;align-items:center;gap:16px}
+.faq-q-item summary::-webkit-details-marker{display:none}
+.faq-q-item summary::after{content:"+";color:var(--red,#34AAFB);font-size:24px;font-weight:400;flex-shrink:0}
+.faq-q-item[open] summary::after{content:"\2212"}
+.faq-q-item .faq-a-body{padding:0 0 20px;color:#4a4842;line-height:1.65;font-size:15.5px}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What are the steps of a commercial CCTV installation?","acceptedAnswer":{"@type":"Answer","text":"A proper commercial CCTV installation follows a sequence: site survey, coverage-led design, structured cabling, mounting and configuration, commissioning against the design, and handover with documentation. Skipping any stage — especially the survey — is how businesses end up with cameras but no usable footage."}},{"@type":"Question","name":"Should a CCTV installer survey the site before quoting?","acceptedAnswer":{"@type":"Answer","text":"Yes. Any installer who quotes a camera count and price before visiting is guessing. A real survey establishes coverage points, lighting conditions, cable routes, and — in Pakistan — how the system stays powered through load-shedding. The survey is what makes the quote meaningful."}}]}</script>
 </head>
 <body class="js-motion">
 <header class="nav" id="siteNav">
@@ -699,6 +710,17 @@ mark{background:#fdf3c2;color:inherit;padding:0 1px;border-radius:2px}
 <p class="post-cta-line">ISE designs, installs and maintains commercial security systems across Karachi and Pakistan — engineered around your site's real risk profile, layout and load-shedding pattern. <a href="/contact#contact">Request a free on-site security audit</a> or <a href="/contact#contact">get in touch</a> to scope your project properly.</p>
 
   </div>
+  <section class="post-faq">
+  <h2>Frequently asked questions</h2>
+  <details class="faq-q-item">
+    <summary>What are the steps of a commercial CCTV installation?</summary>
+    <div class="faq-a-body">A proper commercial CCTV installation follows a sequence: site survey, coverage-led design, structured cabling, mounting and configuration, commissioning against the design, and handover with documentation. Skipping any stage — especially the survey — is how businesses end up with cameras but no usable footage.</div>
+  </details>
+  <details class="faq-q-item">
+    <summary>Should a CCTV installer survey the site before quoting?</summary>
+    <div class="faq-a-body">Yes. Any installer who quotes a camera count and price before visiting is guessing. A real survey establishes coverage points, lighting conditions, cable routes, and — in Pakistan — how the system stays powered through load-shedding. The survey is what makes the quote meaningful.</div>
+  </details>
+</section>
   <section class="related-posts">
   <h2>Related articles</h2>
   <div class="related-grid">

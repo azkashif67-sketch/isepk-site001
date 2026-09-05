@@ -569,6 +569,17 @@ html.gh-intro-skip #introBackdrop{display:none!important}
 mark{background:#fdf3c2;color:inherit;padding:0 1px;border-radius:2px}
 @media(max-width:560px){.site-search-overlay{padding:8vh 10px 10px}.ss-panel{max-width:100%}#siteSearchInput{font-size:16px}}
 </style>
+<style>
+.post-faq{margin:48px 0 8px;padding-top:32px;border-top:1px solid var(--paper-line,#c8c4b8)}
+.post-faq h2{font-size:24px;margin:0 0 20px;color:var(--ink,#151412)}
+.faq-q-item{border-bottom:1px solid #ece9e1;padding:0}
+.faq-q-item summary{cursor:pointer;list-style:none;padding:18px 0;font-weight:700;font-size:17px;color:var(--ink,#151412);display:flex;justify-content:space-between;align-items:center;gap:16px}
+.faq-q-item summary::-webkit-details-marker{display:none}
+.faq-q-item summary::after{content:"+";color:var(--red,#34AAFB);font-size:24px;font-weight:400;flex-shrink:0}
+.faq-q-item[open] summary::after{content:"\2212"}
+.faq-q-item .faq-a-body{padding:0 0 20px;color:#4a4842;line-height:1.65;font-size:15.5px}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What actually happens when a monitored alarm is triggered?","acceptedAnswer":{"@type":"Answer","text":"When a monitored alarm activates, the signal is sent to a monitoring centre where an operator verifies whether it's a genuine event — typically using live camera footage — before escalating to the site contact or authorities. This verification step is what separates real monitoring from a siren that simply makes noise and hopes someone notices."}},{"@type":"Question","name":"What is video verification and why does it matter?","acceptedAnswer":{"@type":"Answer","text":"Video verification means an operator looks at live or recorded camera footage the moment an alarm triggers, to confirm whether it's a real intrusion or a false alarm. It matters because it drastically cuts false-alarm response costs and ensures that when a genuine event happens, the response is fast and appropriate."}},{"@type":"Question","name":"Is 24/7 monitoring worth it for a commercial site in Pakistan?","acceptedAnswer":{"@type":"Answer","text":"For most commercial and industrial sites, yes — because incidents often happen after hours when no staff are present. Monitoring turns your existing cameras and alarms into a system that actually responds, rather than one that only records evidence after the fact. In Pakistan, monitoring paired with power-continuity is especially important given load-shedding."}}]}</script>
 </head>
 <body class="js-motion">
 <header class="nav" id="siteNav">
@@ -689,6 +700,21 @@ mark{background:#fdf3c2;color:inherit;padding:0 1px;border-radius:2px}
 <p class="post-cta-line">ISE provides 24/7 alarm monitoring, video-verified response and remote video guarding for sites across Pakistan — designed together with your surveillance and alarm systems. <a href="/contact">Talk to us</a> about monitoring your site.</p>
 
   </div>
+  <section class="post-faq">
+  <h2>Frequently asked questions</h2>
+  <details class="faq-q-item">
+    <summary>What actually happens when a monitored alarm is triggered?</summary>
+    <div class="faq-a-body">When a monitored alarm activates, the signal is sent to a monitoring centre where an operator verifies whether it's a genuine event — typically using live camera footage — before escalating to the site contact or authorities. This verification step is what separates real monitoring from a siren that simply makes noise and hopes someone notices.</div>
+  </details>
+  <details class="faq-q-item">
+    <summary>What is video verification and why does it matter?</summary>
+    <div class="faq-a-body">Video verification means an operator looks at live or recorded camera footage the moment an alarm triggers, to confirm whether it's a real intrusion or a false alarm. It matters because it drastically cuts false-alarm response costs and ensures that when a genuine event happens, the response is fast and appropriate.</div>
+  </details>
+  <details class="faq-q-item">
+    <summary>Is 24/7 monitoring worth it for a commercial site in Pakistan?</summary>
+    <div class="faq-a-body">For most commercial and industrial sites, yes — because incidents often happen after hours when no staff are present. Monitoring turns your existing cameras and alarms into a system that actually responds, rather than one that only records evidence after the fact. In Pakistan, monitoring paired with power-continuity is especially important given load-shedding.</div>
+  </details>
+</section>
   <section class="related-posts">
   <h2>Related articles</h2>
   <div class="related-grid">

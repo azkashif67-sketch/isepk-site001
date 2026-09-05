@@ -570,6 +570,17 @@ html.gh-intro-skip #introBackdrop{display:none!important}
 mark{background:#fdf3c2;color:inherit;padding:0 1px;border-radius:2px}
 @media(max-width:560px){.site-search-overlay{padding:8vh 10px 10px}.ss-panel{max-width:100%}#siteSearchInput{font-size:16px}}
 </style>
+<style>
+.post-faq{margin:48px 0 8px;padding-top:32px;border-top:1px solid var(--paper-line,#c8c4b8)}
+.post-faq h2{font-size:24px;margin:0 0 20px;color:var(--ink,#151412)}
+.faq-q-item{border-bottom:1px solid #ece9e1;padding:0}
+.faq-q-item summary{cursor:pointer;list-style:none;padding:18px 0;font-weight:700;font-size:17px;color:var(--ink,#151412);display:flex;justify-content:space-between;align-items:center;gap:16px}
+.faq-q-item summary::-webkit-details-marker{display:none}
+.faq-q-item summary::after{content:"+";color:var(--red,#34AAFB);font-size:24px;font-weight:400;flex-shrink:0}
+.faq-q-item[open] summary::after{content:"\2212"}
+.faq-q-item .faq-a-body{padding:0 0 20px;color:#4a4842;line-height:1.65;font-size:15.5px}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is an Annual Maintenance Contract (AMC) for security systems?","acceptedAnswer":{"@type":"Answer","text":"An AMC is a scheduled maintenance agreement that keeps fire and security systems tested, serviced, and compliant year-round. It typically covers periodic inspections, testing, firmware updates, fault rectification, and documentation — ensuring systems actually work when needed rather than failing silently."}},{"@type":"Question","name":"Why is preventive maintenance important for fire and security systems?","acceptedAnswer":{"@type":"Answer","text":"Because these systems fail silently — a dead detector or offline camera gives no warning until an incident reveals it. Preventive maintenance catches faults before they matter, keeps you compliant for inspections and insurance, and extends equipment life, which saves far more than it costs."}}]}</script>
 </head>
 <body class="js-motion">
 <header class="nav" id="siteNav">
@@ -704,6 +715,17 @@ mark{background:#fdf3c2;color:inherit;padding:0 1px;border-radius:2px}
 <p class="post-cta-line">ISE provides Annual Maintenance Contracts for fire and security systems across Karachi and Pakistan — scheduled care, compliant testing, and guaranteed response. <a href="/contact#contact">Request a free maintenance assessment</a> or <a href="/contact#contact">get in touch</a>.</p>
 
   </div>
+  <section class="post-faq">
+  <h2>Frequently asked questions</h2>
+  <details class="faq-q-item">
+    <summary>What is an Annual Maintenance Contract (AMC) for security systems?</summary>
+    <div class="faq-a-body">An AMC is a scheduled maintenance agreement that keeps fire and security systems tested, serviced, and compliant year-round. It typically covers periodic inspections, testing, firmware updates, fault rectification, and documentation — ensuring systems actually work when needed rather than failing silently.</div>
+  </details>
+  <details class="faq-q-item">
+    <summary>Why is preventive maintenance important for fire and security systems?</summary>
+    <div class="faq-a-body">Because these systems fail silently — a dead detector or offline camera gives no warning until an incident reveals it. Preventive maintenance catches faults before they matter, keeps you compliant for inspections and insurance, and extends equipment life, which saves far more than it costs.</div>
+  </details>
+</section>
   <section class="related-posts">
   <h2>Related articles</h2>
   <div class="related-grid">

@@ -569,6 +569,17 @@ html.gh-intro-skip #introBackdrop{display:none!important}
 mark{background:#fdf3c2;color:inherit;padding:0 1px;border-radius:2px}
 @media(max-width:560px){.site-search-overlay{padding:8vh 10px 10px}.ss-panel{max-width:100%}#siteSearchInput{font-size:16px}}
 </style>
+<style>
+.post-faq{margin:48px 0 8px;padding-top:32px;border-top:1px solid var(--paper-line,#c8c4b8)}
+.post-faq h2{font-size:24px;margin:0 0 20px;color:var(--ink,#151412)}
+.faq-q-item{border-bottom:1px solid #ece9e1;padding:0}
+.faq-q-item summary{cursor:pointer;list-style:none;padding:18px 0;font-weight:700;font-size:17px;color:var(--ink,#151412);display:flex;justify-content:space-between;align-items:center;gap:16px}
+.faq-q-item summary::-webkit-details-marker{display:none}
+.faq-q-item summary::after{content:"+";color:var(--red,#34AAFB);font-size:24px;font-weight:400;flex-shrink:0}
+.faq-q-item[open] summary::after{content:"\2212"}
+.faq-q-item .faq-a-body{padding:0 0 20px;color:#4a4842;line-height:1.65;font-size:15.5px}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I plan CCTV coverage for a commercial site?","acceptedAnswer":{"@type":"Answer","text":"Start with coverage objectives, not cameras — identify the entry points, choke points, and high-value areas that must be covered, and what each camera needs to achieve there. The camera count follows from the coverage plan, established during an on-site survey, not the other way around."}},{"@type":"Question","name":"How much CCTV storage do I need?","acceptedAnswer":{"@type":"Answer","text":"It depends on your camera resolution, number of cameras, and how many days of footage you want to retain. Retention is a deliberate decision — often driven by how long it typically takes to notice an incident — and the recorder and drives are sized to hit that retention at your chosen quality."}}]}</script>
 </head>
 <body class="js-motion">
 <header class="nav" id="siteNav">
@@ -697,6 +708,17 @@ mark{background:#fdf3c2;color:inherit;padding:0 1px;border-radius:2px}
 <p class="post-cta-line">ISE designs, installs and maintains commercial CCTV and video surveillance systems across Pakistan — engineered around your site's actual risk profile, not a generic package. <a href="/contact#contact">Request a free site survey</a> to start with a proper coverage plan.</p>
 
   </div>
+  <section class="post-faq">
+  <h2>Frequently asked questions</h2>
+  <details class="faq-q-item">
+    <summary>How do I plan CCTV coverage for a commercial site?</summary>
+    <div class="faq-a-body">Start with coverage objectives, not cameras — identify the entry points, choke points, and high-value areas that must be covered, and what each camera needs to achieve there. The camera count follows from the coverage plan, established during an on-site survey, not the other way around.</div>
+  </details>
+  <details class="faq-q-item">
+    <summary>How much CCTV storage do I need?</summary>
+    <div class="faq-a-body">It depends on your camera resolution, number of cameras, and how many days of footage you want to retain. Retention is a deliberate decision — often driven by how long it typically takes to notice an incident — and the recorder and drives are sized to hit that retention at your chosen quality.</div>
+  </details>
+</section>
   <section class="related-posts">
   <h2>Related articles</h2>
   <div class="related-grid">

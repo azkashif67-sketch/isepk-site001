@@ -569,6 +569,17 @@ html.gh-intro-skip #introBackdrop{display:none!important}
 mark{background:#fdf3c2;color:inherit;padding:0 1px;border-radius:2px}
 @media(max-width:560px){.site-search-overlay{padding:8vh 10px 10px}.ss-panel{max-width:100%}#siteSearchInput{font-size:16px}}
 </style>
+<style>
+.post-faq{margin:48px 0 8px;padding-top:32px;border-top:1px solid var(--paper-line,#c8c4b8)}
+.post-faq h2{font-size:24px;margin:0 0 20px;color:var(--ink,#151412)}
+.faq-q-item{border-bottom:1px solid #ece9e1;padding:0}
+.faq-q-item summary{cursor:pointer;list-style:none;padding:18px 0;font-weight:700;font-size:17px;color:var(--ink,#151412);display:flex;justify-content:space-between;align-items:center;gap:16px}
+.faq-q-item summary::-webkit-details-marker{display:none}
+.faq-q-item summary::after{content:"+";color:var(--red,#34AAFB);font-size:24px;font-weight:400;flex-shrink:0}
+.faq-q-item[open] summary::after{content:"\2212"}
+.faq-q-item .faq-a-body{padding:0 0 20px;color:#4a4842;line-height:1.65;font-size:15.5px}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is a CCTV monitoring system?","acceptedAnswer":{"@type":"Answer","text":"A CCTV monitoring system is more than cameras — it's the full chain of detection, recording, analytics, human oversight, and response that delivers genuine 24/7 protection. Cameras alone record evidence; monitoring means someone or something is watching and acting on what those cameras see."}},{"@type":"Question","name":"Does 24/7 monitoring mean someone watches my cameras all the time?","acceptedAnswer":{"@type":"Answer","text":"In practice, 24/7 monitoring combines automated detection (analytics that flag events) with human verification when something is detected — rather than a person staring at every feed continuously. This is more effective and reliable than manual watching, and ensures a real response when a genuine event occurs."}}]}</script>
 </head>
 <body class="js-motion">
 <header class="nav" id="siteNav">
@@ -704,6 +715,17 @@ mark{background:#fdf3c2;color:inherit;padding:0 1px;border-radius:2px}
 <p class="post-cta-line">ISE designs, installs and maintains complete CCTV monitoring systems for businesses across Pakistan — engineered for 24/7 protection and built to run through load-shedding. <a href="/contact#contact">Request a free on-site security audit</a> or <a href="/contact#contact">get in touch</a>.</p>
 
   </div>
+  <section class="post-faq">
+  <h2>Frequently asked questions</h2>
+  <details class="faq-q-item">
+    <summary>What is a CCTV monitoring system?</summary>
+    <div class="faq-a-body">A CCTV monitoring system is more than cameras — it's the full chain of detection, recording, analytics, human oversight, and response that delivers genuine 24/7 protection. Cameras alone record evidence; monitoring means someone or something is watching and acting on what those cameras see.</div>
+  </details>
+  <details class="faq-q-item">
+    <summary>Does 24/7 monitoring mean someone watches my cameras all the time?</summary>
+    <div class="faq-a-body">In practice, 24/7 monitoring combines automated detection (analytics that flag events) with human verification when something is detected — rather than a person staring at every feed continuously. This is more effective and reliable than manual watching, and ensures a real response when a genuine event occurs.</div>
+  </details>
+</section>
   <section class="related-posts">
   <h2>Related articles</h2>
   <div class="related-grid">

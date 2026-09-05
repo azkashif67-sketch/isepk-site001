@@ -570,6 +570,17 @@ html.gh-intro-skip #introBackdrop{display:none!important}
 mark{background:#fdf3c2;color:inherit;padding:0 1px;border-radius:2px}
 @media(max-width:560px){.site-search-overlay{padding:8vh 10px 10px}.ss-panel{max-width:100%}#siteSearchInput{font-size:16px}}
 </style>
+<style>
+.post-faq{margin:48px 0 8px;padding-top:32px;border-top:1px solid var(--paper-line,#c8c4b8)}
+.post-faq h2{font-size:24px;margin:0 0 20px;color:var(--ink,#151412)}
+.faq-q-item{border-bottom:1px solid #ece9e1;padding:0}
+.faq-q-item summary{cursor:pointer;list-style:none;padding:18px 0;font-weight:700;font-size:17px;color:var(--ink,#151412);display:flex;justify-content:space-between;align-items:center;gap:16px}
+.faq-q-item summary::-webkit-details-marker{display:none}
+.faq-q-item summary::after{content:"+";color:var(--red,#34AAFB);font-size:24px;font-weight:400;flex-shrink:0}
+.faq-q-item[open] summary::after{content:"\2212"}
+.faq-q-item .faq-a-body{padding:0 0 20px;color:#4a4842;line-height:1.65;font-size:15.5px}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is NFPA 72 and does it apply in Pakistan?","acceptedAnswer":{"@type":"Answer","text":"NFPA 72 is the internationally recognised standard for fire alarm and detection system design. In Pakistan it's the de facto benchmark that inspectors, insurers, and banks expect commercial fire alarm systems to meet, alongside PSQCA equipment conformity and Civil Defence requirements."}},{"@type":"Question","name":"What does PSQCA conformity mean for fire alarm systems?","acceptedAnswer":{"@type":"Answer","text":"PSQCA conformity means the equipment meets Pakistan's national quality standards. For a fire alarm system, using PSQCA-conformant equipment — designed to NFPA 72 and Civil Defence-ready — is what makes the installation acceptable to inspectors, insurers, and authorities."}}]}</script>
 </head>
 <body class="js-motion">
 <header class="nav" id="siteNav">
@@ -709,6 +720,17 @@ mark{background:#fdf3c2;color:inherit;padding:0 1px;border-radius:2px}
 <p class="post-cta-line">ISE designs, installs and maintains PSQCA and NFPA 72 compliant fire alarm systems across Pakistan, with PEC-licensed engineers and Civil Defence-ready documentation. <a href="/contact#contact">Request a free on-site fire safety audit</a> or <a href="/contact#contact">get in touch</a>.</p>
 
   </div>
+  <section class="post-faq">
+  <h2>Frequently asked questions</h2>
+  <details class="faq-q-item">
+    <summary>What is NFPA 72 and does it apply in Pakistan?</summary>
+    <div class="faq-a-body">NFPA 72 is the internationally recognised standard for fire alarm and detection system design. In Pakistan it's the de facto benchmark that inspectors, insurers, and banks expect commercial fire alarm systems to meet, alongside PSQCA equipment conformity and Civil Defence requirements.</div>
+  </details>
+  <details class="faq-q-item">
+    <summary>What does PSQCA conformity mean for fire alarm systems?</summary>
+    <div class="faq-a-body">PSQCA conformity means the equipment meets Pakistan's national quality standards. For a fire alarm system, using PSQCA-conformant equipment — designed to NFPA 72 and Civil Defence-ready — is what makes the installation acceptable to inspectors, insurers, and authorities.</div>
+  </details>
+</section>
   <section class="related-posts">
   <h2>Related articles</h2>
   <div class="related-grid">

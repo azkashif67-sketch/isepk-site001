@@ -569,6 +569,17 @@ html.gh-intro-skip #introBackdrop{display:none!important}
 mark{background:#fdf3c2;color:inherit;padding:0 1px;border-radius:2px}
 @media(max-width:560px){.site-search-overlay{padding:8vh 10px 10px}.ss-panel{max-width:100%}#siteSearchInput{font-size:16px}}
 </style>
+<style>
+.post-faq{margin:48px 0 8px;padding-top:32px;border-top:1px solid var(--paper-line,#c8c4b8)}
+.post-faq h2{font-size:24px;margin:0 0 20px;color:var(--ink,#151412)}
+.faq-q-item{border-bottom:1px solid #ece9e1;padding:0}
+.faq-q-item summary{cursor:pointer;list-style:none;padding:18px 0;font-weight:700;font-size:17px;color:var(--ink,#151412);display:flex;justify-content:space-between;align-items:center;gap:16px}
+.faq-q-item summary::-webkit-details-marker{display:none}
+.faq-q-item summary::after{content:"+";color:var(--red,#34AAFB);font-size:24px;font-weight:400;flex-shrink:0}
+.faq-q-item[open] summary::after{content:"\2212"}
+.faq-q-item .faq-a-body{padding:0 0 20px;color:#4a4842;line-height:1.65;font-size:15.5px}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"When are smoke detectors required in commercial buildings?","acceptedAnswer":{"@type":"Answer","text":"Smoke detectors are required in most occupied commercial spaces, escape routes, and corridors — the exact requirement depends on the building's use, occupancy, size, and height. Offices typically need smoke detection throughout, while environments prone to false alarms (kitchens, dusty areas) use heat detection instead."}},{"@type":"Question","name":"What determines a building's fire detection requirement?","acceptedAnswer":{"@type":"Answer","text":"Four factors: the occupancy type (office, factory, hospital, etc.), the number of people present, the floor area, and the building height. The more people, the taller the building, and the more hazardous the use, the more comprehensive and automatic the detection must be."}}]}</script>
 </head>
 <body class="js-motion">
 <header class="nav" id="siteNav">
@@ -700,6 +711,17 @@ mark{background:#fdf3c2;color:inherit;padding:0 1px;border-radius:2px}
 <p class="post-cta-line">ISE designs commercial fire detection and alarm systems across Karachi and Pakistan — matched to your building's use, occupancy and layout, and documented for PSQCA, NFPA 72 and Civil Defence inspection. <a href="/contact#contact">Request a free fire-safety assessment</a> or <a href="/contact#contact">get in touch</a> to confirm what your building needs.</p>
 
   </div>
+  <section class="post-faq">
+  <h2>Frequently asked questions</h2>
+  <details class="faq-q-item">
+    <summary>When are smoke detectors required in commercial buildings?</summary>
+    <div class="faq-a-body">Smoke detectors are required in most occupied commercial spaces, escape routes, and corridors — the exact requirement depends on the building's use, occupancy, size, and height. Offices typically need smoke detection throughout, while environments prone to false alarms (kitchens, dusty areas) use heat detection instead.</div>
+  </details>
+  <details class="faq-q-item">
+    <summary>What determines a building's fire detection requirement?</summary>
+    <div class="faq-a-body">Four factors: the occupancy type (office, factory, hospital, etc.), the number of people present, the floor area, and the building height. The more people, the taller the building, and the more hazardous the use, the more comprehensive and automatic the detection must be.</div>
+  </details>
+</section>
   <section class="related-posts">
   <h2>Related articles</h2>
   <div class="related-grid">

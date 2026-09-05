@@ -570,6 +570,17 @@ html.gh-intro-skip #introBackdrop{display:none!important}
 mark{background:#fdf3c2;color:inherit;padding:0 1px;border-radius:2px}
 @media(max-width:560px){.site-search-overlay{padding:8vh 10px 10px}.ss-panel{max-width:100%}#siteSearchInput{font-size:16px}}
 </style>
+<style>
+.post-faq{margin:48px 0 8px;padding-top:32px;border-top:1px solid var(--paper-line,#c8c4b8)}
+.post-faq h2{font-size:24px;margin:0 0 20px;color:var(--ink,#151412)}
+.faq-q-item{border-bottom:1px solid #ece9e1;padding:0}
+.faq-q-item summary{cursor:pointer;list-style:none;padding:18px 0;font-weight:700;font-size:17px;color:var(--ink,#151412);display:flex;justify-content:space-between;align-items:center;gap:16px}
+.faq-q-item summary::-webkit-details-marker{display:none}
+.faq-q-item summary::after{content:"+";color:var(--red,#34AAFB);font-size:24px;font-weight:400;flex-shrink:0}
+.faq-q-item[open] summary::after{content:"\2212"}
+.faq-q-item .faq-a-body{padding:0 0 20px;color:#4a4842;line-height:1.65;font-size:15.5px}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is unified security architecture?","acceptedAnswer":{"@type":"Answer","text":"Unified security architecture means CCTV, fire, and access control are designed and integrated to work as one coordinated system, rather than as separate products from separate vendors. It enables coordinated response — for example, a fire alarm automatically unlocking doors and pulling up relevant cameras."}},{"@type":"Question","name":"Why is one integrated security partner better than multiple vendors?","acceptedAnswer":{"@type":"Answer","text":"Because a patchwork of vendors creates gaps, finger-pointing, and systems that don't talk to each other. One accountable partner designs everything to work together, gives you a single point of contact, and delivers coordinated response that isolated systems can't match."}}]}</script>
 </head>
 <body class="js-motion">
 <header class="nav" id="siteNav">
@@ -707,6 +718,17 @@ mark{background:#fdf3c2;color:inherit;padding:0 1px;border-radius:2px}
 <p class="post-cta-line">ISE designs, installs and maintains unified security platforms — CCTV, fire and access as one engineered system — for commercial and industrial sites across Pakistan. <a href="/contact#contact">Request a free on-site security audit</a> or <a href="/contact#contact">get in touch</a>.</p>
 
   </div>
+  <section class="post-faq">
+  <h2>Frequently asked questions</h2>
+  <details class="faq-q-item">
+    <summary>What is unified security architecture?</summary>
+    <div class="faq-a-body">Unified security architecture means CCTV, fire, and access control are designed and integrated to work as one coordinated system, rather than as separate products from separate vendors. It enables coordinated response — for example, a fire alarm automatically unlocking doors and pulling up relevant cameras.</div>
+  </details>
+  <details class="faq-q-item">
+    <summary>Why is one integrated security partner better than multiple vendors?</summary>
+    <div class="faq-a-body">Because a patchwork of vendors creates gaps, finger-pointing, and systems that don't talk to each other. One accountable partner designs everything to work together, gives you a single point of contact, and delivers coordinated response that isolated systems can't match.</div>
+  </details>
+</section>
   <section class="related-posts">
   <h2>Related articles</h2>
   <div class="related-grid">

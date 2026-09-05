@@ -570,6 +570,17 @@ html.gh-intro-skip #introBackdrop{display:none!important}
 mark{background:#fdf3c2;color:inherit;padding:0 1px;border-radius:2px}
 @media(max-width:560px){.site-search-overlay{padding:8vh 10px 10px}.ss-panel{max-width:100%}#siteSearchInput{font-size:16px}}
 </style>
+<style>
+.post-faq{margin:48px 0 8px;padding-top:32px;border-top:1px solid var(--paper-line,#c8c4b8)}
+.post-faq h2{font-size:24px;margin:0 0 20px;color:var(--ink,#151412)}
+.faq-q-item{border-bottom:1px solid #ece9e1;padding:0}
+.faq-q-item summary{cursor:pointer;list-style:none;padding:18px 0;font-weight:700;font-size:17px;color:var(--ink,#151412);display:flex;justify-content:space-between;align-items:center;gap:16px}
+.faq-q-item summary::-webkit-details-marker{display:none}
+.faq-q-item summary::after{content:"+";color:var(--red,#34AAFB);font-size:24px;font-weight:400;flex-shrink:0}
+.faq-q-item[open] summary::after{content:"\2212"}
+.faq-q-item .faq-a-body{padding:0 0 20px;color:#4a4842;line-height:1.65;font-size:15.5px}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is the best security camera for an office?","acceptedAnswer":{"@type":"Answer","text":"There is no single best camera — the right choice depends on what each position must achieve. An entrance needs an identify-grade camera for clear faces, while an open floor may only need a general-view camera. Match the camera type, resolution, and placement to the job at each point rather than buying one model everywhere."}},{"@type":"Question","name":"How many megapixels does an office CCTV camera need?","acceptedAnswer":{"@type":"Answer","text":"Enough to achieve the required detail at that position — not the maximum available. A well-placed 2–4MP camera at a doorway can deliver an identifiable face, while a 4K camera mounted too high wastes storage on unusable detail. Decide the detail each spot needs, then choose the lowest resolution that achieves it."}}]}</script>
 </head>
 <body class="js-motion">
 <header class="nav" id="siteNav">
@@ -699,6 +710,17 @@ mark{background:#fdf3c2;color:inherit;padding:0 1px;border-radius:2px}
 <p class="post-cta-line">ISE designs, installs and maintains commercial security systems across Karachi and Pakistan — engineered around your site's real risk profile, layout and load-shedding pattern. <a href="/contact#contact">Request a free on-site security audit</a> or <a href="/contact#contact">get in touch</a> to scope your project properly.</p>
 
   </div>
+  <section class="post-faq">
+  <h2>Frequently asked questions</h2>
+  <details class="faq-q-item">
+    <summary>What is the best security camera for an office?</summary>
+    <div class="faq-a-body">There is no single best camera — the right choice depends on what each position must achieve. An entrance needs an identify-grade camera for clear faces, while an open floor may only need a general-view camera. Match the camera type, resolution, and placement to the job at each point rather than buying one model everywhere.</div>
+  </details>
+  <details class="faq-q-item">
+    <summary>How many megapixels does an office CCTV camera need?</summary>
+    <div class="faq-a-body">Enough to achieve the required detail at that position — not the maximum available. A well-placed 2–4MP camera at a doorway can deliver an identifiable face, while a 4K camera mounted too high wastes storage on unusable detail. Decide the detail each spot needs, then choose the lowest resolution that achieves it.</div>
+  </details>
+</section>
   <section class="related-posts">
   <h2>Related articles</h2>
   <div class="related-grid">
