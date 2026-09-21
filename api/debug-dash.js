@@ -1,46 +1,32 @@
-// TEMP DIAGNOSTIC - checks DB connectivity + data presence for the dashboard. Delete after.
+// TEMP DIAGNOSTIC v2 - probe why leads/pageviews COUNT 502s. Delete after.
 import { db } from './_lib.js';
 
 export default async function handler(req, res) {
-  const out = { env: {}, db: {}, tables: {} };
-  out.env.TURSO_URL_present = !!process.env.TURSO_URL;
-  out.env.TURSO_TOKEN_present = !!process.env.TURSO_TOKEN;
-  out.env.ADMIN_USER_present = !!process.env.ADMIN_USER;
-  out.env.SESSION_SECRET_present = !!process.env.SESSION_SECRET;
+  const out = { probes: {} };
+  const database = db();
 
-  try {
-    const database = db();
-    out.db.connected = true;
+  // Try different query strategies to isolate the 502
+  const tests = {
+    // Does a bare SELECT with LIMIT work (vs full COUNT)?
+    'pageviews_limit1': "SELECT id FROM pageviews LIMIT 1",
+    'pageviews_recent': "SELECT COUNT(*) AS n FROM pageviews WHERE ts > (strftime('%s','now')-86400)*1000",
+    'pageviews_count': "SELECT COUNT(*) AS n FROM pageviews",
+    'leads_limit1': "SELECT id FROM leads LIMIT 1",
+    'leads_count': "SELECT COUNT(*) AS n FROM leads",
+    'leads_recent10': "SELECT id FROM leads ORDER BY id DESC LIMIT 10",
+    // approximate row estimate via max id
+    'pageviews_maxid': "SELECT MAX(id) AS m FROM pageviews",
+    'leads_maxid': "SELECT MAX(id) AS m FROM leads",
+  };
 
-    // list tables
-    const t = await database.execute("SELECT name FROM sqlite_master WHERE type='table'");
-    out.tables.list = t.rows.map(r => r.name);
-
-    // row counts for the key tables
-    for (const tbl of ['leads','pageviews','events','sessions']) {
-      try {
-        const c = await database.execute(`SELECT COUNT(*) AS n FROM ${tbl}`);
-        out.tables[tbl] = c.rows[0].n;
-      } catch (e) {
-        out.tables[tbl] = 'ERR: ' + (e.message||'').slice(0,60);
-      }
+  for (const [name, sql] of Object.entries(tests)) {
+    const t0 = Date.now();
+    try {
+      const r = await database.execute(sql);
+      out.probes[name] = { ok: true, ms: Date.now()-t0, rows: r.rows.length, val: r.rows[0] ? JSON.stringify(r.rows[0]).slice(0,60) : null };
+    } catch (e) {
+      out.probes[name] = { ok: false, ms: Date.now()-t0, err: (e.message||String(e)).slice(0,80) };
     }
-    // most recent lead + pageview timestamps
-    try {
-      const l = await database.execute("SELECT created_at FROM leads ORDER BY id DESC LIMIT 1");
-      out.tables.latest_lead = l.rows.length ? l.rows[0].created_at : '(none)';
-    } catch(e){ out.tables.latest_lead='ERR'; }
-    try {
-      const p = await database.execute("SELECT ts FROM pageviews ORDER BY ts DESC LIMIT 1");
-      out.tables.latest_pageview = p.rows.length ? new Date(p.rows[0].ts).toISOString() : '(none)';
-    } catch(e){ out.tables.latest_pageview='ERR: '+(e.message||'').slice(0,50); }
-
-    out.result = 'DB OK';
-    return res.status(200).json(out);
-  } catch (err) {
-    out.db.connected = false;
-    out.db.error = err.message || String(err);
-    out.result = 'DB CONNECTION FAILED';
-    return res.status(200).json(out);
   }
+  return res.status(200).json(out);
 }
