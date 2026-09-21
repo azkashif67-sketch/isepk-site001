@@ -1078,7 +1078,7 @@ async function anLoad(){
     const d=await r.json();
     if(d.empty){ anRenderEmpty(); return; }
     anRender(d);
-  }catch(e){ /* silent */ }
+  }catch(e){ console.error('Analytics render error:', e); }
 }
 // Lightweight live-only refresh (just the top numbers)
 async function anLoadLive(){

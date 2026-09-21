@@ -24,6 +24,15 @@ export default async function handler(req, res) {
   const session = requireAuth(req, res);
   if (!session) return;
 
+  // Ensure indexes exist (one-time; makes the 14 range queries fast). Safe to run repeatedly.
+  try {
+    const _idb = db();
+    await _idb.execute(`CREATE INDEX IF NOT EXISTS idx_pv_ts ON pageviews(ts)`);
+    await _idb.execute(`CREATE INDEX IF NOT EXISTS idx_pv_ts_path ON pageviews(ts, path)`);
+    await _idb.execute(`CREATE INDEX IF NOT EXISTS idx_ev_ts_type ON events(ts, type)`);
+    await _idb.execute(`CREATE INDEX IF NOT EXISTS idx_sess_lastts ON sessions(last_ts)`);
+  } catch (e) { /* indexes optional */ }
+
   // ── One-time cleanup: purge any admin/api rows (owner can POST ?action=clean) ──
   if (req.method === 'POST' && req.query.action === 'clean') {
     try {
@@ -55,82 +64,32 @@ export default async function handler(req, res) {
     }
 
     // Live visitors: distinct visitors in last 5 minutes
-    const liveRes = await database.execute({
-      sql: `SELECT COUNT(DISTINCT visitor) AS n FROM pageviews WHERE ts > ? AND path NOT LIKE '/admin%' AND path NOT LIKE '/api%'`,
-      args: [now - RANGES.live],
-    });
-    const liveVisitors = liveRes.rows[0].n || 0;
-
-    // Live pages: what those people are viewing right now
-    const livePagesRes = await database.execute({
-      sql: `SELECT path, COUNT(*) AS n FROM pageviews
-            WHERE ts > ? GROUP BY path ORDER BY n DESC LIMIT 8`,
-      args: [now - RANGES.live],
-    });
-
-    // Totals for the range
-    const totalsRes = await database.execute({
-      sql: `SELECT COUNT(*) AS views, COUNT(DISTINCT visitor) AS visitors FROM pageviews WHERE ts > ? AND path NOT LIKE '/admin%' AND path NOT LIKE '/api%'`,
-      args: [start],
-    });
-    const totals = totalsRes.rows[0];
-
-    // Time series — bucket size depends on range
+    // bucket size for the time series (needed before firing queries)
     const bucketMs = range === 'live' ? 30 * 1000
-      : range === 'today' || range === '24h' ? 60 * 60 * 1000   // hourly
-      : 24 * 60 * 60 * 1000;                                     // daily
-    const seriesRes = await database.execute({
-      sql: `SELECT (ts / ?) AS bucket, COUNT(*) AS views, COUNT(DISTINCT visitor) AS visitors
-            FROM pageviews WHERE ts > ? AND path NOT LIKE '/admin%' AND path NOT LIKE '/api%' GROUP BY bucket ORDER BY bucket ASC`,
-      args: [bucketMs, start],
-    });
+      : range === 'today' || range === '24h' ? 60 * 60 * 1000
+      : 24 * 60 * 60 * 1000;
+
+    // Fire all independent range queries in PARALLEL (was 14 sequential round-trips = slow).
+    const [
+      liveRes, livePagesRes, totalsRes, seriesRes, pagesRes,
+      refRes, directRes, countryRes, deviceRes, heatRes,
+    ] = await Promise.all([
+      database.execute({ sql: `SELECT COUNT(DISTINCT visitor) AS n FROM pageviews WHERE ts > ? AND path NOT LIKE '/admin%' AND path NOT LIKE '/api%'`, args: [now - RANGES.live] }),
+      database.execute({ sql: `SELECT path, COUNT(*) AS n FROM pageviews WHERE ts > ? GROUP BY path ORDER BY n DESC LIMIT 8`, args: [now - RANGES.live] }),
+      database.execute({ sql: `SELECT COUNT(*) AS views, COUNT(DISTINCT visitor) AS visitors FROM pageviews WHERE ts > ? AND path NOT LIKE '/admin%' AND path NOT LIKE '/api%'`, args: [start] }),
+      database.execute({ sql: `SELECT (ts / ?) AS bucket, COUNT(*) AS views, COUNT(DISTINCT visitor) AS visitors FROM pageviews WHERE ts > ? AND path NOT LIKE '/admin%' AND path NOT LIKE '/api%' GROUP BY bucket ORDER BY bucket ASC`, args: [bucketMs, start] }),
+      database.execute({ sql: `SELECT path, COUNT(*) AS views, COUNT(DISTINCT visitor) AS visitors FROM pageviews WHERE ts > ? AND path NOT LIKE '/admin%' AND path NOT LIKE '/api%' GROUP BY path ORDER BY views DESC LIMIT 12`, args: [start] }),
+      database.execute({ sql: `SELECT ref_domain, COUNT(*) AS views FROM pageviews WHERE ts > ? AND path NOT LIKE '/admin%' AND ref_domain IS NOT NULL AND ref_domain != '' GROUP BY ref_domain ORDER BY views DESC LIMIT 10`, args: [start] }),
+      database.execute({ sql: `SELECT COUNT(*) AS n FROM pageviews WHERE ts > ? AND path NOT LIKE '/admin%' AND path NOT LIKE '/api%' AND (ref_domain IS NULL OR ref_domain = '')`, args: [start] }),
+      database.execute({ sql: `SELECT country, COUNT(DISTINCT visitor) AS visitors FROM pageviews WHERE ts > ? AND path NOT LIKE '/admin%' AND country IS NOT NULL GROUP BY country ORDER BY visitors DESC LIMIT 10`, args: [start] }),
+      database.execute({ sql: `SELECT device, COUNT(DISTINCT visitor) AS visitors FROM pageviews WHERE ts > ? GROUP BY device`, args: [start] }),
+      database.execute({ sql: `SELECT CAST(strftime('%w', ts/1000, 'unixepoch') AS INTEGER) AS dow, CAST(strftime('%H', ts/1000, 'unixepoch') AS INTEGER) AS hour, COUNT(*) AS n FROM pageviews WHERE ts > ? AND path NOT LIKE '/admin%' AND path NOT LIKE '/api%' GROUP BY dow, hour`, args: [start] }),
+    ]);
+    const liveVisitors = liveRes.rows[0].n || 0;
+    const totals = totalsRes.rows[0];
     const series = seriesRes.rows.map(r => ({
       t: Number(r.bucket) * bucketMs, views: r.views, visitors: r.visitors,
     }));
-
-    // Top pages
-    const pagesRes = await database.execute({
-      sql: `SELECT path, COUNT(*) AS views, COUNT(DISTINCT visitor) AS visitors
-            FROM pageviews WHERE ts > ? AND path NOT LIKE '/admin%' AND path NOT LIKE '/api%' GROUP BY path ORDER BY views DESC LIMIT 12`,
-      args: [start],
-    });
-
-    // Top referrers (exclude direct/null)
-    const refRes = await database.execute({
-      sql: `SELECT ref_domain, COUNT(*) AS views FROM pageviews
-            WHERE ts > ? AND path NOT LIKE '/admin%' AND ref_domain IS NOT NULL AND ref_domain != ''
-            GROUP BY ref_domain ORDER BY views DESC LIMIT 10`,
-      args: [start],
-    });
-    // Direct count
-    const directRes = await database.execute({
-      sql: `SELECT COUNT(*) AS n FROM pageviews WHERE ts > ? AND path NOT LIKE '/admin%' AND path NOT LIKE '/api%' AND (ref_domain IS NULL OR ref_domain = '')`,
-      args: [start],
-    });
-
-    // Countries
-    const countryRes = await database.execute({
-      sql: `SELECT country, COUNT(DISTINCT visitor) AS visitors FROM pageviews
-            WHERE ts > ? AND path NOT LIKE '/admin%' AND country IS NOT NULL GROUP BY country ORDER BY visitors DESC LIMIT 10`,
-      args: [start],
-    });
-
-    // Devices
-    const deviceRes = await database.execute({
-      sql: `SELECT device, COUNT(DISTINCT visitor) AS visitors FROM pageviews
-            WHERE ts > ? GROUP BY device`,
-      args: [start],
-    });
-
-
-    // ── Time-of-day heatmap: day-of-week (0=Sun) × hour (0-23) ──
-    const heatRes = await database.execute({
-      sql: `SELECT CAST(strftime('%w', ts/1000, 'unixepoch') AS INTEGER) AS dow,
-                   CAST(strftime('%H', ts/1000, 'unixepoch') AS INTEGER) AS hour,
-                   COUNT(*) AS n
-            FROM pageviews WHERE ts > ? AND path NOT LIKE '/admin%' AND path NOT LIKE '/api%' GROUP BY dow, hour`,
-      args: [start],
-    });
     const heat = Array.from({length:7}, ()=>new Array(24).fill(0));
     heatRes.rows.forEach(r=>{ if(r.dow!=null&&r.hour!=null) heat[r.dow][r.hour] = r.n; });
 
